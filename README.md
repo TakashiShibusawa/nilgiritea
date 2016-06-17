@@ -1,7 +1,7 @@
-# nilgiti-tea
+# nilgiri-tea
 
 ##なにこれ
-[nilgiti-tea.net](http://nilgiti-tea.net)用Tumblrテーマです。
+[nilgiri-tea.net](http://nilgiri-tea.net)用Tumblrテーマです。
 
 ##Todo
 * もちょっとデザイン改善したいね
