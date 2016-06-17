@@ -1,0 +1,111 @@
+@charset "UTF-8";
+/*  COMMON  */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+ abbr, acronym, address, big, cite, code,
+del, dfn, em, font, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin:0;
+	padding:0;
+	border:0;
+	outline:0;
+}
+a {
+	margin:0;
+	padding:0;
+	border:0;
+}
+body {
+	line-height:1;
+}
+ol, ul {
+	list-style:none;
+}
+blockquote, q {
+	quotes:none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content:'';
+	content:none;
+}
+
+a:focus {
+	/*outline:0;*/
+}
+a img { border-width: 0px; }
+
+/* remember to highlight inserts somehow! */
+ins {
+	text-decoration:none;
+}
+del {
+	text-decoration:line-through;
+}
+
+/* tables still need 'cellspacing=&quot;0&quot;' in the markup */
+table {
+	border-collapse:collapse;
+	border-spacing:0;
+}
+
+img{ border:0px; }
+
+br{ letter-spacing:0em; }
+
+a:link,
+a:visited,
+a:hover { text-decoration: underline; }
+
+
+/*=====================
+basic style
+=====================*/
+.clearfix:after {
+	/*visibility: hidden;*/
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+}
+*:first-child+html .clearfix { zoom: 1; } /* IE7 */
+img.w100 { width: 100%; }
+img.wh100 {
+	width: 100%;
+	height: 100%;
+}
+.txtHide {
+	text-indent: -9999px;
+	white-space: nowrap;
+	overflow: hidden;
+	vertical-align: bottom;
+}
+.txtHide, x:-moz-any-link  { text-indent: -9999px; }
+
+/*=====================
+main structure
+=====================*/
+html{
+	-webkit-text-size-adjust: 100%;
+	min-width: 0 !important;
+}
+head { font-size: 0; }
+body{
+	background-color: #000;
+	font-family: "ヒラギノ角ゴ Pro", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", "Arial", Sans-serif;
+	line-height:1.5;
+	line-break:strict;
+	min-width: 0 !important;
+	margin: 0 auto;
+	font-size: 62.5%;
+}
+#wrapper {
+	width: 930px;
+	margin: 0 auto;
+	padding: 15px 20px 0;
+}
