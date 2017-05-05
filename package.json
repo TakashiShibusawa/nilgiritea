@@ -1,0 +1,9 @@
+{
+  "name": "nilgiritea",
+  "version": "1.0.0",
+  "description": "tumblr theme for nilgiri-tea.net",
+  "main": "index.js",
+  "repository": "git@github.com:niltea/nilgiritea.git",
+  "author": "Takashi Shibusawa <futurabodoni@gmail.com>",
+  "license": "MIT"
+}
