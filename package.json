@@ -5,5 +5,33 @@
   "main": "index.js",
   "repository": "git@github.com:niltea/nilgiritea.git",
   "author": "Takashi Shibusawa <futurabodoni@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "autoprefixer": "^6.7.7",
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2015-riot": "^1.1.0",
+    "concurrently": "^3.4.0",
+    "css-loader": "^0.28.1",
+    "extract-text-webpack-plugin": "^2.1.0",
+    "lite-server": "^2.3.0",
+    "node-sass": "^4.5.2",
+    "postcss-custom-properties": "^5.0.2",
+    "postcss-import": "^9.1.0",
+    "postcss-nested": "^1.0.1",
+    "riot": "^3.4.4",
+    "riot-route": "^3.1.1",
+    "riot-tag-loader": "^1.0.0",
+    "sass-loader": "^6.0.3",
+    "style-loader": "^0.17.0",
+    "webpack": "^2.5.0",
+    "whatwg-fetch": "^2.0.3"
+  },
+  "scripts": {
+    "webpack": "webpack -w",
+    "lite": "lite-server",
+    "release": "webpack --release",
+    "start": "concurrently \"yarn run lite\" \"yarn run webpack\""
+  }
 }
