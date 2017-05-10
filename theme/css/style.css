@@ -1,0 +1,548 @@
+@charset "UTF-8";
+/*  COMMON  */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, acronym, address, big, cite, code,
+del, dfn, em, font, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0; }
+
+a {
+  margin: 0;
+  padding: 0;
+  border: 0; }
+
+ol, ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none; }
+
+a img {
+  border-width: 0px; }
+
+ins {
+  text-decoration: none; }
+
+del {
+  text-decoration: line-through; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+img {
+  border: 0px; }
+
+br {
+  letter-spacing: 0em; }
+
+a:link,
+a:visited,
+a:hover {
+  text-decoration: underline; }
+
+/*=====================
+basic style
+=====================*/
+.fll {
+  display: block;
+  float: left;
+  margin-right: 15px; }
+
+.flr {
+  display: block;
+  float: right;
+  margin-left: 15px; }
+
+.ios .fll,
+.ios .flr {
+  float: none;
+  margin: 0 auto; }
+
+.clearfix:after {
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0; }
+
+img.w100 {
+  width: 100%; }
+
+img.wh100 {
+  width: 100%;
+  height: 100%; }
+
+.txtHide {
+  text-indent: -9999px;
+  white-space: nowrap;
+  overflow: hidden;
+  vertical-align: bottom; }
+
+.txtHide, x:-moz-any-link {
+  text-indent: -9999px; }
+
+/*=====================
+main structure
+=====================*/
+html {
+  -webkit-text-size-adjust: 100%;
+  min-width: 0 !important; }
+
+head {
+  font-size: 0; }
+
+body {
+  background-color: #000;
+  font-family: "Helvetica Neue", "Arial", "NewRodinPro-M", "\30D2\30E9\30AE\30CE\89D2\30B4   Pro", "Hiragino Kaku Gothic Pro", "\30E1\30A4\30EA\30AA", Meiryo, Sans-serif;
+  line-height: 1.5;
+  line-break: strict;
+  min-width: 0 !important;
+  margin: 0 auto;
+  font-size: 62.5%;
+  background-color: #f5f6f7; }
+
+#wrapper {
+  min-width: 640px;
+  max-width: 930px;
+  margin: 0 auto;
+  padding: 15px 20px 40px;
+  border-top: 8px solid #303233;
+  border-bottom: 8px solid #303233; }
+
+iframe#tumblr_controls {
+  top: 8px !important; }
+
+a.install {
+  /*	width: 96px;
+	height: 20px;
+	display: block;
+	position: absolute;
+	top: 34px;
+	right: 3px;*/ }
+
+.pageTitle a {
+  display: block;
+  width: 282px;
+  height: 54px;
+  background: url(http://assam.nilgiri-tea.net/tumblr/images/pageTitle.png); }
+
+.pageHeader .description {
+  margin: 10px 0 15px;
+  font-size: 1.3em; }
+
+.gnav {
+  height: 38px; }
+
+.navItem {
+  float: left;
+  border-bottom: 3px solid #303233;
+  margin-left: 30px; }
+
+.navItem:first-child {
+  margin: 0; }
+
+.navItem.active,
+.navItem:hover {
+  border-color: #2d73a8; }
+
+.navItem,
+.navItem a {
+  width: 130px;
+  height: 35px; }
+
+.navItem a {
+  display: block;
+  background: url(http://assam.nilgiri-tea.net/tumblr/images/gnav.png) no-repeat;
+  text-indent: -9999px;
+  white-space: nowrap;
+  overflow: hidden;
+  vertical-align: bottom; }
+
+.navItem a {
+  text-indent: -9999px; }
+
+.navItem.blog a {
+  background-position: 0 0; }
+
+.navItem.blog a:hover {
+  background-position: 0 -45px; }
+
+.navItem.about a {
+  background-position: -140px 0; }
+
+.navItem.about a:hover {
+  background-position: -140px -45px; }
+
+.navItem.twitter a {
+  background-position: -280px 0; }
+
+.navItem.twitter a:hover {
+  background-position: -280px -45px; }
+
+.navItem.pixiv a {
+  background-position: -420px 0; }
+
+.navItem.pixiv a:hover {
+  background-position: -420px -45px; }
+
+/*permallink*/
+.section {
+  margin-top: 20px; }
+
+/*post*/
+.postContainer {
+  padding: 40px 0 5px;
+  border-bottom: 2px solid #303233; }
+
+.post {
+  width: 290px;
+  margin: 0 15px 30px 0;
+  border-radius: 3px;
+  overflow: hidden;
+  box-shadow: 0 0 5px #282a2f;
+  float: left;
+  background-color: #fff; }
+
+.post.exposed {
+  width: 610px;
+  margin: 0 auto 30px;
+  float: none; }
+
+@media screen and (max-width: 970px) {
+  .post.exposed {
+    margin: 0 15px 30px; } }
+
+.post .post-title {
+  padding: 15px 20px 0;
+  font-size: 1.6em; }
+
+.post a {
+  color-color: Accent; }
+
+.post a:hover {
+  text-decoration: underline;
+  color-color: Hover; }
+
+.post img {
+  max-width: 100%; }
+
+.post .imgLink {
+  display: block; }
+
+.post h2 {
+  padding: 20px 20px 0;
+  font-size: 1.8em;
+  font-family: "Helvetica Neue Bold", "Arial", "NewRodinPro-B", "\30D2\30E9\30AE\30CE\89D2\30B4   Pro", "Hiragino Kaku Gothic Pro", "\30E1\30A4\30EA\30AA", Meiryo, Sans-serif;
+  font-weight: bold; }
+
+.post.exposed h2 {
+  font-size: 2.2em;
+  padding: 20px 20px 10px; }
+
+.post h3 {
+  border-top: 1px dotted #303233;
+  font-size: 2.0em;
+  font-weight: bold;
+  padding-top: 20px;
+  padding-top: 5px; }
+
+.post h4 {
+  font-size: 1.8em;
+  font-weight: bold;
+  padding-top: 10px; }
+
+.post p {
+  padding: 15px 20px 0;
+  font-size: 1.4em;
+  color: #171a1d;
+  text-align: justify; }
+
+.post h3 + p,
+.post h4 + p {
+  padding-top: 0; }
+
+#rina {
+  font-family: "BudoStd-L", "Helvetica Neue", "Arial", "NewRodinPro-M", "\30D2\30E9\30AE\30CE\89D2\30B4   Pro", "Hiragino Kaku Gothic Pro", "\30E1\30A4\30EA\30AA", Meiryo, Sans-serif; }
+
+#chie {
+  font-family: "PopJoyStd-B", "Helvetica Neue", "Arial", "NewRodinPro-M", "\30D2\30E9\30AE\30CE\89D2\30B4   Pro", "Hiragino Kaku Gothic Pro", "\30E1\30A4\30EA\30AA", Meiryo, Sans-serif; }
+
+#misaki {
+  font-family: "TsukuMinPr6-R", "Helvetica Neue", "Arial", "NewRodinPro-M", "\30D2\30E9\30AE\30CE\89D2\30B4   Pro", "Hiragino Kaku Gothic Pro", "\30E1\30A4\30EA\30AA", Meiryo, Sans-serif; }
+
+/*photo*/
+.photoContainer {
+  text-align: center; }
+
+.post.photo + p {
+  margin-top: 5px; }
+
+/*text*/
+.textContent {
+  padding: 0 20px; }
+
+.textContent p {
+  padding: 15px 0 0; }
+
+.textContent ul {
+  padding-top: 1em;
+  padding-left: 2em;
+  list-style-type: disc; }
+
+.textContent li {
+  font-size: 1.3em; }
+
+.post blockquote {
+  font-size: 1.3em;
+  border-left: 1px dotted #e1e1e1;
+  margin: 0 20px 0; }
+
+.post blockquote p {
+  font-size: 1em;
+  padding: 5px 0 0 0.75em; }
+
+/*quote*/
+.post.quote .content {
+  padding: 15px 20px 0; }
+
+.post.quote blockquote {
+  padding: 0;
+  border: none;
+  font-size: 1.8em;
+  quotes: "" "\300C" "\300D" "\300E" "\300F";
+  padding: 0 0 0 1em;
+  margin: 0; }
+
+.post.quote blockquote.medium {
+  font-size: 1.6em; }
+
+.post.quote blockquote.long {
+  font-size: 1.3em; }
+
+.post.quote blockquote:before {
+  content: open-quote;
+  letter-spacing: -.25em; }
+
+.post.quote blockquote:after {
+  content: close-quote;
+  margin-left: -.25em; }
+
+.post.quote .source {
+  margin-top: 10px;
+  padding: 0 0 0 1.5em;
+  font-size: 1.3em;
+  position: relative; }
+
+.post.quote .source:before {
+  content: "\2014\A0";
+  position: absolute;
+  left: 0;
+  top: 0; }
+
+.post pre {
+  font: normal normal normal 11px/normal Courier;
+  background: #e6e6e6;
+  padding: 10px;
+  margin: 0 0 12px 0; }
+
+.column.right small {
+  color: #a8a8a8;
+  font-size: 11px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+.column.right small a {
+  color: #a8a8a8; }
+
+.column.right small a:hover {
+  color: #757575;
+  text-decoration: none; }
+
+.column.right small.high_res {
+  text-align: right;
+  margin: 0 0 12px 0;
+  display: block; }
+
+table.chat {
+  width: 100%;
+  margin: 0 0 3px 0;
+  border-collapse: collapse; }
+
+h2 + table.chat {
+  margin: 0 0 14px 0 !important; }
+
+table.chat tr td {
+  padding: 3px 10px; }
+
+table.chat tr td.name {
+  font-weight: bold;
+  text-align: right;
+  vertical-align: top; }
+
+table.chat tr td.line1 {
+  background: #F2F2F2; }
+
+.album_case {
+  width: 205px;
+  height: 193px;
+  margin: 0 45px 30px 0;
+  position: relative;
+  z-index: 10;
+  float: left; }
+
+img.album_art {
+  max-width: 188px !important;
+  margin: 3px 0 0 -250px;
+  position: relative;
+  left: 15px;
+  z-index: 9;
+  float: left; }
+
+.audio .audio_player {
+  width: 207px;
+  opacity: 80%;
+  display: inline-block; }
+
+.audio small {
+  display: block; }
+
+.notesContainer {
+  width: 610px;
+  margin: 0 auto; }
+
+@media screen and (max-width: 970px) {
+  .notesContainer {
+    width: auto; } }
+
+.notes {
+  border-top: 1px dotted #303233;
+  padding: 10px 20px 20px; }
+
+.note {
+  font-size: 1.2em; }
+
+ol.notes .avatar_frame {
+  display: none; }
+
+.tags {
+  padding: 20px 20px 0; }
+
+.tags a {
+  display: block;
+  float: left;
+  font-size: 1.3em;
+  color: #c1c2c2;
+  text-decoration: none; }
+
+.meta {
+  padding: 10px 20px 15px; }
+
+.dateNote {
+  width: 110px;
+  float: left;
+  font-size: 1.2em;
+  color: #c1c2c2;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+.dateNote a {
+  color: #c1c2c2;
+  text-decoration: none; }
+
+.postControls {
+  width: 140px;
+  float: left;
+  text-align: right; }
+
+.exposed .postControls {
+  float: none;
+  width: 100%; }
+
+.postControls li {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+  margin-left: 10px;
+  vertical-align: middle; }
+
+.postControls li .tweet_button {
+  font-size: 26px;
+  color: #000; }
+
+.postControls li .tweet_button,
+.postControls li .reblog_button,
+.postControls li .like_button {
+  opacity: 0.4; }
+
+.postControls li .tweet_button:hover,
+.postControls li .reblog_button:hover,
+.postControls li .like_button:hover {
+  opacity: 0.5; }
+
+.postControls li .reblog_button.rebloged,
+.postControls li .like_button.liked {
+  opacity: 1; }
+
+/* navigation */
+.navigation {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px 0 0;
+  overflow: hidden; }
+
+.navigation .count {
+  float: left; }
+
+.navigation .links {
+  width: 100%;
+  text-align: center; }
+
+.navigation.permalink .links {
+  overflow: hidden; }
+
+.navigation .links a,
+.navigation .links span {
+  display: inline-block;
+  padding: 6px 9px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 1.4em;
+  color: #424b54; }
+
+.navigation .links a:hover {
+  background-color: #ddd; }
+
+.current_page {
+  background-color: #ddd; }
+
+/*=====================
+copyright
+=====================*/
+.copyright {
+  margin-top: 25px; }
+
+.nilgiriLogo {
+  background: url(http://assam.nilgiri-tea.net/tumblr/images/nilgiri.png) no-repeat;
+  width: 108px;
+  height: 34px;
+  margin: 0 auto;
+  display: block; }
+
+.Shibusawa {
+  margin-top: 13px;
+  text-align: center;
+  font-size: 1.2em;
+  color: #0e1012; }

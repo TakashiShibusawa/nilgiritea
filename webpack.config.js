@@ -9,7 +9,7 @@ var cssnested = require('postcss-nested');
 var customProperties = require('postcss-custom-properties');
 var autoprefixer = require('autoprefixer');
 
-const plugins = [ new webpack.ProvidePlugin({
+const plugins_js = [ new webpack.ProvidePlugin({
 	riot: 'riot'
 })
 ];
@@ -17,7 +17,7 @@ if(DEBUG){
 	console.log('############################\n## Debug mode is enabled ##\n###########################');
 } else {
 	console.log('#############################\n## Release mode is enabled ##\n#############################');
-	plugins.push(
+	plugins_js.push(
 		new webpack.optimize.UglifyJsPlugin({ compress: { screw_ie8: true, warnings: false } }),
 		new webpack.optimize.AggressiveMergingPlugin()
 		);
@@ -26,10 +26,7 @@ if(DEBUG){
 module.exports = [
 {
 	entry: {
-		bundle: [
-		'whatwg-fetch',
-		'./src/js/app.js'
-		]
+		bundle: './src/js/app.js'
 	},
 	output: {
 		path: path.join(__dirname + '/theme/js/'),
@@ -44,16 +41,16 @@ module.exports = [
 			use: 'riot-tag-loader'
 		},
 		{
-			test: /\.js|\.tag$/,
+			test: /\.js$|\.tag$/,
 			exclude: /node_modules/,
-			use : 'babel-loader'
+			use: 'babel-loader'
 		}
 		]
 	},
 	resolve: {
 		extensions: ['*', '.js', '.tag']
 	},
-	plugins: plugins
+	plugins: plugins_js
 },
 {
 	entry: {
@@ -75,7 +72,7 @@ module.exports = [
 					loader: "css-loader",
 					options: {
 						url: false,
-						minimize: true
+						minimize: !DEBUG
 					}
 				},
 				"sass-loader"
