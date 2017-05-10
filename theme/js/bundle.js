@@ -2837,7 +2837,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 
 var riot = __webpack_require__(0);
-riot.tag2('niltea-page', '', '', '', function (opts) {});
+riot.tag2('niltea-page', '<div class="pageHeader"> <h1 class="pageTitle "> <a href="/" class="home txtHide">{title}</a> </h1> <ul class="gnav clearfix"> <li class="navItem blog" title="blog"><a href="/" target="_top">blog</a></li> <li class="navItem about" title="about"><a href="/about/" target="_top">about</a></li> <li class="navItem twitter" title="twitter"><a href="http://www.twitter.com/{TwitterUsername}" target="_blank">twitter</a></li> <li class="navItem pixiv" title="pixiv"><a href="http://www.pixiv.net/member.php?id={text:Pixiv ID}" target="_blank">pixiv</a></li> </ul> </div>', '', '', function (opts) {});
 
 /***/ }),
 /* 2 */,
@@ -2871,7 +2871,7 @@ if (true) module.exports = RiotControl;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* WEBPACK VAR INJECTION */(function(riot) {Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__niltea_util_js__ = __webpack_require__(5);
 // import utility
 
@@ -2881,6 +2881,11 @@ __webpack_require__(0);
 __webpack_require__(1);
 
 const RiotControl = __webpack_require__(3);
+
+document.addEventListener('DOMContentLoaded', () => {
+	riot.mount('#wrapper', 'niltea-page');
+});
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
 /* 5 */
