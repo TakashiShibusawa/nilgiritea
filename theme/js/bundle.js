@@ -2837,7 +2837,9 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 
 var riot = __webpack_require__(0);
-riot.tag2('niltea-page', '<div class="pageHeader"> <h1 class="pageTitle "> <a href="/" class="home txtHide">{title}</a> </h1> <ul class="gnav clearfix"> <li class="navItem blog" title="blog"><a href="/" target="_top">blog</a></li> <li class="navItem about" title="about"><a href="/about/" target="_top">about</a></li> <li class="navItem twitter" title="twitter"><a href="http://www.twitter.com/{TwitterUsername}" target="_blank">twitter</a></li> <li class="navItem pixiv" title="pixiv"><a href="http://www.pixiv.net/member.php?id={text:Pixiv ID}" target="_blank">pixiv</a></li> </ul> </div>', '', '', function (opts) {});
+__webpack_require__(6);
+__webpack_require__(7);
+riot.tag2('niltea-page', '<niltea-header></niltea-header> <niltea-content></niltea-content> <niltea-footer></niltea-footer>', '', '', function (opts) {});
 
 /***/ }),
 /* 2 */,
@@ -2885,6 +2887,33 @@ const RiotControl = __webpack_require__(3);
 document.addEventListener('DOMContentLoaded', () => {
 	riot.mount('#wrapper', 'niltea-page');
 });
+
+// $(function(){
+// 	var $container = $('.postContainer');
+// 	var $post = $container.children('.post').first();
+// 	var isPermaLink = ($post.hasClass('permaLink'))? true : false;
+// 	if(isPermaLink === false){
+// 		$container.imagesLoaded(function(){
+// 			$container.masonry({
+// 				itemSelector: '.post',
+// 				columnWidth: 290,
+// 				gutter: 30
+// 			});
+// 		});
+// 		// photosetResize();
+// 	}
+// });
+// Photoset Resize Code by Kevin - EXCOLO.TUMBLR.COM 
+// function photosetResize() {
+// 	$('iframe.photoset').each(function(){
+// 		var newSize = 290;
+// 		var newSrc = $(this).attr('src').replace('500',newSize);
+// 		$(this).attr('src', newSrc).width(newSize);
+// 		var high = $(this).css('height');
+// 		var calculate = parseInt(high, 10)* newSize/500;
+// 		$(this).css('height', calculate);
+// 	});
+// }
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
@@ -3028,6 +3057,22 @@ document.addEventListener('DOMContentLoaded', () => {
 		return string;
 	}
 }());
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var riot = __webpack_require__(0);
+riot.tag2('niltea-header', '<header class="pageHeader"> <h1 class="pageTitle "> <a href="/" class="home">{title}</a> </h1> <nav class="gnav clearfix" id="gnav"> <ul> <li class="navItem about" title="about"><a href="/#/about/" target="_top">about</a></li> <li class="navItem blog" title="blog"><a href="/#/" target="_top">blog</a></li> <li class="navItem twitter" title="twitter"><a href="http://www.twitter.com/{TwitterUsername}" target="_blank">twitter</a></li> <li class="navItem pixiv" title="pixiv"><a href="http://www.pixiv.net/member.php?id={pixiv}" target="_blank">pixiv</a></li> <li class="navItem github" title="github"><a href="https://github.com/niltea" target="_blank">GitHub</a></li> </ul> </nav> </header>', '', '', function (opts) {});
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var riot = __webpack_require__(0);
+riot.tag2('niltea-footer', '<footer class="footer"> <nav class="navigation"> <div class="links"> <a href="{PreviousPage}" class="previous">&lt; PREV</a> <span class="current_page">{PageNumber}</span> <virtual><a href="{URL}" class="previous">{PageNumber}</a></virtual> <a href="{NextPage}" class="next">NEXT &gt;</a> </div> </nav> <nav class="navigation permalink"> <div class="links"> <a href="{NextPost}" class="left">Prev</a> <a href="{PreviousPost}" class="right">Next</a> </div> </nav> <div class="copyright"> <a class="nilgiriLogo txtHide" href="http://www.nilgiri-tea.net/">Designed by Nilgiri Tea</a> <div class="Shibusawa">&copy; Nilgiri Tea</div> </div> </footer>', '', '', function (opts) {});
 
 /***/ })
 /******/ ]);
