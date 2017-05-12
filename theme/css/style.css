@@ -148,49 +148,9 @@ body {
 iframe#tumblr_controls {
   top: 8px !important; }
 
-.pageTitle a {
-  display: block;
-  width: 282px;
-  height: 54px; }
-
 .pageHeader .description {
   margin: 10px 0 15px;
   font-size: 1.3em; }
-
-.gnav {
-  height: 38px; }
-
-.navItem {
-  float: left;
-  border-bottom: 3px solid #303233;
-  margin-left: 30px; }
-  .navItem:first-child {
-    margin: 0; }
-  .navItem.active, .navItem:hover {
-    border-color: #2d73a8; }
-  .navItem,
-  .navItem a {
-    width: 130px;
-    height: 35px; }
-  .navItem a {
-    display: block;
-    vertical-align: bottom; }
-  .navItem.blog a {
-    background-position: 0 0; }
-  .navItem.blog a:hover {
-    background-position: 0 -45px; }
-  .navItem.about a {
-    background-position: -140px 0; }
-  .navItem.about a:hover {
-    background-position: -140px -45px; }
-  .navItem.twitter a {
-    background-position: -280px 0; }
-  .navItem.twitter a:hover {
-    background-position: -280px -45px; }
-  .navItem.pixiv a {
-    background-position: -420px 0; }
-  .navItem.pixiv a:hover {
-    background-position: -420px -45px; }
 
 /*permallink*/
 .section {
