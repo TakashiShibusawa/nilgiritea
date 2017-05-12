@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -2833,91 +2833,6 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var riot = __webpack_require__(0);
-__webpack_require__(6);
-__webpack_require__(7);
-riot.tag2('niltea-page', '<niltea-header></niltea-header> <niltea-content></niltea-content> <niltea-footer></niltea-footer>', '', '', function (opts) {});
-
-/***/ }),
-/* 2 */,
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var RiotControl = {
-  _stores: [],
-  addStore: function(store) {
-    this._stores.push(store);
-  },
-  reset: function() {
-    this._stores = [];
-  }
-};
-
-['on','one','off','trigger'].forEach(function(api){
-  RiotControl[api] = function() {
-    var args = [].slice.call(arguments);
-    this._stores.forEach(function(el){
-      el[api].apply(el, args);
-    });
-  };
-});
-
-if (true) module.exports = RiotControl;
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(riot) {Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__niltea_util_js__ = __webpack_require__(5);
-// import utility
-
-
-// riot and tags
-__webpack_require__(0);
-__webpack_require__(1);
-
-const RiotControl = __webpack_require__(3);
-
-document.addEventListener('DOMContentLoaded', () => {
-	riot.mount('#wrapper', 'niltea-page');
-});
-
-// $(function(){
-// 	var $container = $('.postContainer');
-// 	var $post = $container.children('.post').first();
-// 	var isPermaLink = ($post.hasClass('permaLink'))? true : false;
-// 	if(isPermaLink === false){
-// 		$container.imagesLoaded(function(){
-// 			$container.masonry({
-// 				itemSelector: '.post',
-// 				columnWidth: 290,
-// 				gutter: 30
-// 			});
-// 		});
-// 		// photosetResize();
-// 	}
-// });
-// Photoset Resize Code by Kevin - EXCOLO.TUMBLR.COM 
-// function photosetResize() {
-// 	$('iframe.photoset').each(function(){
-// 		var newSize = 290;
-// 		var newSrc = $(this).attr('src').replace('500',newSize);
-// 		$(this).attr('src', newSrc).width(newSize);
-// 		var high = $(this).css('height');
-// 		var calculate = parseInt(high, 10)* newSize/500;
-// 		$(this).css('height', calculate);
-// 	});
-// }
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
-
-/***/ }),
-/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3059,7 +2974,42 @@ document.addEventListener('DOMContentLoaded', () => {
 }());
 
 /***/ }),
-/* 6 */
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var RiotControl = {
+  _stores: [],
+  addStore: function(store) {
+    this._stores.push(store);
+  },
+  reset: function() {
+    this._stores = [];
+  }
+};
+
+['on','one','off','trigger'].forEach(function(api){
+  RiotControl[api] = function() {
+    var args = [].slice.call(arguments);
+    this._stores.forEach(function(el){
+      el[api].apply(el, args);
+    });
+  };
+});
+
+if (true) module.exports = RiotControl;
+
+
+/***/ }),
+/* 3 */,
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var riot = __webpack_require__(0);
+riot.tag2('niltea-footer', '<footer class="footer"> <nav class="navigation"> <div class="links"> <a href="{PreviousPage}" class="previous">&lt; PREV</a> <span class="current_page">{PageNumber}</span> <virtual><a href="{URL}" class="previous">{PageNumber}</a></virtual> <a href="{NextPage}" class="next">NEXT &gt;</a> </div> </nav> <nav class="navigation permalink"> <div class="links"> <a href="{NextPost}" class="left">Prev</a> <a href="{PreviousPost}" class="right">Next</a> </div> </nav> <div class="copyright"> <a class="nilgiriLogo txtHide" href="http://www.nilgiri-tea.net/">Designed by Nilgiri Tea</a> <div class="Shibusawa">&copy; Nilgiri Tea</div> </div> </footer>', '', '', function (opts) {});
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -3070,12 +3020,1294 @@ riot.tag2('niltea-header', '<header class="mainHeader"> <h1 class="pageTitle"> <
 });
 
 /***/ }),
-/* 7 */
+/* 6 */,
+/* 7 */,
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+const constant = new class Constant {
+	constructor() {
+		this.api = {
+			API_KEY: "api_key=Rak7GXrKPBB6uuTODOgQL3hPLpnTAf2b2IoUjAUoBd8yLoCthg",
+			APIRoot: "http://api.tumblr.com/v2/blog/nilgiritea.tumblr.com/"
+		};
+		this.action = {
+			fetchArticle: "fetchArticle"
+		};
+		this.setCurrent = 'setCurrent';
+		this.setContent = 'setContent';
+	}
+
+	_getApiKey() {
+		return this.api.API_KEY;
+	}
+	getEndPoint(type, resource) {
+		const endPoint = this.api.APIRoot + type + '?' + this._getApiKey();
+		return endPoint;
+	}
+
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = (constant);
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(riot) {Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__niltea_util_js__ = __webpack_require__(1);
+// import utility
+
+
+// riot and tags
+__webpack_require__(0);
+__webpack_require__(13);
+__webpack_require__(14);
+__webpack_require__(5);
+__webpack_require__(4);
+
+riot.mount('#wrapper', 'niltea-base');
+
+// $(function(){
+// 	var $container = $('.postContainer');
+// 	var $post = $container.children('.post').first();
+// 	var isPermaLink = ($post.hasClass('permaLink'))? true : false;
+// 	if(isPermaLink === false){
+// 		$container.imagesLoaded(function(){
+// 			$container.masonry({
+// 				itemSelector: '.post',
+// 				columnWidth: 290,
+// 				gutter: 30
+// 			});
+// 		});
+// 		// photosetResize();
+// 	}
+// });
+// Photoset Resize Code by Kevin - EXCOLO.TUMBLR.COM 
+// function photosetResize() {
+// 	$('iframe.photoset').each(function(){
+// 		var newSize = 290;
+// 		var newSrc = $(this).attr('src').replace('500',newSize);
+// 		$(this).attr('src', newSrc).width(newSize);
+// 		var high = $(this).css('height');
+// 		var calculate = parseInt(high, 10)* newSize/500;
+// 		$(this).css('height', calculate);
+// 	});
+// }
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+
+/***/ }),
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
+;(function(window, undefined) {var observable = function(el) {
+
+  /**
+   * Extend the original object or create a new empty one
+   * @type { Object }
+   */
+
+  el = el || {}
+
+  /**
+   * Private variables
+   */
+  var callbacks = {},
+    slice = Array.prototype.slice
+
+  /**
+   * Public Api
+   */
+
+  // extend the el object adding the observable methods
+  Object.defineProperties(el, {
+    /**
+     * Listen to the given `event` ands
+     * execute the `callback` each time an event is triggered.
+     * @param  { String } event - event id
+     * @param  { Function } fn - callback function
+     * @returns { Object } el
+     */
+    on: {
+      value: function(event, fn) {
+        if (typeof fn == 'function')
+          (callbacks[event] = callbacks[event] || []).push(fn)
+        return el
+      },
+      enumerable: false,
+      writable: false,
+      configurable: false
+    },
+
+    /**
+     * Removes the given `event` listeners
+     * @param   { String } event - event id
+     * @param   { Function } fn - callback function
+     * @returns { Object } el
+     */
+    off: {
+      value: function(event, fn) {
+        if (event == '*' && !fn) callbacks = {}
+        else {
+          if (fn) {
+            var arr = callbacks[event]
+            for (var i = 0, cb; cb = arr && arr[i]; ++i) {
+              if (cb == fn) arr.splice(i--, 1)
+            }
+          } else delete callbacks[event]
+        }
+        return el
+      },
+      enumerable: false,
+      writable: false,
+      configurable: false
+    },
+
+    /**
+     * Listen to the given `event` and
+     * execute the `callback` at most once
+     * @param   { String } event - event id
+     * @param   { Function } fn - callback function
+     * @returns { Object } el
+     */
+    one: {
+      value: function(event, fn) {
+        function on() {
+          el.off(event, on)
+          fn.apply(el, arguments)
+        }
+        return el.on(event, on)
+      },
+      enumerable: false,
+      writable: false,
+      configurable: false
+    },
+
+    /**
+     * Execute all callback functions that listen to
+     * the given `event`
+     * @param   { String } event - event id
+     * @returns { Object } el
+     */
+    trigger: {
+      value: function(event) {
+
+        // getting the arguments
+        var arglen = arguments.length - 1,
+          args = new Array(arglen),
+          fns,
+          fn,
+          i
+
+        for (i = 0; i < arglen; i++) {
+          args[i] = arguments[i + 1] // skip first argument
+        }
+
+        fns = slice.call(callbacks[event] || [], 0)
+
+        for (i = 0; fn = fns[i]; ++i) {
+          fn.apply(el, args)
+        }
+
+        if (callbacks['*'] && event != '*')
+          el.trigger.apply(el, ['*', event].concat(args))
+
+        return el
+      },
+      enumerable: false,
+      writable: false,
+      configurable: false
+    }
+  })
+
+  return el
+
+}
+  /* istanbul ignore next */
+  // support CommonJS, AMD & browser
+  if (true)
+    module.exports = observable
+  else if (typeof define === 'function' && define.amd)
+    define(function() { return observable })
+  else
+    window.observable = observable
+
+})(typeof window != 'undefined' ? window : undefined);
+
+/***/ }),
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot_observable__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot_observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riot_observable__);
+
+
+/**
+ * Simple client-side router
+ * @module riot-route
+ */
+
+var RE_ORIGIN = /^.+?\/\/+[^\/]+/;
+var EVENT_LISTENER = 'EventListener';
+var REMOVE_EVENT_LISTENER = 'remove' + EVENT_LISTENER;
+var ADD_EVENT_LISTENER = 'add' + EVENT_LISTENER;
+var HAS_ATTRIBUTE = 'hasAttribute';
+var POPSTATE = 'popstate';
+var HASHCHANGE = 'hashchange';
+var TRIGGER = 'trigger';
+var MAX_EMIT_STACK_LEVEL = 3;
+var win = typeof window != 'undefined' && window;
+var doc = typeof document != 'undefined' && document;
+var hist = win && history;
+var loc = win && (hist.location || win.location);
+var prot = Router.prototype;
+var clickEvent = doc && doc.ontouchstart ? 'touchstart' : 'click';
+var central = __WEBPACK_IMPORTED_MODULE_0_riot_observable___default()();
+
+var started = false;
+var routeFound = false;
+var debouncedEmit;
+var base;
+var current;
+var parser;
+var secondParser;
+var emitStack = [];
+var emitStackLevel = 0;
+
+/**
+ * Default parser. You can replace it via router.parser method.
+ * @param {string} path - current path (normalized)
+ * @returns {array} array
+ */
+function DEFAULT_PARSER(path) {
+  return path.split(/[/?#]/)
+}
+
+/**
+ * Default parser (second). You can replace it via router.parser method.
+ * @param {string} path - current path (normalized)
+ * @param {string} filter - filter string (normalized)
+ * @returns {array} array
+ */
+function DEFAULT_SECOND_PARSER(path, filter) {
+  var f = filter
+    .replace(/\?/g, '\\?')
+    .replace(/\*/g, '([^/?#]+?)')
+    .replace(/\.\./, '.*');
+  var re = new RegExp(("^" + f + "$"));
+  var args = path.match(re);
+
+  if (args) { return args.slice(1) }
+}
+
+/**
+ * Simple/cheap debounce implementation
+ * @param   {function} fn - callback
+ * @param   {number} delay - delay in seconds
+ * @returns {function} debounced function
+ */
+function debounce(fn, delay) {
+  var t;
+  return function () {
+    clearTimeout(t);
+    t = setTimeout(fn, delay);
+  }
+}
+
+/**
+ * Set the window listeners to trigger the routes
+ * @param {boolean} autoExec - see route.start
+ */
+function start(autoExec) {
+  debouncedEmit = debounce(emit, 1);
+  win[ADD_EVENT_LISTENER](POPSTATE, debouncedEmit);
+  win[ADD_EVENT_LISTENER](HASHCHANGE, debouncedEmit);
+  doc[ADD_EVENT_LISTENER](clickEvent, click);
+  if (autoExec) { emit(true); }
+}
+
+/**
+ * Router class
+ */
+function Router() {
+  this.$ = [];
+  __WEBPACK_IMPORTED_MODULE_0_riot_observable___default()(this); // make it observable
+  central.on('stop', this.s.bind(this));
+  central.on('emit', this.e.bind(this));
+}
+
+function normalize(path) {
+  return path.replace(/^\/|\/$/, '')
+}
+
+function isString(str) {
+  return typeof str == 'string'
+}
+
+/**
+ * Get the part after domain name
+ * @param {string} href - fullpath
+ * @returns {string} path from root
+ */
+function getPathFromRoot(href) {
+  return (href || loc.href).replace(RE_ORIGIN, '')
+}
+
+/**
+ * Get the part after base
+ * @param {string} href - fullpath
+ * @returns {string} path from base
+ */
+function getPathFromBase(href) {
+  return base[0] === '#'
+    ? (href || loc.href || '').split(base)[1] || ''
+    : (loc ? getPathFromRoot(href) : href || '').replace(base, '')
+}
+
+function emit(force) {
+  // the stack is needed for redirections
+  var isRoot = emitStackLevel === 0;
+  if (MAX_EMIT_STACK_LEVEL <= emitStackLevel) { return }
+
+  emitStackLevel++;
+  emitStack.push(function() {
+    var path = getPathFromBase();
+    if (force || path !== current) {
+      central[TRIGGER]('emit', path);
+      current = path;
+    }
+  });
+  if (isRoot) {
+    var first;
+    while (first = emitStack.shift()) { first(); } // stack increses within this call
+    emitStackLevel = 0;
+  }
+}
+
+function click(e) {
+  if (
+    e.which !== 1 // not left click
+    || e.metaKey || e.ctrlKey || e.shiftKey // or meta keys
+    || e.defaultPrevented // or default prevented
+  ) { return }
+
+  var el = e.target;
+  while (el && el.nodeName !== 'A') { el = el.parentNode; }
+
+  if (
+    !el || el.nodeName !== 'A' // not A tag
+    || el[HAS_ATTRIBUTE]('download') // has download attr
+    || !el[HAS_ATTRIBUTE]('href') // has no href attr
+    || el.target && el.target !== '_self' // another window or frame
+    || el.href.indexOf(loc.href.match(RE_ORIGIN)[0]) === -1 // cross origin
+  ) { return }
+
+  if (el.href !== loc.href
+    && (
+      el.href.split('#')[0] === loc.href.split('#')[0] // internal jump
+      || base[0] !== '#' && getPathFromRoot(el.href).indexOf(base) !== 0 // outside of base
+      || base[0] === '#' && el.href.split(base)[0] !== loc.href.split(base)[0] // outside of #base
+      || !go(getPathFromBase(el.href), el.title || doc.title) // route not found
+    )) { return }
+
+  e.preventDefault();
+}
+
+/**
+ * Go to the path
+ * @param {string} path - destination path
+ * @param {string} title - page title
+ * @param {boolean} shouldReplace - use replaceState or pushState
+ * @returns {boolean} - route not found flag
+ */
+function go(path, title, shouldReplace) {
+  // Server-side usage: directly execute handlers for the path
+  if (!hist) { return central[TRIGGER]('emit', getPathFromBase(path)) }
+
+  path = base + normalize(path);
+  title = title || doc.title;
+  // browsers ignores the second parameter `title`
+  shouldReplace
+    ? hist.replaceState(null, title, path)
+    : hist.pushState(null, title, path);
+  // so we need to set it manually
+  doc.title = title;
+  routeFound = false;
+  emit();
+  return routeFound
+}
+
+/**
+ * Go to path or set action
+ * a single string:                go there
+ * two strings:                    go there with setting a title
+ * two strings and boolean:        replace history with setting a title
+ * a single function:              set an action on the default route
+ * a string/RegExp and a function: set an action on the route
+ * @param {(string|function)} first - path / action / filter
+ * @param {(string|RegExp|function)} second - title / action
+ * @param {boolean} third - replace flag
+ */
+prot.m = function(first, second, third) {
+  if (isString(first) && (!second || isString(second))) { go(first, second, third || false); }
+  else if (second) { this.r(first, second); }
+  else { this.r('@', first); }
+};
+
+/**
+ * Stop routing
+ */
+prot.s = function() {
+  this.off('*');
+  this.$ = [];
+};
+
+/**
+ * Emit
+ * @param {string} path - path
+ */
+prot.e = function(path) {
+  this.$.concat('@').some(function(filter) {
+    var args = (filter === '@' ? parser : secondParser)(normalize(path), normalize(filter));
+    if (typeof args != 'undefined') {
+      this[TRIGGER].apply(null, [filter].concat(args));
+      return routeFound = true // exit from loop
+    }
+  }, this);
+};
+
+/**
+ * Register route
+ * @param {string} filter - filter for matching to url
+ * @param {function} action - action to register
+ */
+prot.r = function(filter, action) {
+  if (filter !== '@') {
+    filter = '/' + normalize(filter);
+    this.$.push(filter);
+  }
+  this.on(filter, action);
+};
+
+var mainRouter = new Router();
+var route = mainRouter.m.bind(mainRouter);
+
+/**
+ * Create a sub router
+ * @returns {function} the method of a new Router object
+ */
+route.create = function() {
+  var newSubRouter = new Router();
+  // assign sub-router's main method
+  var router = newSubRouter.m.bind(newSubRouter);
+  // stop only this sub-router
+  router.stop = newSubRouter.s.bind(newSubRouter);
+  return router
+};
+
+/**
+ * Set the base of url
+ * @param {(str|RegExp)} arg - a new base or '#' or '#!'
+ */
+route.base = function(arg) {
+  base = arg || '#';
+  current = getPathFromBase(); // recalculate current path
+};
+
+/** Exec routing right now **/
+route.exec = function() {
+  emit(true);
+};
+
+/**
+ * Replace the default router to yours
+ * @param {function} fn - your parser function
+ * @param {function} fn2 - your secondParser function
+ */
+route.parser = function(fn, fn2) {
+  if (!fn && !fn2) {
+    // reset parser for testing...
+    parser = DEFAULT_PARSER;
+    secondParser = DEFAULT_SECOND_PARSER;
+  }
+  if (fn) { parser = fn; }
+  if (fn2) { secondParser = fn2; }
+};
+
+/**
+ * Helper function to get url query as an object
+ * @returns {object} parsed query
+ */
+route.query = function() {
+  var q = {};
+  var href = loc.href || current;
+  href.replace(/[?&](.+?)=([^&]*)/g, function(_, k, v) { q[k] = v; });
+  return q
+};
+
+/** Stop routing **/
+route.stop = function () {
+  if (started) {
+    if (win) {
+      win[REMOVE_EVENT_LISTENER](POPSTATE, debouncedEmit);
+      win[REMOVE_EVENT_LISTENER](HASHCHANGE, debouncedEmit);
+      doc[REMOVE_EVENT_LISTENER](clickEvent, click);
+    }
+    central[TRIGGER]('stop');
+    started = false;
+  }
+};
+
+/**
+ * Start routing
+ * @param {boolean} autoExec - automatically exec after starting if true
+ */
+route.start = function (autoExec) {
+  if (!started) {
+    if (win) {
+      if (document.readyState === 'interactive' || document.readyState === 'complete') {
+        start(autoExec);
+      }
+      else {
+        document.onreadystatechange = function () {
+          if (document.readyState === 'interactive') {
+            // the timeout is needed to solve
+            // a weird safari bug https://github.com/riot/route/issues/33
+            setTimeout(function() { start(autoExec); }, 1);
+          }
+        };
+      }
+    }
+    started = true;
+  }
+};
+
+/** Prepare the router **/
+route.base();
+route.parser();
+
+/* harmony default export */ __webpack_exports__["a"] = (route);
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+(function(self) {
+  'use strict';
+
+  if (self.fetch) {
+    return
+  }
+
+  var support = {
+    searchParams: 'URLSearchParams' in self,
+    iterable: 'Symbol' in self && 'iterator' in Symbol,
+    blob: 'FileReader' in self && 'Blob' in self && (function() {
+      try {
+        new Blob()
+        return true
+      } catch(e) {
+        return false
+      }
+    })(),
+    formData: 'FormData' in self,
+    arrayBuffer: 'ArrayBuffer' in self
+  }
+
+  if (support.arrayBuffer) {
+    var viewClasses = [
+      '[object Int8Array]',
+      '[object Uint8Array]',
+      '[object Uint8ClampedArray]',
+      '[object Int16Array]',
+      '[object Uint16Array]',
+      '[object Int32Array]',
+      '[object Uint32Array]',
+      '[object Float32Array]',
+      '[object Float64Array]'
+    ]
+
+    var isDataView = function(obj) {
+      return obj && DataView.prototype.isPrototypeOf(obj)
+    }
+
+    var isArrayBufferView = ArrayBuffer.isView || function(obj) {
+      return obj && viewClasses.indexOf(Object.prototype.toString.call(obj)) > -1
+    }
+  }
+
+  function normalizeName(name) {
+    if (typeof name !== 'string') {
+      name = String(name)
+    }
+    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
+      throw new TypeError('Invalid character in header field name')
+    }
+    return name.toLowerCase()
+  }
+
+  function normalizeValue(value) {
+    if (typeof value !== 'string') {
+      value = String(value)
+    }
+    return value
+  }
+
+  // Build a destructive iterator for the value list
+  function iteratorFor(items) {
+    var iterator = {
+      next: function() {
+        var value = items.shift()
+        return {done: value === undefined, value: value}
+      }
+    }
+
+    if (support.iterable) {
+      iterator[Symbol.iterator] = function() {
+        return iterator
+      }
+    }
+
+    return iterator
+  }
+
+  function Headers(headers) {
+    this.map = {}
+
+    if (headers instanceof Headers) {
+      headers.forEach(function(value, name) {
+        this.append(name, value)
+      }, this)
+    } else if (Array.isArray(headers)) {
+      headers.forEach(function(header) {
+        this.append(header[0], header[1])
+      }, this)
+    } else if (headers) {
+      Object.getOwnPropertyNames(headers).forEach(function(name) {
+        this.append(name, headers[name])
+      }, this)
+    }
+  }
+
+  Headers.prototype.append = function(name, value) {
+    name = normalizeName(name)
+    value = normalizeValue(value)
+    var oldValue = this.map[name]
+    this.map[name] = oldValue ? oldValue+','+value : value
+  }
+
+  Headers.prototype['delete'] = function(name) {
+    delete this.map[normalizeName(name)]
+  }
+
+  Headers.prototype.get = function(name) {
+    name = normalizeName(name)
+    return this.has(name) ? this.map[name] : null
+  }
+
+  Headers.prototype.has = function(name) {
+    return this.map.hasOwnProperty(normalizeName(name))
+  }
+
+  Headers.prototype.set = function(name, value) {
+    this.map[normalizeName(name)] = normalizeValue(value)
+  }
+
+  Headers.prototype.forEach = function(callback, thisArg) {
+    for (var name in this.map) {
+      if (this.map.hasOwnProperty(name)) {
+        callback.call(thisArg, this.map[name], name, this)
+      }
+    }
+  }
+
+  Headers.prototype.keys = function() {
+    var items = []
+    this.forEach(function(value, name) { items.push(name) })
+    return iteratorFor(items)
+  }
+
+  Headers.prototype.values = function() {
+    var items = []
+    this.forEach(function(value) { items.push(value) })
+    return iteratorFor(items)
+  }
+
+  Headers.prototype.entries = function() {
+    var items = []
+    this.forEach(function(value, name) { items.push([name, value]) })
+    return iteratorFor(items)
+  }
+
+  if (support.iterable) {
+    Headers.prototype[Symbol.iterator] = Headers.prototype.entries
+  }
+
+  function consumed(body) {
+    if (body.bodyUsed) {
+      return Promise.reject(new TypeError('Already read'))
+    }
+    body.bodyUsed = true
+  }
+
+  function fileReaderReady(reader) {
+    return new Promise(function(resolve, reject) {
+      reader.onload = function() {
+        resolve(reader.result)
+      }
+      reader.onerror = function() {
+        reject(reader.error)
+      }
+    })
+  }
+
+  function readBlobAsArrayBuffer(blob) {
+    var reader = new FileReader()
+    var promise = fileReaderReady(reader)
+    reader.readAsArrayBuffer(blob)
+    return promise
+  }
+
+  function readBlobAsText(blob) {
+    var reader = new FileReader()
+    var promise = fileReaderReady(reader)
+    reader.readAsText(blob)
+    return promise
+  }
+
+  function readArrayBufferAsText(buf) {
+    var view = new Uint8Array(buf)
+    var chars = new Array(view.length)
+
+    for (var i = 0; i < view.length; i++) {
+      chars[i] = String.fromCharCode(view[i])
+    }
+    return chars.join('')
+  }
+
+  function bufferClone(buf) {
+    if (buf.slice) {
+      return buf.slice(0)
+    } else {
+      var view = new Uint8Array(buf.byteLength)
+      view.set(new Uint8Array(buf))
+      return view.buffer
+    }
+  }
+
+  function Body() {
+    this.bodyUsed = false
+
+    this._initBody = function(body) {
+      this._bodyInit = body
+      if (!body) {
+        this._bodyText = ''
+      } else if (typeof body === 'string') {
+        this._bodyText = body
+      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
+        this._bodyBlob = body
+      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
+        this._bodyFormData = body
+      } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+        this._bodyText = body.toString()
+      } else if (support.arrayBuffer && support.blob && isDataView(body)) {
+        this._bodyArrayBuffer = bufferClone(body.buffer)
+        // IE 10-11 can't handle a DataView body.
+        this._bodyInit = new Blob([this._bodyArrayBuffer])
+      } else if (support.arrayBuffer && (ArrayBuffer.prototype.isPrototypeOf(body) || isArrayBufferView(body))) {
+        this._bodyArrayBuffer = bufferClone(body)
+      } else {
+        throw new Error('unsupported BodyInit type')
+      }
+
+      if (!this.headers.get('content-type')) {
+        if (typeof body === 'string') {
+          this.headers.set('content-type', 'text/plain;charset=UTF-8')
+        } else if (this._bodyBlob && this._bodyBlob.type) {
+          this.headers.set('content-type', this._bodyBlob.type)
+        } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+          this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8')
+        }
+      }
+    }
+
+    if (support.blob) {
+      this.blob = function() {
+        var rejected = consumed(this)
+        if (rejected) {
+          return rejected
+        }
+
+        if (this._bodyBlob) {
+          return Promise.resolve(this._bodyBlob)
+        } else if (this._bodyArrayBuffer) {
+          return Promise.resolve(new Blob([this._bodyArrayBuffer]))
+        } else if (this._bodyFormData) {
+          throw new Error('could not read FormData body as blob')
+        } else {
+          return Promise.resolve(new Blob([this._bodyText]))
+        }
+      }
+
+      this.arrayBuffer = function() {
+        if (this._bodyArrayBuffer) {
+          return consumed(this) || Promise.resolve(this._bodyArrayBuffer)
+        } else {
+          return this.blob().then(readBlobAsArrayBuffer)
+        }
+      }
+    }
+
+    this.text = function() {
+      var rejected = consumed(this)
+      if (rejected) {
+        return rejected
+      }
+
+      if (this._bodyBlob) {
+        return readBlobAsText(this._bodyBlob)
+      } else if (this._bodyArrayBuffer) {
+        return Promise.resolve(readArrayBufferAsText(this._bodyArrayBuffer))
+      } else if (this._bodyFormData) {
+        throw new Error('could not read FormData body as text')
+      } else {
+        return Promise.resolve(this._bodyText)
+      }
+    }
+
+    if (support.formData) {
+      this.formData = function() {
+        return this.text().then(decode)
+      }
+    }
+
+    this.json = function() {
+      return this.text().then(JSON.parse)
+    }
+
+    return this
+  }
+
+  // HTTP methods whose capitalization should be normalized
+  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
+
+  function normalizeMethod(method) {
+    var upcased = method.toUpperCase()
+    return (methods.indexOf(upcased) > -1) ? upcased : method
+  }
+
+  function Request(input, options) {
+    options = options || {}
+    var body = options.body
+
+    if (input instanceof Request) {
+      if (input.bodyUsed) {
+        throw new TypeError('Already read')
+      }
+      this.url = input.url
+      this.credentials = input.credentials
+      if (!options.headers) {
+        this.headers = new Headers(input.headers)
+      }
+      this.method = input.method
+      this.mode = input.mode
+      if (!body && input._bodyInit != null) {
+        body = input._bodyInit
+        input.bodyUsed = true
+      }
+    } else {
+      this.url = String(input)
+    }
+
+    this.credentials = options.credentials || this.credentials || 'omit'
+    if (options.headers || !this.headers) {
+      this.headers = new Headers(options.headers)
+    }
+    this.method = normalizeMethod(options.method || this.method || 'GET')
+    this.mode = options.mode || this.mode || null
+    this.referrer = null
+
+    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
+      throw new TypeError('Body not allowed for GET or HEAD requests')
+    }
+    this._initBody(body)
+  }
+
+  Request.prototype.clone = function() {
+    return new Request(this, { body: this._bodyInit })
+  }
+
+  function decode(body) {
+    var form = new FormData()
+    body.trim().split('&').forEach(function(bytes) {
+      if (bytes) {
+        var split = bytes.split('=')
+        var name = split.shift().replace(/\+/g, ' ')
+        var value = split.join('=').replace(/\+/g, ' ')
+        form.append(decodeURIComponent(name), decodeURIComponent(value))
+      }
+    })
+    return form
+  }
+
+  function parseHeaders(rawHeaders) {
+    var headers = new Headers()
+    rawHeaders.split(/\r?\n/).forEach(function(line) {
+      var parts = line.split(':')
+      var key = parts.shift().trim()
+      if (key) {
+        var value = parts.join(':').trim()
+        headers.append(key, value)
+      }
+    })
+    return headers
+  }
+
+  Body.call(Request.prototype)
+
+  function Response(bodyInit, options) {
+    if (!options) {
+      options = {}
+    }
+
+    this.type = 'default'
+    this.status = 'status' in options ? options.status : 200
+    this.ok = this.status >= 200 && this.status < 300
+    this.statusText = 'statusText' in options ? options.statusText : 'OK'
+    this.headers = new Headers(options.headers)
+    this.url = options.url || ''
+    this._initBody(bodyInit)
+  }
+
+  Body.call(Response.prototype)
+
+  Response.prototype.clone = function() {
+    return new Response(this._bodyInit, {
+      status: this.status,
+      statusText: this.statusText,
+      headers: new Headers(this.headers),
+      url: this.url
+    })
+  }
+
+  Response.error = function() {
+    var response = new Response(null, {status: 0, statusText: ''})
+    response.type = 'error'
+    return response
+  }
+
+  var redirectStatuses = [301, 302, 303, 307, 308]
+
+  Response.redirect = function(url, status) {
+    if (redirectStatuses.indexOf(status) === -1) {
+      throw new RangeError('Invalid status code')
+    }
+
+    return new Response(null, {status: status, headers: {location: url}})
+  }
+
+  self.Headers = Headers
+  self.Request = Request
+  self.Response = Response
+
+  self.fetch = function(input, init) {
+    return new Promise(function(resolve, reject) {
+      var request = new Request(input, init)
+      var xhr = new XMLHttpRequest()
+
+      xhr.onload = function() {
+        var options = {
+          status: xhr.status,
+          statusText: xhr.statusText,
+          headers: parseHeaders(xhr.getAllResponseHeaders() || '')
+        }
+        options.url = 'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL')
+        var body = 'response' in xhr ? xhr.response : xhr.responseText
+        resolve(new Response(body, options))
+      }
+
+      xhr.onerror = function() {
+        reject(new TypeError('Network request failed'))
+      }
+
+      xhr.ontimeout = function() {
+        reject(new TypeError('Network request failed'))
+      }
+
+      xhr.open(request.method, request.url, true)
+
+      if (request.credentials === 'include') {
+        xhr.withCredentials = true
+      }
+
+      if ('responseType' in xhr && support.blob) {
+        xhr.responseType = 'blob'
+      }
+
+      request.headers.forEach(function(value, name) {
+        xhr.setRequestHeader(name, value)
+      })
+
+      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
+    })
+  }
+  self.fetch.polyfill = true
+})(typeof self !== 'undefined' ? self : this);
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riot__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_riot_route__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Action_Action__ = __webpack_require__(16);
 
 var riot = __webpack_require__(0);
-riot.tag2('niltea-footer', '<footer class="footer"> <nav class="navigation"> <div class="links"> <a href="{PreviousPage}" class="previous">&lt; PREV</a> <span class="current_page">{PageNumber}</span> <virtual><a href="{URL}" class="previous">{PageNumber}</a></virtual> <a href="{NextPage}" class="next">NEXT &gt;</a> </div> </nav> <nav class="navigation permalink"> <div class="links"> <a href="{NextPost}" class="left">Prev</a> <a href="{PreviousPost}" class="right">Next</a> </div> </nav> <div class="copyright"> <a class="nilgiriLogo txtHide" href="http://www.nilgiri-tea.net/">Designed by Nilgiri Tea</a> <div class="Shibusawa">&copy; Nilgiri Tea</div> </div> </footer>', '', '', function (opts) {});
+
+
+
+
+const RiotControl = __webpack_require__(2);
+
+riot.tag2('niltea-base', '<section class="header" ref="header"></section> <section class="content" ref="content"></section> <section class="footer" ref="footer"></section>', '', '', function (opts) {
+	const self = this;
+
+	const loadIndex = () => {
+		riot.mount(self.refs.content, 'niltea-index');
+		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent('posts');
+	};
+
+	self.on('mount', () => {
+		riot.mount(self.refs.header, 'niltea-header');
+		riot.mount(self.refs.footer, 'niltea-footer');
+	});
+
+	__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */].base('/');
+
+	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/', loadIndex);
+
+	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('*', () => {
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/');
+	});
+	__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */].start(true);
+});
+
+/***/ }),
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot_route__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_riotcontrol__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_riotcontrol__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Action_Action__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Store_Store__ = __webpack_require__(15);
+
+var riot = __webpack_require__(0);
+
+
+
+
+
+
+riot.tag2('niltea-index', '<section id="article_list" class="article_list"> <niltea-list-item articlelist="{articleList}"></niltea-list-item> </section>', '', '', function (opts) {
+		const self = this;
+		self.articleList = {};
+
+		__WEBPACK_IMPORTED_MODULE_1_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].ActionTypes.changed, () => {
+				self.articleList = __WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].content;
+				riot.update();
+		});
+
+		self.on('mount', () => {});
+
+		self.on('unmount', () => {
+				__WEBPACK_IMPORTED_MODULE_1_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].ActionTypes.changed);
+		});
+});
+
+riot.tag2('niltea-list-item', '<article each="{item in opts.articlelist}" class="article-list_item"> <a class="photo" href="{original_size.url}" if="{item.photos}" each="{item.photos}"> <img riot-src="{alt_sizes[4].url || alt_sizes[3].url}" alt=""> </a> <h3 class="title">{item.title}</h3> href=\'/articles/{item.id}\' </article>', '', '', function (opts) {
+		const self = this;
+		self.on('update', () => {
+				console.log(opts.articlelist);
+		});
+});
+
+riot.tag2('niltea-index-list-lead', '<span class="line" each="{content in lines}">{content}</span>', '', '', function (opts) {
+		let content = opts.content;
+		content = content.replace('</p>', '').replace('<p>', '');
+		this.lines = content.split('<br />');
+});
+
+/***/ }),
+/* 15 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(riot) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Constant_Constant__ = __webpack_require__(8);
+
+
+
+const store = new class ContentStore {
+	get current() {
+		return this._currentPage;
+	}
+	get content() {
+		return this._content;
+	}
+	get baseURL() {
+		return 'http://nilgiri-tea.net/';
+	}
+	get title() {
+		return 'Nilgiri Tea';
+	}
+	get twitterID() {
+		return 'niltea';
+	}
+
+	constructor() {
+		riot.observable(this);
+
+		this._content = '';
+		this._currentPage = '';
+		this._pageTitle = '';
+
+		this.on(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setCurrent, this._setCurrent.bind(this));
+		this.on(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setContent, this._setContent.bind(this));
+	}
+
+	_setCurrent(currentAction) {
+		console.log('_setCurrent');
+		// Actionから渡されたcurrent操作関数がcurrentActionへ代入される
+		// それを用いてcurrentの内容を変更する
+		this._currentPage = currentAction(this._content);
+		// Storeの内容が変わったよー、というのをControlへ通知する（そして関係する動作を叩いてもらう
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changed);
+	}
+	_setContent(contentAction) {
+		console.log('_setContent');
+		this._content = contentAction(this._content);
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changed);
+	}
+	_setpageTitle(pageTitleAction) {
+		this._pageTitle = pageTitleAction(this._pageTitle);
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changed);
+	}
+}();
+
+store.ActionTypes = { changed: "content_store_changed" };
+__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.addStore(store);
+
+/* harmony default export */ __webpack_exports__["a"] = (store);
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+
+/***/ }),
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Constant_Constant__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_whatwg_fetch__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_whatwg_fetch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_whatwg_fetch__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__niltea_util_js__ = __webpack_require__(1);
+
+
+
+
+
+
+const fetchParams = { mode: 'cors' };
+const tumblrAPI = new class TumblrAPI {
+	async fetchAPI(uri) {
+		if (typeof uri !== 'string') return false;
+		const res = await fetch(uri, fetchParams);
+		const json = await res.json();
+		return res.status >= 200 && res.status < 300 ? json : false;
+	}
+}();
+
+const appAction = new class AppAction {
+	async loadContent(type, resource = '') {
+		let json = null,
+		    article = null,
+		    flg_result = false;
+		switch (type) {
+			case 'pages':
+				// pageの時はリソース指定必須とする。なければfailフラグの返却
+				if (!resource) return flg_result;
+				// ページリストを取得し、forEachで回す
+				json = await tumblrAPI.fetchAPI(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].getEndPoint(type));
+				json.forEach(page => {
+					// リソースIDが指定の物と違ったら飛ばす
+					if (page.resource_id !== resource) return false;
+
+					// 記事が見つかったときの処理
+					flg_result = true;
+					// 記事を整形してtriggerする
+					article = this._loadArticle(page);
+				});
+				break;
+
+			default:
+				//posts の取得
+				json = await tumblrAPI.fetchAPI(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].getEndPoint(type, resource));
+				// jsonがきちんと返ってきたら成功フラグをtrueにする
+				if (json) {
+					article = this._loadArticle(json.response.posts);
+					flg_result = true;
+				}
+				break;
+		}
+		// 成功フラグが立っていればcontrolに通知する
+		if (flg_result) __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setContent, content => article);
+		return flg_result;
+	}
+	_loadArticle(articles) {
+		const articleList = [];
+		// 単一記事の場合はObjectが渡されてくるはずなので、forEachで回すためにArrayに突っ込む
+		if (Object.prototype.toString.call(articles) !== '[object Array]') {
+			articles = [articles];
+		}
+		articles.forEach(article => {
+			const articleData = this._getArticleData(article);
+			articleList.push(articleData);
+		});
+		return articleList;
+	}
+	_getArticleData(post) {
+		return {
+			id: post.id,
+			caption: post.caption,
+			title: post.slug,
+			date: post.timestamp,
+			type: post.type,
+			url: post.short_url,
+			photos: post.photos
+		};
+	}
+	decrementCounter() {
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].decrementCounter, count => count - 1);
+	}
+	resetCounter() {
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].resetCounter, count => 0);
+	}
+}();
+
+// export default AppAction
+/* harmony default export */ __webpack_exports__["a"] = (appAction);
 
 /***/ })
 /******/ ]);

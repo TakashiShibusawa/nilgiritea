@@ -3,15 +3,12 @@ import util from './niltea_util.js';
 
 // riot and tags
 require('riot');
-require('./tag/Index.tag')
+require('./tag/base.tag')
+require('./tag/index.tag')
+require('./tag/compornents/header.tag')
+require('./tag/compornents/footer.tag')
 
-const RiotControl  = require('riotcontrol');
-
-document.addEventListener('DOMContentLoaded', () => {
-	riot.mount('#wrapper', 'niltea-page');
-});
-
-
+riot.mount('#wrapper', 'niltea-base');
 
 // $(function(){
 // 	var $container = $('.postContainer');

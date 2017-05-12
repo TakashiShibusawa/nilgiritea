@@ -1,8 +1,5 @@
 import TumblrActionCreators from '../actions/tumblr-action-creators.js';
 
-const API_KEY = "Rak7GXrKPBB6uuTODOgQL3hPLpnTAf2b2IoUjAUoBd8yLoCthg";
-const BASE_URL = "http://api.tumblr.com/v2/blog/nilgiritea.tumblr.com/posts";
-
 export default {
   // get some message
   // set offset and can get 20 article
