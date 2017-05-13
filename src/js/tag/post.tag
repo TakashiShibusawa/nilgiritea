@@ -18,7 +18,8 @@ import Store from '../Store/Store';
 		</section>
 		<section class='post_text'><raw content='{caption}' /></section>
 		<div class="post_meta">
-			<a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="rblg" target='_blank'>reblog</a>
+			<a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="reblog lsf" target='_blank'>retweet</a>
+			<a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="like lsf" target='_blank'>{heart}</a>
 		</div>
 	</article>
 
@@ -36,6 +37,7 @@ import Store from '../Store/Store';
 			'reblog_key',
 		];
 		self.isPhotoSet = false;
+		self.heart = 'heartempty';
 
 		const layoutPhotoset = () => {
 			const layout = self.photoset_layout.split('');
@@ -159,6 +161,13 @@ import Store from '../Store/Store';
 			font-size: 1.3em;
 			width: 60%;
 			min-width: 25em;
+			a {
+				text-decoration: none;
+				font-size: 2em;
+				margin-right: 0.5em;
+			}
+			.reblog { color: #222; }
+			.like { color: #c22; }
 		}
 		@media screen and (max-width: 37.5em) {
 			.post_title {
