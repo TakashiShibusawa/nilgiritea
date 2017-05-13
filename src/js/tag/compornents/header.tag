@@ -4,7 +4,7 @@ import Store from '../../Store/Store';
 	<header class="mainHeader">
 		<h1 class="pageTitle">
 			<a href="/" class="home">{title}</a>
-			<span class="description"></span>
+			<span class="description"><raw content="{description}" /></span>
 		</h1>
 		<nav class="gnav clearfix" id="gnav">
 			<ul>
@@ -18,11 +18,13 @@ import Store from '../../Store/Store';
 	</header>
 	<script>
 		const self = this;
+		self.title = '';
+		self.description = '';
 		// Subscribes Store.changedBlogInfo
 		RiotControl.on(Store.ActionTypes.changedBlogInfo, () => {
-			const content = Store.blogInfo;
-			// console.log(content)
-			self.title = content.title;
+			const blogInfo = Store.blogInfo;
+			self.title = blogInfo.title;
+			self.description = blogInfo.description;
 			self.update();
 		});
 	</script>

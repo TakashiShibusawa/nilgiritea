@@ -8,6 +8,7 @@ require('./tag/index.tag')
 require('./tag/post.tag')
 require('./tag/compornents/header.tag')
 require('./tag/compornents/footer.tag')
+require('./tag/compornents/raw.tag')
 
 riot.mount('#wrapper', 'niltea-base');
 

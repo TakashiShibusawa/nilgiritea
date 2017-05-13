@@ -3021,13 +3021,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var riot = __webpack_require__(0);
 
 
-riot.tag2('niltea-header', '<header class="mainHeader"> <h1 class="pageTitle"> <a href="/" class="home">{title}</a> <span class="description"></span> </h1> <nav class="gnav clearfix" id="gnav"> <ul> <li class="gnav_item about" title="about"><a href="/#/about/" target="_top">about</a></li> <li class="gnav_item blog" title="blog"><a href="/#/" target="_top">blog</a></li> <li class="gnav_item twitter" title="twitter"><a href="http://www.twitter.com/{TwitterUsername}" target="_blank">twitter</a></li> <li class="gnav_item pixiv" title="pixiv"><a href="http://www.pixiv.net/member.php?id={pixiv}" target="_blank">pixiv</a></li> <li class="gnav_item github" title="github"><a href="https://github.com/niltea" target="_blank">GitHub</a></li> </ul> </nav> </header>', 'niltea-header .clearfix,[data-is="niltea-header"] .clearfix{ zoom: 1; } niltea-header .clearfix:after,[data-is="niltea-header"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-header .txtHide,[data-is="niltea-header"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-header a,[data-is="niltea-header"] a{ text-decoration: none; color: #000; } niltea-header .mainHeader,[data-is="niltea-header"] .mainHeader{ padding-top: 30px; zoom: 1; } niltea-header .mainHeader:after,[data-is="niltea-header"] .mainHeader:after{ content: ""; clear: both; display: block; } niltea-header .pageTitle,[data-is="niltea-header"] .pageTitle{ float: left; } niltea-header .pageTitle a,[data-is="niltea-header"] .pageTitle a{ font-size: 2.8em; } niltea-header .gnav,[data-is="niltea-header"] .gnav{ float: left; margin-left: 40px; } niltea-header .gnav_item,[data-is="niltea-header"] .gnav_item{ display: inline-block; } niltea-header .gnav_item + .gnav_item,[data-is="niltea-header"] .gnav_item + .gnav_item{ margin-left: 30px; } niltea-header .gnav_item:first-child,[data-is="niltea-header"] .gnav_item:first-child{ margin: 0; } niltea-header .gnav_item.active,[data-is="niltea-header"] .gnav_item.active,niltea-header .gnav_item:hover,[data-is="niltea-header"] .gnav_item:hover{ } niltea-header .gnav_item a,[data-is="niltea-header"] .gnav_item a{ font-size: 1.8em; }', '', function (opts) {
+riot.tag2('niltea-header', '<header class="mainHeader"> <h1 class="pageTitle"> <a href="/" class="home">{title}</a> <span class="description"><raw content="{description}"></raw></span> </h1> <nav class="gnav clearfix" id="gnav"> <ul> <li class="gnav_item about" title="about"><a href="/#/about/" target="_top">about</a></li> <li class="gnav_item blog" title="blog"><a href="/#/" target="_top">blog</a></li> <li class="gnav_item twitter" title="twitter"><a href="http://www.twitter.com/{TwitterUsername}" target="_blank">twitter</a></li> <li class="gnav_item pixiv" title="pixiv"><a href="http://www.pixiv.net/member.php?id={pixiv}" target="_blank">pixiv</a></li> <li class="gnav_item github" title="github"><a href="https://github.com/niltea" target="_blank">GitHub</a></li> </ul> </nav> </header>', 'niltea-header .clearfix,[data-is="niltea-header"] .clearfix{ zoom: 1; } niltea-header .clearfix:after,[data-is="niltea-header"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-header .txtHide,[data-is="niltea-header"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-header a,[data-is="niltea-header"] a{ text-decoration: none; color: #000; } niltea-header .mainHeader,[data-is="niltea-header"] .mainHeader{ padding-top: 30px; zoom: 1; } niltea-header .mainHeader:after,[data-is="niltea-header"] .mainHeader:after{ content: ""; clear: both; display: block; } niltea-header .pageTitle,[data-is="niltea-header"] .pageTitle{ float: left; } niltea-header .pageTitle a,[data-is="niltea-header"] .pageTitle a{ font-size: 2.8em; } niltea-header .gnav,[data-is="niltea-header"] .gnav{ float: left; margin-left: 40px; } niltea-header .gnav_item,[data-is="niltea-header"] .gnav_item{ display: inline-block; } niltea-header .gnav_item + .gnav_item,[data-is="niltea-header"] .gnav_item + .gnav_item{ margin-left: 30px; } niltea-header .gnav_item:first-child,[data-is="niltea-header"] .gnav_item:first-child{ margin: 0; } niltea-header .gnav_item.active,[data-is="niltea-header"] .gnav_item.active,niltea-header .gnav_item:hover,[data-is="niltea-header"] .gnav_item:hover{ } niltea-header .gnav_item a,[data-is="niltea-header"] .gnav_item a{ font-size: 1.8em; }', '', function (opts) {
 		const self = this;
+		self.title = '';
+		self.description = '';
 
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changedBlogInfo, () => {
-				const content = __WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].blogInfo;
-
-				self.title = content.title;
+				const blogInfo = __WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].blogInfo;
+				self.title = blogInfo.title;
+				self.description = blogInfo.description;
 				self.update();
 		});
 });
@@ -3084,6 +3086,7 @@ __webpack_require__(14);
 __webpack_require__(17);
 __webpack_require__(5);
 __webpack_require__(4);
+__webpack_require__(18);
 
 riot.mount('#wrapper', 'niltea-base');
 
@@ -4380,6 +4383,16 @@ riot.tag2('niltea-post', '<div class="post post-single"> <div class="photo" if="
 		self.isPhotoSet = self.photos.length > 1;
 		self.update();
 	});
+});
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var riot = __webpack_require__(0);
+riot.tag2('raw', '<span></span>', '', '', function (opts) {
+    this.on('update', () => this.root.innerHTML = opts.content);
 });
 
 /***/ })
