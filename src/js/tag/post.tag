@@ -2,10 +2,10 @@ import RiotControl from 'riotcontrol';
 
 import Store from '../Store/Store';
 <niltea-post>
-	<div class="post post-single">
+	<article class="post post-single">
 		<h2 class="post_title">{title}</h2>
 		<!-- Photo -->
-		<div class="photo" if={photos} ref='photo'>
+		<section class="photo" if={photos} ref='photo'>
 
 			<a class="photo_item photo_item-single" if={!isPhotoSet} each={photos} href='{original_size.url}'>
 				<img src="{alt_sizes[0].url}" alt="" ref='photoItem'>
@@ -15,10 +15,12 @@ import Store from '../Store/Store';
 					<img src="{alt_sizes[0].url}" alt="" ref='photoItem'>
 				</a>
 			</div>
+		</section>
+		<section class='post_text'><raw content='{caption}' /></section>
+		<div class="post_meta">
+			<a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="rblg" target='_blank'>reblog</a>
 		</div>
-		<span><raw content='{caption}' /></span>
-		<a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="rblg" target='_blank'>reblog</a>
-	</div>
+	</article>
 
 	<script>
 		const self = this;
@@ -104,6 +106,7 @@ import Store from '../Store/Store';
 	<style type="text/scss">
 		.post_title {
 			margin-bottom: 2em;
+			margin-bottom: 6vw;
 			text-align: center;
 			font-weight: 500;
 			font-size: 2.8em;
@@ -137,6 +140,33 @@ import Store from '../Store/Store';
 		img {
 			width: 100%;
 			vertical-align: top;
+		}
+
+		/*text*/
+		.post_text {
+			border-radius: 2px;
+			background-color: #3dffcf;
+			margin: 6vw auto 0;
+			width: 60%;
+			padding: 2em;
+			min-width: 25em;
+			font-size: 1.6em;
+			line-height: 1.75em;
+			letter-spacing: 0.1em;
+		}
+		.post_meta {
+			margin: 3vw auto 0;
+			font-size: 1.3em;
+			width: 60%;
+			min-width: 25em;
+		}
+		@media screen and (max-width: 37.5em) {
+			.post_title {
+				font-size: 2.2em;
+			}
+			.post_text {
+				font-size: 1.4em;
+			}
 		}
 	</style>
 </niltea-post>
