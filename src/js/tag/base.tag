@@ -30,16 +30,16 @@ import RiotControl from 'riotcontrol';
 	});
 
 	// post
-	route('/post/*', (postID) => {
+	route('/post/*', (id) => {
 		riot.mount(self.refs.content, 'niltea-post');
-		Action.loadContent({type: 'posts', postID});
-		Action.setCurrent({current: 'posts', postID});
+		Action.loadContent({type: 'posts', query: {id}});
+		Action.setCurrent({current: 'posts', id});
 	});
 	// about
 	route('/about', () => {
 		riot.mount(self.refs.content, 'niltea-about')
 		const info = Store.blogInfo;
-		if (!info) Action.loadContent({type: 'posts', limit: 1});
+		if (!info) Action.loadContent({type: 'info'});
 		document.title = 'about | Nilgiri Tea'
 		// Action.loadContent('posts');
 		Action.setCurrent({current: 'about'});

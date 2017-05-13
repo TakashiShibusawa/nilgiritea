@@ -15,14 +15,12 @@ const tumblrAPI = new class TumblrAPI {
 };
 
 const appAction = new class AppAction {
-	async loadContent({type, resource = '', offset, limit}){
+	async loadContent({type, query}){
 		let json = null,
 		article = null,
 		flg_result = false;
 		switch (type) {
-			case 'pages':
-			// pageの時はリソース指定必須とする。なければfailフラグの返却
-			if (!resource) return flg_result;
+			case 'info':
 			// ページリストを取得し、forEachで回す
 			json = await tumblrAPI.fetchAPI(Constant.getEndPoint(type));
 			json.forEach(page => {
@@ -38,7 +36,7 @@ const appAction = new class AppAction {
 
 			default:
 			//posts の取得
-			json = await tumblrAPI.fetchAPI(Constant.getEndPoint(type, resource));
+			json = await tumblrAPI.fetchAPI(Constant.getEndPoint({type, query}));
 			// jsonがきちんと返ってきたら成功フラグをtrueにする
 			if (json) {
 				article = this._loadArticle(json.response.posts);
@@ -83,8 +81,8 @@ const appAction = new class AppAction {
 		};
 	}
 	setCurrent(currentInfo) {
-		const {current: currentPage, postID = null} = currentInfo;
-		RiotControl.trigger(Constant.setCurrent, (currentObj) => { return {currentPage, postID} });
+		const {current: currentPage, id = null} = currentInfo;
+		RiotControl.trigger(Constant.setCurrent, (currentObj) => { return {currentPage, id} });
 	}
 	resetCounter(){
 		RiotControl.trigger(Constant.resetCounter, (count)=> 0);

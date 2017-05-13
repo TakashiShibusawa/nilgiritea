@@ -16,9 +16,16 @@ const constant = new class Constant{
 	_getApiKey(){
 		return this.api.API_KEY;
 	}
-	getEndPoint (type, resource) {
-		const id = resource ? `&id=${resource}` : '';
-		const endPoint = this.api.APIRoot + type + '?' + this._getApiKey() + id;
+	_setQS (query) {
+		if (!query) return '';
+		let queryString = '';
+		Object.keys(query).forEach(key => (query[key]) ? queryString += `&${key}=${query[key]}` : queryString );
+		return queryString;
+	}
+	getEndPoint ({type, query}) {
+		const queryString = this._setQS(query);
+		const endPoint = this.api.APIRoot + type + '?' + this._getApiKey() + queryString;
+		console.log(endPoint)
 		return endPoint;
 	}
 

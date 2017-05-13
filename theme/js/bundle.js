@@ -2962,14 +2962,12 @@ const tumblrAPI = new class TumblrAPI {
 }();
 
 const appAction = new class AppAction {
-	async loadContent({ type, resource = '', offset, limit }) {
+	async loadContent({ type, query }) {
 		let json = null,
 		    article = null,
 		    flg_result = false;
 		switch (type) {
-			case 'pages':
-				// pageの時はリソース指定必須とする。なければfailフラグの返却
-				if (!resource) return flg_result;
+			case 'info':
 				// ページリストを取得し、forEachで回す
 				json = await tumblrAPI.fetchAPI(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].getEndPoint(type));
 				json.forEach(page => {
@@ -2985,7 +2983,7 @@ const appAction = new class AppAction {
 
 			default:
 				//posts の取得
-				json = await tumblrAPI.fetchAPI(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].getEndPoint(type, resource));
+				json = await tumblrAPI.fetchAPI(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].getEndPoint({ type, query }));
 				// jsonがきちんと返ってきたら成功フラグをtrueにする
 				if (json) {
 					article = this._loadArticle(json.response.posts);
@@ -3030,9 +3028,9 @@ const appAction = new class AppAction {
 		};
 	}
 	setCurrent(currentInfo) {
-		const { current: currentPage, postID = null } = currentInfo;
+		const { current: currentPage, id = null } = currentInfo;
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setCurrent, currentObj => {
-			return { currentPage, postID };
+			return { currentPage, id };
 		});
 	}
 	resetCounter() {
@@ -3208,9 +3206,16 @@ const constant = new class Constant {
 	_getApiKey() {
 		return this.api.API_KEY;
 	}
-	getEndPoint(type, resource) {
-		const id = resource ? `&id=${resource}` : '';
-		const endPoint = this.api.APIRoot + type + '?' + this._getApiKey() + id;
+	_setQS(query) {
+		if (!query) return '';
+		let queryString = '';
+		Object.keys(query).forEach(key => query[key] ? queryString += `&${key}=${query[key]}` : queryString);
+		return queryString;
+	}
+	getEndPoint({ type, query }) {
+		const queryString = this._setQS(query);
+		const endPoint = this.api.APIRoot + type + '?' + this._getApiKey() + queryString;
+		console.log(endPoint);
 		return endPoint;
 	}
 
@@ -3278,16 +3283,16 @@ riot.tag2('niltea-base', '<section class="header" ref="header"></section> <secti
 		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].setCurrent({ current: 'index' });
 	});
 
-	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/post/*', postID => {
+	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/post/*', id => {
 		riot.mount(self.refs.content, 'niltea-post');
-		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent({ type: 'posts', postID });
-		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].setCurrent({ current: 'posts', postID });
+		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent({ type: 'posts', query: { id } });
+		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].setCurrent({ current: 'posts', id });
 	});
 
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/about', () => {
 		riot.mount(self.refs.content, 'niltea-about');
 		const info = __WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].blogInfo;
-		if (!info) __WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent({ type: 'posts', limit: 1 });
+		if (!info) __WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent({ type: 'info' });
 		document.title = 'about | Nilgiri Tea';
 
 		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].setCurrent({ current: 'about' });
