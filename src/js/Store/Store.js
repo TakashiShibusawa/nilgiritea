@@ -20,7 +20,6 @@ const store = new class ContentStore{
 	}
 
 	_setCurrent(currentAction){
-			console.log('_setCurrent')
 		// Actionから渡されたcurrent操作関数がcurrentActionへ代入される
 		// それを用いてcurrentの内容を変更する
 		this._currentPage = currentAction(this._content);
@@ -28,7 +27,6 @@ const store = new class ContentStore{
 		RiotControl.trigger(this.ActionTypes.changed);
 	}
 	_setContent(contentAction){
-			console.log('_setContent')
 		this._content = contentAction(this._content);
 		RiotControl.trigger(this.ActionTypes.changed);
 	}

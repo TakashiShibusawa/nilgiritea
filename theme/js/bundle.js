@@ -3043,7 +3043,8 @@ const constant = new class Constant {
 		return this.api.API_KEY;
 	}
 	getEndPoint(type, resource) {
-		const endPoint = this.api.APIRoot + type + '?' + this._getApiKey();
+		const id = resource ? `&id=${resource}` : '';
+		const endPoint = this.api.APIRoot + type + '?' + this._getApiKey() + id;
 		return endPoint;
 	}
 
@@ -3065,6 +3066,7 @@ const constant = new class Constant {
 __webpack_require__(0);
 __webpack_require__(13);
 __webpack_require__(14);
+__webpack_require__(17);
 __webpack_require__(5);
 __webpack_require__(4);
 
@@ -4094,6 +4096,11 @@ riot.tag2('niltea-base', '<section class="header" ref="header"></section> <secti
 
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/', loadIndex);
 
+	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/post/*', postID => {
+		riot.mount(self.refs.content, 'niltea-post');
+		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent('posts', postID);
+	});
+
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('*', () => {
 		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/');
 	});
@@ -4135,7 +4142,7 @@ riot.tag2('niltea-index', '<section id="article_list" class="article_list"> <nil
 		});
 });
 
-riot.tag2('niltea-list-item', '<article each="{item in opts.articlelist}" class="article-list_item"> <a class="photo" href="{original_size.url}" if="{item.photos}" each="{item.photos}"> {console.log(original_size)} <img riot-src="{alt_sizes[4] ? alt_sizes[4].url : alt_sizes[3].url}" alt=""> </a> <h3 class="title">{item.title}</h3> href=\'/articles/{item.id}\' </article>', '', '', function (opts) {
+riot.tag2('niltea-list-item', '<article each="{item in opts.articlelist}" class="article-list_item"> <a class="photo" href="/post/{item.id}" if="{item.photos}" each="{item.photos}"> {console.log(original_size)} <img riot-src="{alt_sizes[4] ? alt_sizes[4].url : alt_sizes[3].url}" alt=""> </a> <h3 class="title">{item.title}</h3> </article>', '', '', function (opts) {
 		const self = this;
 		self.on('update', () => {
 				console.log(opts.articlelist);
@@ -4188,7 +4195,6 @@ const store = new class ContentStore {
 	}
 
 	_setCurrent(currentAction) {
-		console.log('_setCurrent');
 		// Actionから渡されたcurrent操作関数がcurrentActionへ代入される
 		// それを用いてcurrentの内容を変更する
 		this._currentPage = currentAction(this._content);
@@ -4196,7 +4202,6 @@ const store = new class ContentStore {
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changed);
 	}
 	_setContent(contentAction) {
-		console.log('_setContent');
 		this._content = contentAction(this._content);
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changed);
 	}
@@ -4308,6 +4313,41 @@ const appAction = new class AppAction {
 
 // export default AppAction
 /* harmony default export */ __webpack_exports__["a"] = (appAction);
+
+/***/ }),
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Store_Store__ = __webpack_require__(15);
+
+var riot = __webpack_require__(0);
+
+
+
+riot.tag2('niltea-post', '<div id="post"> <div class="photoContainer" if="{photos}"> <a class="photo" if="{!isPhotoSet}" each="{photos}" href="{original_size.url}"> <img riot-src="{alt_sizes[0].url}" alt=""> </a> <a class="photo photoSetItem" if="{isPhotoSet}" each="{photos}" href="{original_size.url}"> <img riot-src="{alt_sizes[0].url}" alt=""> </a> </div> <span>{caption}</span> </div>', '', '', function (opts) {
+	const self = this;
+	const contentKeys = ['id', 'caption', 'title', 'date', 'type', 'url', 'photos'];
+	this.isPhotoSet = false;
+
+	self.on('unmount', () => {
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changed);
+	});
+
+	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changed, () => {
+		const content = __WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].content[0];
+		console.log(content);
+		contentKeys.forEach(key => {
+			this[key] = content[key];
+		});
+
+		this.isPhotoSet = this.photos.length > 1;
+		riot.update();
+	});
+});
 
 /***/ })
 /******/ ]);

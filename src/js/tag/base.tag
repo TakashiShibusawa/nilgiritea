@@ -28,6 +28,12 @@ const RiotControl  = require('riotcontrol');
 
 	route('/', loadIndex);
 
+	// post
+	route('/post/*', (postID) => {
+		riot.mount(self.refs.content, 'niltea-post');
+		Action.loadContent('posts', postID);
+	});
+
 	// default
 	route('*', () => {route('/')});
 	route.start(true);

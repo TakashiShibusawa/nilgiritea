@@ -15,7 +15,8 @@ const constant = new class Constant{
 		return this.api.API_KEY;
 	}
 	getEndPoint (type, resource) {
-		const endPoint = this.api.APIRoot + type + '?' + this._getApiKey();
+		const id = resource ? `&id=${resource}` : '';
+		const endPoint = this.api.APIRoot + type + '?' + this._getApiKey() + id;
 		return endPoint;
 	}
 

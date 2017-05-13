@@ -5,6 +5,7 @@ import util from './niltea_util.js';
 require('riot');
 require('./tag/base.tag')
 require('./tag/index.tag')
+require('./tag/post.tag')
 require('./tag/compornents/header.tag')
 require('./tag/compornents/footer.tag')
 
