@@ -2,9 +2,11 @@ import RiotControl from 'riotcontrol';
 import Store from '../../Store/Store';
 <niltea-header>
 	<header class="mainHeader">
-		<h1 class="pageTitle">
-			<a href="/" class="home">{title}</a>
-			<span class="description"><raw content="{description}" /></span>
+		<h1>
+			<a href="/" class="home">
+				<span class="mainTitle">{title}</span>
+				<span class="siteDescription"><raw content="{description}" /></span>
+			</a>
 		</h1>
 		<nav class="gnav clearfix" id="gnav">
 			<ul>
@@ -35,24 +37,40 @@ import Store from '../../Store/Store';
 			color: #000;
 		}
 		.mainHeader {
-			padding-top: 30px;
 			@include clearfix;
 		}
-		.pageTitle {
+		h1 {
 			float: left;
+			padding-left: 2%;
 			a {
-				font-size: 2.8em;
+				display: block;
+			}
+			.mainTitle {
+				display: block;
+				font-size: 3.8em;
+				line-height: 1em;
+				letter-spacing: 0.05em;
+			}
+			.siteDescription {
+				display: block;
+				margin-top: 10px;
+				font-weight: 400;
+				font-size: 1.0em;
+				line-height: 1em;
+				letter-spacing: 0.15em;
 			}
 		}
 		.gnav {
 			float: left;
-			margin-left: 40px;
+			padding-left: 40px;
+			padding-top: 23px;
+			max-width: 80%;
 		}
 		.gnav_item {
 			display: inline-block;
-			/*border-bottom: 3px solid #303233;*/
+			line-height: 1em;
 			+ .gnav_item {
-				margin-left: 30px;
+				margin-left: 2em;
 			}
 			&:first-child { margin: 0; }
 			&.active,
@@ -61,6 +79,15 @@ import Store from '../../Store/Store';
 			}
 			a {
 				font-size: 1.8em;
+			}
+		}
+		@media screen and (max-width: 37.5em) {
+			h1, .gnav {
+				float: none;
+			}
+			.gnav {
+				padding-left: 2%;
+				padding-top: 23px;
 			}
 		}
 	</style>
