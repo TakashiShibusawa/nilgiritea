@@ -15,7 +15,7 @@ const tumblrAPI = new class TumblrAPI {
 };
 
 const appAction = new class AppAction {
-	async loadContent(type, resource = ''){
+	async loadContent({type, resource = '', offset, limit}){
 		let json = null,
 		article = null,
 		flg_result = false;

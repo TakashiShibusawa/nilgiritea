@@ -10,7 +10,7 @@ import Store from '../../Store/Store';
 		</h1>
 		<nav class="gnav clearfix" id="gnav">
 			<ul>
-				<li class="gnav_item about" title="about"><a href="/about/" target="_top">about</a></li>
+				<li class="gnav_item about" title="about"><a href="/about">about</a></li>
 				<li class="gnav_item pixiv" title="Pixiv"><a href="http://www.pixiv.net/member.php?id={pixiv}" target="_blank">pixiv</a></li>
 				<li class="gnav_item twitter lsf" title="Twitter"><a href="http://www.twitter.com/{TwitterUsername}" target="_blank">twitter</a></li>
 				<li class="gnav_item github lsf" title="GitHub"><a href="https://github.com/niltea" target="_blank">github</a></li>

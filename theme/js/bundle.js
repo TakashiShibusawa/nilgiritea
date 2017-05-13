@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -2833,6 +2833,218 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var RiotControl = {
+  _stores: [],
+  addStore: function(store) {
+    this._stores.push(store);
+  },
+  reset: function() {
+    this._stores = [];
+  }
+};
+
+['on','one','off','trigger'].forEach(function(api){
+  RiotControl[api] = function() {
+    var args = [].slice.call(arguments);
+    this._stores.forEach(function(el){
+      el[api].apply(el, args);
+    });
+  };
+});
+
+if (true) module.exports = RiotControl;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(riot) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Constant_Constant__ = __webpack_require__(5);
+
+
+
+const store = new class ContentStore {
+	get blogInfo() {
+		return this._blogInfo;
+	}
+	get current() {
+		return this._current;
+	}
+	get content() {
+		return this._content;
+	}
+	get baseURL() {
+		return 'http://nilgiri-tea.net/';
+	}
+	get title() {
+		return 'Nilgiri Tea';
+	}
+	get twitterID() {
+		return 'niltea';
+	}
+
+	constructor() {
+		riot.observable(this);
+
+		this._blogInfo = null;
+		this._content = '';
+		this._current = '';
+		this._pageTitle = '';
+		this.on(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setBlogInfo, this._setBlogInfo.bind(this));
+		this.on(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setCurrent, this._setCurrent.bind(this));
+		this.on(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setContent, this._setContent.bind(this));
+	}
+
+	_setBlogInfo(action) {
+		const blogInfo = action(JSON.stringify(this._blogInfo));
+		// もしinfoが変わっていればisChangedが立つのでデータを差し替えてtrigger
+		if (!blogInfo.isChanged) return;
+		this._blogInfo = blogInfo.data;
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changedBlogInfo);
+	}
+	_setCurrent(action) {
+		// Actionから渡されたcurrent操作関数がactionへ代入される
+		// それを用いてcurrentの内容を変更する
+		this._current = action(this._current);
+		// Storeの内容が変わったよー、というのをControlへ通知する（そして関係する動作を叩いてもらう
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changedCurrent);
+	}
+	_setContent(contentAction) {
+		this._content = contentAction(this._content);
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changed);
+	}
+	_setpageTitle(pageTitleAction) {
+		this._pageTitle = pageTitleAction(this._pageTitle);
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changed);
+	}
+}();
+
+store.ActionTypes = {
+	changedBlogInfo: "changedBlogInfo",
+	changed: "content_store_changed",
+	changedCurrent: "changedCurrent"
+};
+__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.addStore(store);
+
+/* harmony default export */ __webpack_exports__["a"] = (store);
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Constant_Constant__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_whatwg_fetch__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_whatwg_fetch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_whatwg_fetch__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__niltea_util_js__ = __webpack_require__(4);
+
+
+
+
+
+const fetchParams = { mode: 'cors' };
+
+const tumblrAPI = new class TumblrAPI {
+	async fetchAPI(uri) {
+		if (typeof uri !== 'string') return false;
+		const res = await fetch(uri, fetchParams);
+		const json = await res.json();
+		return res.status >= 200 && res.status < 300 ? json : false;
+	}
+}();
+
+const appAction = new class AppAction {
+	async loadContent({ type, resource = '', offset, limit }) {
+		let json = null,
+		    article = null,
+		    flg_result = false;
+		switch (type) {
+			case 'pages':
+				// pageの時はリソース指定必須とする。なければfailフラグの返却
+				if (!resource) return flg_result;
+				// ページリストを取得し、forEachで回す
+				json = await tumblrAPI.fetchAPI(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].getEndPoint(type));
+				json.forEach(page => {
+					// リソースIDが指定の物と違ったら飛ばす
+					if (page.resource_id !== resource) return false;
+
+					// 記事が見つかったときの処理
+					flg_result = true;
+					// 記事を整形してtriggerする
+					article = this._loadArticle(page);
+				});
+				break;
+
+			default:
+				//posts の取得
+				json = await tumblrAPI.fetchAPI(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].getEndPoint(type, resource));
+				// jsonがきちんと返ってきたら成功フラグをtrueにする
+				if (json) {
+					article = this._loadArticle(json.response.posts);
+					flg_result = true;
+				}
+				break;
+		}
+		// 成功フラグが立っていればcontrolに通知する
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setBlogInfo, oldInfo => {
+			let isChanged = false;
+			let data = null;
+			const fetchedBlogInfo = JSON.stringify(json.response.blog);
+			if (oldInfo !== fetchedBlogInfo) {
+				isChanged = true;
+				data = json.response.blog;
+			}
+			return { isChanged, data };
+		});
+		if (flg_result) __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setContent, content => article);
+		return flg_result;
+	}
+	_loadArticle(posts_fetched) {
+		const posts_formatted = [];
+		posts_fetched.forEach(article => {
+			const articleData = this._getArticleData(article);
+			posts_formatted.push(articleData);
+		});
+		return posts_formatted;
+	}
+	_getArticleData(post) {
+		return {
+			id: post.id,
+			caption: post.caption,
+			title: post.slug,
+			slug: post.slug,
+			date: post.timestamp,
+			type: post.type,
+			url: post.short_url,
+			photos: post.photos,
+			photoset_layout: post.photoset_layout,
+			reblog_key: post.reblog_key
+		};
+	}
+	setCurrent(currentInfo) {
+		const { current: currentPage, postID = null } = currentInfo;
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setCurrent, currentObj => {
+			return { currentPage, postID };
+		});
+	}
+	resetCounter() {
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].resetCounter, count => 0);
+	}
+}();
+
+// export default AppAction
+/* harmony default export */ __webpack_exports__["a"] = (appAction);
+
+/***/ }),
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2974,85 +3186,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 }());
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var RiotControl = {
-  _stores: [],
-  addStore: function(store) {
-    this._stores.push(store);
-  },
-  reset: function() {
-    this._stores = [];
-  }
-};
-
-['on','one','off','trigger'].forEach(function(api){
-  RiotControl[api] = function() {
-    var args = [].slice.call(arguments);
-    this._stores.forEach(function(el){
-      el[api].apply(el, args);
-    });
-  };
-});
-
-if (true) module.exports = RiotControl;
-
-
-/***/ }),
-/* 3 */,
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Store_Store__ = __webpack_require__(15);
-
-var riot = __webpack_require__(0);
-
-
-
-riot.tag2('niltea-footer', '<footer class="footer"> <nav class="navigation" if="{currentPage === \'index\'}"> <a href="{PreviousPage}" class="previous">&lt; PREV</a> <span class="current_page">{PageNumber}</span> <virtual><a href="{URL}" class="previous">{PageNumber}</a></virtual> <a href="{NextPage}" class="next">NEXT &gt;</a> </nav> <div class="copyright"> <a class="nilgiriLogo txtHide" href="http://www.nilgiri-tea.net/">Designed by Nilgiri Tea</a> </div> </footer>', 'niltea-footer .navigation,[data-is="niltea-footer"] .navigation{ width: 100%; margin: 0 auto; padding: 20px 0 0; overflow: hidden; text-align: center; } niltea-footer .navigation .count,[data-is="niltea-footer"] .navigation .count{ float: left; } niltea-footer .navigation .links,[data-is="niltea-footer"] .navigation .links{ width: 100%; text-align: center; } niltea-footer .navigation.permalink .links,[data-is="niltea-footer"] .navigation.permalink .links{ overflow: hidden; } niltea-footer .navigation .links a,[data-is="niltea-footer"] .navigation .links a,niltea-footer .navigation .links span,[data-is="niltea-footer"] .navigation .links span{ display: inline-block; padding: 6px 9px; border-radius: 4px; text-decoration: none; font-size: 1.4em; color: #424b54; } niltea-footer .navigation .links a:hover,[data-is="niltea-footer"] .navigation .links a:hover{ background-color: #ddd; } niltea-footer .current_page,[data-is="niltea-footer"] .current_page{ background-color: #ddd; }', '', function (opts) {
-	const self = this;
-
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changedCurrent, () => {
-		self.currentPage = __WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].current.currentPage;
-		self.update();
-	});
-});
-
-/***/ }),
 /* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Store_Store__ = __webpack_require__(15);
-
-var riot = __webpack_require__(0);
-
-
-riot.tag2('niltea-header', '<header class="mainHeader"> <h1> <a href="/" class="home"> <span class="mainTitle">{title}</span> <span class="siteDescription"><raw content="{description}"></raw></span> </a> </h1> <nav class="gnav clearfix" id="gnav"> <ul> <li class="gnav_item about" title="about"><a href="/about/" target="_top">about</a></li> <li class="gnav_item pixiv" title="Pixiv"><a href="http://www.pixiv.net/member.php?id={pixiv}" target="_blank">pixiv</a></li> <li class="gnav_item twitter lsf" title="Twitter"><a href="http://www.twitter.com/{TwitterUsername}" target="_blank">twitter</a></li> <li class="gnav_item github lsf" title="GitHub"><a href="https://github.com/niltea" target="_blank">github</a></li> </ul> </nav> </header>', 'niltea-header .clearfix,[data-is="niltea-header"] .clearfix{ zoom: 1; } niltea-header .clearfix:after,[data-is="niltea-header"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-header .txtHide,[data-is="niltea-header"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-header .mainHeader,[data-is="niltea-header"] .mainHeader{ zoom: 1; position: fixed; width: 100%; } niltea-header .mainHeader:after,[data-is="niltea-header"] .mainHeader:after{ content: ""; clear: both; display: block; } niltea-header a,[data-is="niltea-header"] a{ text-decoration: none; color: #000; } niltea-header h1,[data-is="niltea-header"] h1{ float: left; padding-left: 2%; } niltea-header h1 a,[data-is="niltea-header"] h1 a{ display: block; } niltea-header h1 .mainTitle,[data-is="niltea-header"] h1 .mainTitle{ display: block; font-size: 3.8em; line-height: 1em; letter-spacing: 0.05em; } niltea-header h1 .siteDescription,[data-is="niltea-header"] h1 .siteDescription{ display: block; margin-top: 10px; font-weight: 400; font-size: 1.0em; line-height: 1em; letter-spacing: 0.15em; } niltea-header .gnav,[data-is="niltea-header"] .gnav{ float: left; padding-left: 40px; padding-top: 15px; max-width: 80%; } niltea-header .gnav_item,[data-is="niltea-header"] .gnav_item{ display: inline-block; line-height: 1em; font-size: 2.0em; } niltea-header .gnav_item + .gnav_item,[data-is="niltea-header"] .gnav_item + .gnav_item{ margin-left: 1.5em; } niltea-header .gnav_item:first-child,[data-is="niltea-header"] .gnav_item:first-child{ margin: 0; } niltea-header .gnav_item.active,[data-is="niltea-header"] .gnav_item.active,niltea-header .gnav_item:hover,[data-is="niltea-header"] .gnav_item:hover{ } niltea-header .gnav_item a,[data-is="niltea-header"] .gnav_item a{ font-size: 1em; } niltea-header .gnav_item.lsf a,[data-is="niltea-header"] .gnav_item.lsf a{ font-size: 1.2em; } niltea-header .gnav_item.pixiv a,[data-is="niltea-header"] .gnav_item.pixiv a{ width: 18px; height: 18px; display: block; background: url(/images/pixiv.svg) 0 0 no-repeat; background-size: 100%; text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } @media screen and (max-width: 37.5em) { niltea-header h1,[data-is="niltea-header"] h1,niltea-header .gnav,[data-is="niltea-header"] .gnav{ float: none; } niltea-header .gnav,[data-is="niltea-header"] .gnav{ padding-left: 2%; padding-top: 23px; } }', '', function (opts) {
-		const self = this;
-		self.title = '';
-		self.description = '';
-
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changedBlogInfo, () => {
-				const blogInfo = __WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].blogInfo;
-				self.title = blogInfo.title;
-				self.description = blogInfo.description;
-				self.update();
-		});
-});
-
-/***/ }),
-/* 6 */,
-/* 7 */,
-/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3085,23 +3219,292 @@ const constant = new class Constant {
 /* harmony default export */ __webpack_exports__["a"] = (constant);
 
 /***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Store_Store__ = __webpack_require__(2);
+
+var riot = __webpack_require__(0);
+
+
+
+
+
+riot.tag2('niltea-about', '<section id="about" class="post page"> <h2 class="post_title">about page</h2> </section>', '', '', function (opts) {
+    const self = this;
+});
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riot__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_riot_route__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Action_Action__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Store_Store__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_riotcontrol__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_riotcontrol__);
+
+var riot = __webpack_require__(0);
+
+
+
+
+
+
+
+riot.tag2('niltea-base', '<section class="header" ref="header"></section> <section class="content" ref="content"></section> <section class="footer" ref="footer"></section>', '', '', function (opts) {
+	const self = this;
+
+	self.on('mount', () => {
+		riot.mount(self.refs.header, 'niltea-header');
+		riot.mount(self.refs.footer, 'niltea-footer');
+	});
+
+	__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */].base('/');
+
+	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/', () => {
+		riot.mount(self.refs.content, 'niltea-index');
+		document.title = 'Nilgiri Tea';
+		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent({ type: 'posts' });
+		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].setCurrent({ current: 'index' });
+	});
+
+	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/post/*', postID => {
+		riot.mount(self.refs.content, 'niltea-post');
+		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent({ type: 'posts', postID });
+		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].setCurrent({ current: 'posts', postID });
+	});
+
+	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/about', () => {
+		riot.mount(self.refs.content, 'niltea-about');
+		const info = __WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].blogInfo;
+		if (!info) __WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent({ type: 'posts', limit: 1 });
+		document.title = 'about | Nilgiri Tea';
+
+		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].setCurrent({ current: 'about' });
+	});
+
+	__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */].start(true);
+});
+
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Store_Store__ = __webpack_require__(2);
+
+var riot = __webpack_require__(0);
+
+
+
+riot.tag2('niltea-footer', '<footer class="footer"> <nav class="navigation" if="{currentPage === \'index\'}"> <a href="{PreviousPage}" class="previous">&lt; PREV</a> <span class="current_page">{PageNumber}</span> <virtual><a href="{URL}" class="previous">{PageNumber}</a></virtual> <a href="{NextPage}" class="next">NEXT &gt;</a> </nav> <div class="copyright"> <a class="nilgiriLogo txtHide" href="/">Designed by Nilgiri Tea</a> </div> </footer>', 'niltea-footer .navigation,[data-is="niltea-footer"] .navigation{ width: 100%; margin: 0 auto; padding: 20px 0 0; overflow: hidden; text-align: center; } niltea-footer .navigation .count,[data-is="niltea-footer"] .navigation .count{ float: left; } niltea-footer .navigation .links,[data-is="niltea-footer"] .navigation .links{ width: 100%; text-align: center; } niltea-footer .navigation.permalink .links,[data-is="niltea-footer"] .navigation.permalink .links{ overflow: hidden; } niltea-footer .navigation .links a,[data-is="niltea-footer"] .navigation .links a,niltea-footer .navigation .links span,[data-is="niltea-footer"] .navigation .links span{ display: inline-block; padding: 6px 9px; border-radius: 4px; text-decoration: none; font-size: 1.4em; color: #424b54; } niltea-footer .navigation .links a:hover,[data-is="niltea-footer"] .navigation .links a:hover{ background-color: #ddd; } niltea-footer .current_page,[data-is="niltea-footer"] .current_page{ background-color: #ddd; }', '', function (opts) {
+	const self = this;
+
+	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changedCurrent, () => {
+		self.currentPage = __WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].current.currentPage;
+		self.update();
+	});
+});
+
+/***/ }),
 /* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Store_Store__ = __webpack_require__(2);
+
+var riot = __webpack_require__(0);
+
+
+riot.tag2('niltea-header', '<header class="mainHeader"> <h1> <a href="/" class="home"> <span class="mainTitle">{title}</span> <span class="siteDescription"><raw content="{description}"></raw></span> </a> </h1> <nav class="gnav clearfix" id="gnav"> <ul> <li class="gnav_item about" title="about"><a href="/about">about</a></li> <li class="gnav_item pixiv" title="Pixiv"><a href="http://www.pixiv.net/member.php?id={pixiv}" target="_blank">pixiv</a></li> <li class="gnav_item twitter lsf" title="Twitter"><a href="http://www.twitter.com/{TwitterUsername}" target="_blank">twitter</a></li> <li class="gnav_item github lsf" title="GitHub"><a href="https://github.com/niltea" target="_blank">github</a></li> </ul> </nav> </header>', 'niltea-header .clearfix,[data-is="niltea-header"] .clearfix{ zoom: 1; } niltea-header .clearfix:after,[data-is="niltea-header"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-header .txtHide,[data-is="niltea-header"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-header .mainHeader,[data-is="niltea-header"] .mainHeader{ zoom: 1; position: fixed; width: 100%; } niltea-header .mainHeader:after,[data-is="niltea-header"] .mainHeader:after{ content: ""; clear: both; display: block; } niltea-header a,[data-is="niltea-header"] a{ text-decoration: none; color: #000; } niltea-header h1,[data-is="niltea-header"] h1{ float: left; padding-left: 2%; } niltea-header h1 a,[data-is="niltea-header"] h1 a{ display: block; } niltea-header h1 .mainTitle,[data-is="niltea-header"] h1 .mainTitle{ display: block; font-size: 3.8em; line-height: 1em; letter-spacing: 0.05em; } niltea-header h1 .siteDescription,[data-is="niltea-header"] h1 .siteDescription{ display: block; margin-top: 10px; font-weight: 400; font-size: 1.0em; line-height: 1em; letter-spacing: 0.15em; } niltea-header .gnav,[data-is="niltea-header"] .gnav{ float: left; padding-left: 40px; padding-top: 15px; max-width: 80%; } niltea-header .gnav_item,[data-is="niltea-header"] .gnav_item{ display: inline-block; line-height: 1em; font-size: 2.0em; } niltea-header .gnav_item + .gnav_item,[data-is="niltea-header"] .gnav_item + .gnav_item{ margin-left: 1.5em; } niltea-header .gnav_item:first-child,[data-is="niltea-header"] .gnav_item:first-child{ margin: 0; } niltea-header .gnav_item.active,[data-is="niltea-header"] .gnav_item.active,niltea-header .gnav_item:hover,[data-is="niltea-header"] .gnav_item:hover{ } niltea-header .gnav_item a,[data-is="niltea-header"] .gnav_item a{ font-size: 1em; } niltea-header .gnav_item.lsf a,[data-is="niltea-header"] .gnav_item.lsf a{ font-size: 1.2em; } niltea-header .gnav_item.pixiv a,[data-is="niltea-header"] .gnav_item.pixiv a{ width: 18px; height: 18px; display: block; background: url(/images/pixiv.svg) 0 0 no-repeat; background-size: 100%; text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } @media screen and (max-width: 37.5em) { niltea-header h1,[data-is="niltea-header"] h1,niltea-header .gnav,[data-is="niltea-header"] .gnav{ float: none; } niltea-header .gnav,[data-is="niltea-header"] .gnav{ padding-left: 2%; padding-top: 23px; } }', '', function (opts) {
+		const self = this;
+		self.title = '';
+		self.description = '';
+
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changedBlogInfo, () => {
+				const blogInfo = __WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].blogInfo;
+				self.title = blogInfo.title;
+				self.description = blogInfo.description;
+				self.update();
+		});
+});
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var riot = __webpack_require__(0);
+riot.tag2('raw', '<span></span>', '', '', function (opts) {
+    this.on('update', () => this.root.innerHTML = opts.content);
+});
+
+/***/ }),
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Store_Store__ = __webpack_require__(2);
+
+var riot = __webpack_require__(0);
+
+
+
+
+
+riot.tag2('niltea-index', '<section id="article_list" class="post"> <niltea-list-item articlelist="{articleList}"></niltea-list-item> </section>', '', '', function (opts) {
+		const self = this;
+		self.articleList = {};
+
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changed, () => {
+				self.articleList = __WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].content;
+				self.update();
+		});
+
+		self.on('mount', () => {});
+
+		self.on('unmount', () => {
+				__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changed);
+		});
+});
+
+riot.tag2('niltea-list-item', '<article each="{item in opts.articlelist}" class="post_item"> <a class="photo" href="/post/{item.id}" if="{item.photos}" each="{item.photos}"> <img riot-src="{alt_sizes[4] ? alt_sizes[4].url : alt_sizes[3].url}" alt=""> </a> <h3 class="title">{item.title}</h3> </article>', '', '', function (opts) {
+		const self = this;
+		self.on('update', () => {
+				console.log(opts.articlelist);
+		});
+});
+
+riot.tag2('niltea-index-list-lead', '<span class="line" each="{content in lines}">{content}</span>', '', '', function (opts) {
+		let content = opts.content;
+		content = content.replace('</p>', '').replace('<p>', '');
+		this.lines = content.split('<br />');
+});
+
+/***/ }),
+/* 12 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Store_Store__ = __webpack_require__(2);
+
+var riot = __webpack_require__(0);
+
+
+
+riot.tag2('niltea-post', '<article class="post post-single"> <h2 class="post_title">{title}</h2> <section class="photo" if="{photos}" ref="photo"> <a class="photo_item photo_item-single" if="{!isPhotoSet}" each="{photos}" href="{original_size.url}"> <img riot-src="{alt_sizes[0].url}" alt="" ref="photoItem"> </a> <div if="{isPhotoSet}" each="{row in photoset}" class="photo_rowContainer layout_itemCount-{row.length}" ref="rowContainer"> <a class="photo_item photo_item-set" each="{row}" href="{original_size.url}"> <img riot-src="{alt_sizes[0].url}" alt="" ref="photoItem"> </a> </div> </section> <section class="post_text"><raw content="{caption}"></raw></section> <div class="post_meta"> <a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="reblog lsf" target="_blank">retweet</a> <a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="like lsf" target="_blank">{heart}</a> </div> </article>', 'niltea-post .photo,[data-is="niltea-post"] .photo{ text-align: center; } niltea-post .photo_item,[data-is="niltea-post"] .photo_item{ display: block; width: 100%; line-height: 1; font-size: 0; } niltea-post .photo_rowContainer,[data-is="niltea-post"] .photo_rowContainer{ overflow: hidden; line-height: 1; font-size: 0; } niltea-post .photo_item-set,[data-is="niltea-post"] .photo_item-set{ display: inline-block; } niltea-post .layout_itemCount-2 .photo_item-set,[data-is="niltea-post"] .layout_itemCount-2 .photo_item-set{ width: 50%; } niltea-post .layout_itemCount-3 .photo_item-set,[data-is="niltea-post"] .layout_itemCount-3 .photo_item-set{ width: 33%; } niltea-post img,[data-is="niltea-post"] img{ width: 100%; vertical-align: top; } niltea-post .post_text,[data-is="niltea-post"] .post_text{ border-radius: 2px; background-color: #3dffcf; margin: 6vw auto 0; width: 60%; padding: 2em; min-width: 25em; font-size: 1.6em; line-height: 1.75em; letter-spacing: 0.1em; } niltea-post .post_meta,[data-is="niltea-post"] .post_meta{ margin: 3vw auto 0; font-size: 1.3em; width: 60%; min-width: 25em; } niltea-post .post_meta a,[data-is="niltea-post"] .post_meta a{ text-decoration: none; font-size: 2em; margin-right: 0.5em; } niltea-post .post_meta .reblog,[data-is="niltea-post"] .post_meta .reblog{ color: #222; } niltea-post .post_meta .like,[data-is="niltea-post"] .post_meta .like{ color: #c22; } @media screen and (max-width: 37.5em) { niltea-post .post_title,[data-is="niltea-post"] .post_title{ font-size: 2.2em; } niltea-post .post_text,[data-is="niltea-post"] .post_text{ font-size: 1.4em; } }', '', function (opts) {
+	const self = this;
+	const contentKeys = ['id', 'caption', 'title', 'date', 'type', 'url', 'photos', 'photoset_layout', 'reblog_key'];
+	self.isPhotoSet = false;
+	self.heart = 'heartempty';
+
+	const layoutPhotoset = () => {
+		const layout = self.photoset_layout.split('');
+
+		self.refs.rowContainer.forEach(row => {
+			let mostLowHeight = null;
+			const photos = [].slice.call(row.getElementsByTagName('img'));
+			photos.forEach(photo => {
+				const height = photo.height;
+				if (mostLowHeight === null || mostLowHeight > height) mostLowHeight = height;
+			});
+			row.style.height = mostLowHeight + 'px';
+		});
+	};
+
+	const setPhotoLayout = () => {
+		const photoset = [];
+		const layout = self.photoset_layout.split('');
+		let photoIndex = 0;
+		layout.forEach((itemPerRow, row) => {
+			const photosInRow = [];
+			for (let i = parseInt(itemPerRow, 10); i > 0; i -= 1) {
+				const photo = self.photos[photoIndex];
+				photosInRow.push(photo);
+				photoIndex += 1;
+			}
+			photoset.push(photosInRow);
+		});
+		return photoset;
+	};
+	const afterUpdate = () => {
+		if (!self.isPhotoSet) return;
+
+		const photoCount = self.refs.photoItem.length;
+		let loadedCount = 0;
+		self.refs.photoItem.forEach(photo => {
+			photo.addEventListener('load', () => {
+				loadedCount += 1;
+				if (loadedCount >= photoCount) layoutPhotoset();
+			});
+		});
+	};
+
+	self.on('mount', () => {
+		window.addEventListener('resize', layoutPhotoset);
+	});
+
+	self.on('unmount', () => {
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changed);
+		window.removeEventListener('resize', layoutPhotoset);
+	});
+
+	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changed, () => {
+		const content = __WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].content[0];
+		contentKeys.forEach(key => {
+			self[key] = content[key];
+		});
+		this.caption = this.caption.replace(/<h2>(?:[a-zA-Z/d々〇〻ぁ-んァ-ヶー\u3400-\u9FFF\uF900-\uFAFF]|[\uD840-\uD87F][\uDC00-\uDFFF])+<\/h2>/, '');
+
+		self.isPhotoSet = self.photos.length > 1;
+		if (self.isPhotoSet) self.photoset = setPhotoLayout();
+		self.update();
+		afterUpdate();
+	});
+});
+
+/***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* WEBPACK VAR INJECTION */(function(riot) {Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__niltea_util_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__niltea_util_js__ = __webpack_require__(4);
 // import utility
 
 
 // riot and tags
 __webpack_require__(0);
-__webpack_require__(13);
-__webpack_require__(14);
-__webpack_require__(17);
-__webpack_require__(5);
-__webpack_require__(4);
-__webpack_require__(18);
+__webpack_require__(7);
+__webpack_require__(11);
+__webpack_require__(12);
+__webpack_require__(6);
+__webpack_require__(9);
+__webpack_require__(8);
+__webpack_require__(10);
 
 riot.mount('#wrapper', 'niltea-base');
 
@@ -3134,7 +3537,7 @@ riot.mount('#wrapper', 'niltea-base');
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 10 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 ;(function(window, undefined) {var observable = function(el) {
@@ -3272,11 +3675,11 @@ riot.mount('#wrapper', 'niltea-base');
 })(typeof window != 'undefined' ? window : undefined);
 
 /***/ }),
-/* 11 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot_observable__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot_observable__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot_observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riot_observable__);
 
 
@@ -3628,7 +4031,7 @@ route.parser();
 
 
 /***/ }),
-/* 12 */
+/* 16 */
 /***/ (function(module, exports) {
 
 (function(self) {
@@ -4093,385 +4496,6 @@ route.parser();
   self.fetch.polyfill = true
 })(typeof self !== 'undefined' ? self : this);
 
-
-/***/ }),
-/* 13 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riot__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_riot_route__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Action_Action__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Store_Store__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_riotcontrol__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_riotcontrol__);
-
-var riot = __webpack_require__(0);
-
-
-
-
-
-
-
-riot.tag2('niltea-base', '<section class="header" ref="header"></section> <section class="content" ref="content"></section> <section class="footer" ref="footer"></section>', '', '', function (opts) {
-	const self = this;
-
-	self.on('mount', () => {
-		riot.mount(self.refs.header, 'niltea-header');
-		riot.mount(self.refs.footer, 'niltea-footer');
-	});
-
-	__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */].base('/');
-
-	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/', () => {
-		riot.mount(self.refs.content, 'niltea-index');
-		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent('posts');
-		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].setCurrent({ current: 'index' });
-	});
-
-	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/post/*', postID => {
-		riot.mount(self.refs.content, 'niltea-post');
-		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent('posts', postID);
-		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].setCurrent({ current: 'posts', postID });
-	});
-
-	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('*', () => {
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/');
-	});
-	__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */].start(true);
-});
-
-/***/ }),
-/* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot_route__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_riotcontrol__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Action_Action__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Store_Store__ = __webpack_require__(15);
-
-var riot = __webpack_require__(0);
-
-
-
-
-
-
-riot.tag2('niltea-index', '<section id="article_list" class="post"> <niltea-list-item articlelist="{articleList}"></niltea-list-item> </section>', '', '', function (opts) {
-		const self = this;
-		self.articleList = {};
-
-		__WEBPACK_IMPORTED_MODULE_1_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].ActionTypes.changed, () => {
-				self.articleList = __WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].content;
-				self.update();
-		});
-
-		self.on('mount', () => {});
-
-		self.on('unmount', () => {
-				__WEBPACK_IMPORTED_MODULE_1_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].ActionTypes.changed);
-		});
-});
-
-riot.tag2('niltea-list-item', '<article each="{item in opts.articlelist}" class="post_item"> <a class="photo" href="/post/{item.id}" if="{item.photos}" each="{item.photos}"> {console.log(original_size)} <img riot-src="{alt_sizes[4] ? alt_sizes[4].url : alt_sizes[3].url}" alt=""> </a> <h3 class="title">{item.title}</h3> </article>', '', '', function (opts) {
-		const self = this;
-		self.on('update', () => {
-				console.log(opts.articlelist);
-		});
-});
-
-riot.tag2('niltea-index-list-lead', '<span class="line" each="{content in lines}">{content}</span>', '', '', function (opts) {
-		let content = opts.content;
-		content = content.replace('</p>', '').replace('<p>', '');
-		this.lines = content.split('<br />');
-});
-
-/***/ }),
-/* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(riot) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Constant_Constant__ = __webpack_require__(8);
-
-
-
-const store = new class ContentStore {
-	get blogInfo() {
-		return this._blogInfo;
-	}
-	get current() {
-		return this._current;
-	}
-	get content() {
-		return this._content;
-	}
-	get baseURL() {
-		return 'http://nilgiri-tea.net/';
-	}
-	get title() {
-		return 'Nilgiri Tea';
-	}
-	get twitterID() {
-		return 'niltea';
-	}
-
-	constructor() {
-		riot.observable(this);
-
-		this._blogInfo = null;
-		this._content = '';
-		this._current = '';
-		this._pageTitle = '';
-		this.on(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setBlogInfo, this._setBlogInfo.bind(this));
-		this.on(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setCurrent, this._setCurrent.bind(this));
-		this.on(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setContent, this._setContent.bind(this));
-	}
-
-	_setBlogInfo(action) {
-		const blogInfo = action(JSON.stringify(this._blogInfo));
-		// もしinfoが変わっていればisChangedが立つのでデータを差し替えてtrigger
-		if (!blogInfo.isChanged) return;
-		this._blogInfo = blogInfo.data;
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changedBlogInfo);
-	}
-	_setCurrent(action) {
-		// Actionから渡されたcurrent操作関数がactionへ代入される
-		// それを用いてcurrentの内容を変更する
-		this._current = action(this._current);
-		// Storeの内容が変わったよー、というのをControlへ通知する（そして関係する動作を叩いてもらう
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changedCurrent);
-	}
-	_setContent(contentAction) {
-		this._content = contentAction(this._content);
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changed);
-	}
-	_setpageTitle(pageTitleAction) {
-		this._pageTitle = pageTitleAction(this._pageTitle);
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changed);
-	}
-}();
-
-store.ActionTypes = {
-	changedBlogInfo: "changedBlogInfo",
-	changed: "content_store_changed",
-	changedCurrent: "changedCurrent"
-};
-__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.addStore(store);
-
-/* harmony default export */ __webpack_exports__["a"] = (store);
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
-
-/***/ }),
-/* 16 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Constant_Constant__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_whatwg_fetch__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_whatwg_fetch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_whatwg_fetch__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__niltea_util_js__ = __webpack_require__(1);
-
-
-
-
-
-const fetchParams = { mode: 'cors' };
-
-const tumblrAPI = new class TumblrAPI {
-	async fetchAPI(uri) {
-		if (typeof uri !== 'string') return false;
-		const res = await fetch(uri, fetchParams);
-		const json = await res.json();
-		return res.status >= 200 && res.status < 300 ? json : false;
-	}
-}();
-
-const appAction = new class AppAction {
-	async loadContent(type, resource = '') {
-		let json = null,
-		    article = null,
-		    flg_result = false;
-		switch (type) {
-			case 'pages':
-				// pageの時はリソース指定必須とする。なければfailフラグの返却
-				if (!resource) return flg_result;
-				// ページリストを取得し、forEachで回す
-				json = await tumblrAPI.fetchAPI(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].getEndPoint(type));
-				json.forEach(page => {
-					// リソースIDが指定の物と違ったら飛ばす
-					if (page.resource_id !== resource) return false;
-
-					// 記事が見つかったときの処理
-					flg_result = true;
-					// 記事を整形してtriggerする
-					article = this._loadArticle(page);
-				});
-				break;
-
-			default:
-				//posts の取得
-				json = await tumblrAPI.fetchAPI(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].getEndPoint(type, resource));
-				// jsonがきちんと返ってきたら成功フラグをtrueにする
-				if (json) {
-					article = this._loadArticle(json.response.posts);
-					flg_result = true;
-				}
-				break;
-		}
-		// 成功フラグが立っていればcontrolに通知する
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setBlogInfo, oldInfo => {
-			let isChanged = false;
-			let data = null;
-			const fetchedBlogInfo = JSON.stringify(json.response.blog);
-			if (oldInfo !== fetchedBlogInfo) {
-				isChanged = true;
-				data = json.response.blog;
-			}
-			return { isChanged, data };
-		});
-		if (flg_result) __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setContent, content => article);
-		return flg_result;
-	}
-	_loadArticle(posts_fetched) {
-		const posts_formatted = [];
-		posts_fetched.forEach(article => {
-			const articleData = this._getArticleData(article);
-			posts_formatted.push(articleData);
-		});
-		return posts_formatted;
-	}
-	_getArticleData(post) {
-		return {
-			id: post.id,
-			caption: post.caption,
-			title: post.slug,
-			slug: post.slug,
-			date: post.timestamp,
-			type: post.type,
-			url: post.short_url,
-			photos: post.photos,
-			photoset_layout: post.photoset_layout,
-			reblog_key: post.reblog_key
-		};
-	}
-	setCurrent(currentInfo) {
-		const { current: currentPage, postID = null } = currentInfo;
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setCurrent, currentObj => {
-			return { currentPage, postID };
-		});
-	}
-	resetCounter() {
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].resetCounter, count => 0);
-	}
-}();
-
-// export default AppAction
-/* harmony default export */ __webpack_exports__["a"] = (appAction);
-
-/***/ }),
-/* 17 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Store_Store__ = __webpack_require__(15);
-
-var riot = __webpack_require__(0);
-
-
-
-riot.tag2('niltea-post', '<article class="post post-single"> <h2 class="post_title">{title}</h2> <section class="photo" if="{photos}" ref="photo"> <a class="photo_item photo_item-single" if="{!isPhotoSet}" each="{photos}" href="{original_size.url}"> <img riot-src="{alt_sizes[0].url}" alt="" ref="photoItem"> </a> <div if="{isPhotoSet}" each="{row in photoset}" class="photo_rowContainer layout_itemCount-{row.length}" ref="rowContainer"> <a class="photo_item photo_item-set" each="{row}" href="{original_size.url}"> <img riot-src="{alt_sizes[0].url}" alt="" ref="photoItem"> </a> </div> </section> <section class="post_text"><raw content="{caption}"></raw></section> <div class="post_meta"> <a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="reblog lsf" target="_blank">retweet</a> <a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="like lsf" target="_blank">{heart}</a> </div> </article>', 'niltea-post .post_title,[data-is="niltea-post"] .post_title{ margin-bottom: 2em; margin-bottom: 6vw; text-align: center; font-weight: 500; font-size: 2.8em; } niltea-post .photo,[data-is="niltea-post"] .photo{ text-align: center; } niltea-post .photo_item,[data-is="niltea-post"] .photo_item{ display: block; width: 100%; line-height: 1; font-size: 0; } niltea-post .photo_rowContainer,[data-is="niltea-post"] .photo_rowContainer{ overflow: hidden; line-height: 1; font-size: 0; } niltea-post .photo_item-set,[data-is="niltea-post"] .photo_item-set{ display: inline-block; } niltea-post .layout_itemCount-2 .photo_item-set,[data-is="niltea-post"] .layout_itemCount-2 .photo_item-set{ width: 50%; } niltea-post .layout_itemCount-3 .photo_item-set,[data-is="niltea-post"] .layout_itemCount-3 .photo_item-set{ width: 33%; } niltea-post img,[data-is="niltea-post"] img{ width: 100%; vertical-align: top; } niltea-post .post_text,[data-is="niltea-post"] .post_text{ border-radius: 2px; background-color: #3dffcf; margin: 6vw auto 0; width: 60%; padding: 2em; min-width: 25em; font-size: 1.6em; line-height: 1.75em; letter-spacing: 0.1em; } niltea-post .post_meta,[data-is="niltea-post"] .post_meta{ margin: 3vw auto 0; font-size: 1.3em; width: 60%; min-width: 25em; } niltea-post .post_meta a,[data-is="niltea-post"] .post_meta a{ text-decoration: none; font-size: 2em; margin-right: 0.5em; } niltea-post .post_meta .reblog,[data-is="niltea-post"] .post_meta .reblog{ color: #222; } niltea-post .post_meta .like,[data-is="niltea-post"] .post_meta .like{ color: #c22; } @media screen and (max-width: 37.5em) { niltea-post .post_title,[data-is="niltea-post"] .post_title{ font-size: 2.2em; } niltea-post .post_text,[data-is="niltea-post"] .post_text{ font-size: 1.4em; } }', '', function (opts) {
-	const self = this;
-	const contentKeys = ['id', 'caption', 'title', 'date', 'type', 'url', 'photos', 'photoset_layout', 'reblog_key'];
-	self.isPhotoSet = false;
-	self.heart = 'heartempty';
-
-	const layoutPhotoset = () => {
-		const layout = self.photoset_layout.split('');
-
-		self.refs.rowContainer.forEach(row => {
-			let mostLowHeight = null;
-			const photos = [].slice.call(row.getElementsByTagName('img'));
-			photos.forEach(photo => {
-				const height = photo.height;
-				if (mostLowHeight === null || mostLowHeight > height) mostLowHeight = height;
-			});
-			row.style.height = mostLowHeight + 'px';
-		});
-	};
-
-	const setPhotoLayout = () => {
-		const photoset = [];
-		const layout = self.photoset_layout.split('');
-		let photoIndex = 0;
-		layout.forEach((itemPerRow, row) => {
-			const photosInRow = [];
-			for (let i = parseInt(itemPerRow, 10); i > 0; i -= 1) {
-				const photo = self.photos[photoIndex];
-				photosInRow.push(photo);
-				photoIndex += 1;
-			}
-			photoset.push(photosInRow);
-		});
-		return photoset;
-	};
-	const afterUpdate = () => {
-		if (!self.isPhotoSet) return;
-
-		const photoCount = self.refs.photoItem.length;
-		let loadedCount = 0;
-		self.refs.photoItem.forEach(photo => {
-			photo.addEventListener('load', () => {
-				loadedCount += 1;
-				if (loadedCount >= photoCount) layoutPhotoset();
-			});
-		});
-	};
-
-	self.on('mount', () => {
-		window.addEventListener('resize', layoutPhotoset);
-	});
-
-	self.on('unmount', () => {
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changed);
-		window.removeEventListener('resize', layoutPhotoset);
-	});
-
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changed, () => {
-		const content = __WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].content[0];
-		contentKeys.forEach(key => {
-			self[key] = content[key];
-		});
-		this.caption = this.caption.replace(/<h2>(?:[a-zA-Z/d々〇〻ぁ-んァ-ヶー\u3400-\u9FFF\uF900-\uFAFF]|[\uD840-\uD87F][\uDC00-\uDFFF])+<\/h2>/, '');
-
-		self.isPhotoSet = self.photos.length > 1;
-		if (self.isPhotoSet) self.photoset = setPhotoLayout();
-		self.update();
-		afterUpdate();
-	});
-});
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var riot = __webpack_require__(0);
-riot.tag2('raw', '<span></span>', '', '', function (opts) {
-    this.on('update', () => this.root.innerHTML = opts.content);
-});
 
 /***/ })
 /******/ ]);

@@ -10,7 +10,7 @@ import Store from '../../Store/Store';
 			<a href="{NextPage}" class="next">NEXT &gt;</a>
 		</nav>
 		<div class="copyright">
-			<a class="nilgiriLogo txtHide" href="http://www.nilgiri-tea.net/">Designed by Nilgiri Tea</a>
+			<a class="nilgiriLogo txtHide" href="/">Designed by Nilgiri Tea</a>
 		</div>
 	</footer>
 	<script>

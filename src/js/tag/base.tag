@@ -24,19 +24,29 @@ import RiotControl from 'riotcontrol';
 	// Indexのロード
 	route('/', () => {
 		riot.mount(self.refs.content, 'niltea-index')
-		Action.loadContent('posts');
+		document.title = 'Nilgiri Tea'
+		Action.loadContent({type: 'posts'});
 		Action.setCurrent({current: 'index'});
 	});
 
 	// post
 	route('/post/*', (postID) => {
 		riot.mount(self.refs.content, 'niltea-post');
-		Action.loadContent('posts', postID);
+		Action.loadContent({type: 'posts', postID});
 		Action.setCurrent({current: 'posts', postID});
+	});
+	// about
+	route('/about', () => {
+		riot.mount(self.refs.content, 'niltea-about')
+		const info = Store.blogInfo;
+		if (!info) Action.loadContent({type: 'posts', limit: 1});
+		document.title = 'about | Nilgiri Tea'
+		// Action.loadContent('posts');
+		Action.setCurrent({current: 'about'});
 	});
 
 	// default
-	route('*', () => {route('/')});
+	// route('*', () => {route('/')});
 	route.start(true);
 
 </script>

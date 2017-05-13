@@ -1,11 +1,9 @@
-import route from 'riot-route';
 import RiotControl from 'riotcontrol';
 
 import Action from '../Action/Action';
 import Store from '../Store/Store';
 
 <niltea-index>
-
 	<section id="article_list" class='post'>
 		<niltea-list-item articleList={articleList}></niltea-list-item>
 	</section>
@@ -31,7 +29,6 @@ import Store from '../Store/Store';
 <niltea-list-item>
 	<article each={item in opts.articlelist} class='post_item'>
 		<a class="photo" href='/post/{item.id}' if={item.photos} each={item.photos}>
-			{console.log(original_size)}
 			<!-- <img src="{original_size.url}" alt=""> -->
 			<img src="{alt_sizes[4] ? alt_sizes[4].url : alt_sizes[3].url}" alt="">
 		</a>

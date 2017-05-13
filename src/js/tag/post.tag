@@ -106,14 +106,6 @@ import Store from '../Store/Store';
 		});
 	</script>
 	<style type="text/scss">
-		.post_title {
-			margin-bottom: 2em;
-			margin-bottom: 6vw;
-			text-align: center;
-			font-weight: 500;
-			font-size: 2.8em;
-		}
-
 		/*photo*/
 		.photo {
 			text-align: center;
