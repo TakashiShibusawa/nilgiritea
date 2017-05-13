@@ -24,8 +24,8 @@ import RiotControl from 'riotcontrol';
 	// Indexのロード
 	route('/', () => {
 		riot.mount(self.refs.content, 'niltea-index')
-		document.title = 'Nilgiri Tea'
 		Action.loadContent({type: 'posts'});
+		document.title = `${Store.blogInfo.title}`;
 		Action.setCurrent({current: 'index'});
 	});
 
@@ -38,15 +38,13 @@ import RiotControl from 'riotcontrol';
 	// about
 	route('/about', () => {
 		riot.mount(self.refs.content, 'niltea-about')
-		const info = Store.blogInfo;
-		if (!info) Action.loadContent({type: 'info'});
-		document.title = 'about | Nilgiri Tea'
-		// Action.loadContent('posts');
+		if (!Store.blogInfo) Action.loadContent({type: 'info'});
+		document.title = `about | ${Store.blogInfo.title}`;
 		Action.setCurrent({current: 'about'});
 	});
 
 	// default
-	// route('*', () => {route('/')});
+	route('*', () => {route('/')});
 	route.start(true);
 
 </script>

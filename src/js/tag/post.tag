@@ -101,6 +101,8 @@ import Store from '../Store/Store';
 			// photosが複数であればphososetであると判断
 			self.isPhotoSet = (self.photos.length > 1);
 			if (self.isPhotoSet) self.photoset = setPhotoLayout();
+
+			document.title = `${this.title} | ${Store.blogInfo.title}`;
 			self.update();
 			afterUpdate();
 		});

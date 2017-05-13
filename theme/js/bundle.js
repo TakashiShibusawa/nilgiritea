@@ -3259,8 +3259,8 @@ riot.tag2('niltea-base', '<section class="header" ref="header"></section> <secti
 
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/', () => {
 		riot.mount(self.refs.content, 'niltea-index');
-		document.title = 'Nilgiri Tea';
 		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent({ type: 'posts' });
+		document.title = `${__WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].blogInfo.title}`;
 		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].setCurrent({ current: 'index' });
 	});
 
@@ -3272,13 +3272,14 @@ riot.tag2('niltea-base', '<section class="header" ref="header"></section> <secti
 
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/about', () => {
 		riot.mount(self.refs.content, 'niltea-about');
-		const info = __WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].blogInfo;
-		if (!info) __WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent({ type: 'info' });
-		document.title = 'about | Nilgiri Tea';
-
+		if (!__WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].blogInfo) __WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent({ type: 'info' });
+		document.title = `about | ${__WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].blogInfo.title}`;
 		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].setCurrent({ current: 'about' });
 	});
 
+	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('*', () => {
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/');
+	});
 	__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */].start(true);
 });
 
@@ -3467,6 +3468,8 @@ riot.tag2('niltea-post', '<article class="post post-single"> <h2 class="post_tit
 
 		self.isPhotoSet = self.photos.length > 1;
 		if (self.isPhotoSet) self.photoset = setPhotoLayout();
+
+		document.title = `${this.title} | ${__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].blogInfo.title}`;
 		self.update();
 		afterUpdate();
 	});
