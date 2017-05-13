@@ -27,7 +27,7 @@ import Store from '../Store/Store';
 			'url',
 			'photos',
 		];
-		this.isPhotoSet = false;
+		self.isPhotoSet = false;
 
 		self.on('unmount', () => {
 			RiotControl.off(Store.ActionTypes.changed);
@@ -37,10 +37,10 @@ import Store from '../Store/Store';
 		RiotControl.on(Store.ActionTypes.changed, () => {
 			const content = Store.content[0];
 			console.log(content)
-			contentKeys.forEach(key => { this[key] = content[key] });
+			contentKeys.forEach(key => { self[key] = content[key] });
 			// photosが複数であればphososetであると判断
-			this.isPhotoSet = (this.photos.length > 1);
-			riot.update();
+			self.isPhotoSet = (self.photos.length > 1);
+			self.update();
 		});
 
 	</script>

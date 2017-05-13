@@ -1,7 +1,10 @@
+import RiotControl from 'riotcontrol';
+import Store from '../../Store/Store';
 <niltea-header>
 	<header class="mainHeader">
 		<h1 class="pageTitle">
 			<a href="/" class="home">{title}</a>
+			<span class="description"></span>
 		</h1>
 		<nav class="gnav clearfix" id="gnav">
 			<ul>
@@ -15,7 +18,13 @@
 	</header>
 	<script>
 		const self = this;
-		self.title = 'Nilgiri Tea';
+		// Subscribes Store.changedBlogInfo
+		RiotControl.on(Store.ActionTypes.changedBlogInfo, () => {
+			const content = Store.blogInfo;
+			// console.log(content)
+			self.title = content.title;
+			self.update();
+		});
 	</script>
 	<style type="text/scss">
 		@import "../../../css/includes/mixin";

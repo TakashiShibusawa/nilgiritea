@@ -3,7 +3,7 @@ import route from 'riot-route';
 
 import Action from '../Action/Action';
 import Store from '../Store/Store';
-const RiotControl  = require('riotcontrol');
+import RiotControl from 'riotcontrol';
 
 <niltea-base>
 	<section class='header' ref='header'></section>
@@ -39,16 +39,5 @@ const RiotControl  = require('riotcontrol');
 	route('*', () => {route('/')});
 	route.start(true);
 
-
-	// Subscribes Store.changedBlogInfo
-	RiotControl.on(Store.ActionTypes.changedBlogInfo, () => {
-		const content = Store.blogInfo;
-		console.log('changedBlogInfo')
-		console.log(content)
-		// contentKeys.forEach(key => { this[key] = content[key] });
-		// photosが複数であればphososetであると判断
-		// this.isPhotoSet = (this.photos.length > 1);
-		// riot.update();
-	});
 </script>
 </niltea-base>

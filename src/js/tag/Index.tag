@@ -16,7 +16,7 @@ import Store from '../Store/Store';
 		// Subscribes Store.onChanged
 		RiotControl.on(Store.ActionTypes.changed, () => {
 			self.articleList = Store.content;
-			riot.update();
+			self.update();
 		});
 
 		self.on('mount', () => {

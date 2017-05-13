@@ -3010,13 +3010,26 @@ riot.tag2('niltea-footer', '<footer class="footer"> <nav class="navigation"> <di
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Store_Store__ = __webpack_require__(15);
 
 var riot = __webpack_require__(0);
-riot.tag2('niltea-header', '<header class="mainHeader"> <h1 class="pageTitle"> <a href="/" class="home">{title}</a> </h1> <nav class="gnav clearfix" id="gnav"> <ul> <li class="gnav_item about" title="about"><a href="/#/about/" target="_top">about</a></li> <li class="gnav_item blog" title="blog"><a href="/#/" target="_top">blog</a></li> <li class="gnav_item twitter" title="twitter"><a href="http://www.twitter.com/{TwitterUsername}" target="_blank">twitter</a></li> <li class="gnav_item pixiv" title="pixiv"><a href="http://www.pixiv.net/member.php?id={pixiv}" target="_blank">pixiv</a></li> <li class="gnav_item github" title="github"><a href="https://github.com/niltea" target="_blank">GitHub</a></li> </ul> </nav> </header>', 'niltea-header .clearfix,[data-is="niltea-header"] .clearfix{ zoom: 1; } niltea-header .clearfix:after,[data-is="niltea-header"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-header .txtHide,[data-is="niltea-header"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-header a,[data-is="niltea-header"] a{ text-decoration: none; color: #000; } niltea-header .mainHeader,[data-is="niltea-header"] .mainHeader{ padding-top: 30px; zoom: 1; } niltea-header .mainHeader:after,[data-is="niltea-header"] .mainHeader:after{ content: ""; clear: both; display: block; } niltea-header .pageTitle,[data-is="niltea-header"] .pageTitle{ float: left; } niltea-header .pageTitle a,[data-is="niltea-header"] .pageTitle a{ font-size: 2.8em; } niltea-header .gnav,[data-is="niltea-header"] .gnav{ float: left; margin-left: 40px; } niltea-header .gnav_item,[data-is="niltea-header"] .gnav_item{ display: inline-block; } niltea-header .gnav_item + .gnav_item,[data-is="niltea-header"] .gnav_item + .gnav_item{ margin-left: 30px; } niltea-header .gnav_item:first-child,[data-is="niltea-header"] .gnav_item:first-child{ margin: 0; } niltea-header .gnav_item.active,[data-is="niltea-header"] .gnav_item.active,niltea-header .gnav_item:hover,[data-is="niltea-header"] .gnav_item:hover{ } niltea-header .gnav_item a,[data-is="niltea-header"] .gnav_item a{ font-size: 1.8em; }', '', function (opts) {
-    const self = this;
-    self.title = 'Nilgiri Tea';
+
+
+riot.tag2('niltea-header', '<header class="mainHeader"> <h1 class="pageTitle"> <a href="/" class="home">{title}</a> <span class="description"></span> </h1> <nav class="gnav clearfix" id="gnav"> <ul> <li class="gnav_item about" title="about"><a href="/#/about/" target="_top">about</a></li> <li class="gnav_item blog" title="blog"><a href="/#/" target="_top">blog</a></li> <li class="gnav_item twitter" title="twitter"><a href="http://www.twitter.com/{TwitterUsername}" target="_blank">twitter</a></li> <li class="gnav_item pixiv" title="pixiv"><a href="http://www.pixiv.net/member.php?id={pixiv}" target="_blank">pixiv</a></li> <li class="gnav_item github" title="github"><a href="https://github.com/niltea" target="_blank">GitHub</a></li> </ul> </nav> </header>', 'niltea-header .clearfix,[data-is="niltea-header"] .clearfix{ zoom: 1; } niltea-header .clearfix:after,[data-is="niltea-header"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-header .txtHide,[data-is="niltea-header"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-header a,[data-is="niltea-header"] a{ text-decoration: none; color: #000; } niltea-header .mainHeader,[data-is="niltea-header"] .mainHeader{ padding-top: 30px; zoom: 1; } niltea-header .mainHeader:after,[data-is="niltea-header"] .mainHeader:after{ content: ""; clear: both; display: block; } niltea-header .pageTitle,[data-is="niltea-header"] .pageTitle{ float: left; } niltea-header .pageTitle a,[data-is="niltea-header"] .pageTitle a{ font-size: 2.8em; } niltea-header .gnav,[data-is="niltea-header"] .gnav{ float: left; margin-left: 40px; } niltea-header .gnav_item,[data-is="niltea-header"] .gnav_item{ display: inline-block; } niltea-header .gnav_item + .gnav_item,[data-is="niltea-header"] .gnav_item + .gnav_item{ margin-left: 30px; } niltea-header .gnav_item:first-child,[data-is="niltea-header"] .gnav_item:first-child{ margin: 0; } niltea-header .gnav_item.active,[data-is="niltea-header"] .gnav_item.active,niltea-header .gnav_item:hover,[data-is="niltea-header"] .gnav_item:hover{ } niltea-header .gnav_item a,[data-is="niltea-header"] .gnav_item a{ font-size: 1.8em; }', '', function (opts) {
+		const self = this;
+
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changedBlogInfo, () => {
+				const content = __WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].blogInfo;
+
+				self.title = content.title;
+				self.update();
+		});
 });
 
 /***/ }),
@@ -4074,6 +4087,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_riot_route__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Action_Action__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Store_Store__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_riotcontrol__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_riotcontrol__);
 
 var riot = __webpack_require__(0);
 
@@ -4081,7 +4096,7 @@ var riot = __webpack_require__(0);
 
 
 
-const RiotControl = __webpack_require__(2);
+
 
 riot.tag2('niltea-base', '<section class="header" ref="header"></section> <section class="content" ref="content"></section> <section class="footer" ref="footer"></section>', '', '', function (opts) {
 	const self = this;
@@ -4109,12 +4124,6 @@ riot.tag2('niltea-base', '<section class="header" ref="header"></section> <secti
 		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/');
 	});
 	__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */].start(true);
-
-	RiotControl.on(__WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].ActionTypes.changedBlogInfo, () => {
-		const content = __WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].blogInfo;
-		console.log('changedBlogInfo');
-		console.log(content);
-	});
 });
 
 /***/ }),
@@ -4142,7 +4151,7 @@ riot.tag2('niltea-index', '<section id="article_list" class="post"> <niltea-list
 
 		__WEBPACK_IMPORTED_MODULE_1_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].ActionTypes.changed, () => {
 				self.articleList = __WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].content;
-				riot.update();
+				self.update();
 		});
 
 		self.on('mount', () => {});
@@ -4355,7 +4364,7 @@ var riot = __webpack_require__(0);
 riot.tag2('niltea-post', '<div class="post post-single"> <div class="photo" if="{photos}"> <a class="photo_item photo_item-single" if="{!isPhotoSet}" each="{photos}" href="{original_size.url}"> <img riot-src="{alt_sizes[0].url}" alt=""> </a> <a class="photo_item photo_item-set" if="{isPhotoSet}" each="{photos}" href="{original_size.url}"> <img riot-src="{alt_sizes[0].url}" alt=""> </a> </div> <span>{caption}</span> </div>', '', '', function (opts) {
 	const self = this;
 	const contentKeys = ['id', 'caption', 'title', 'date', 'type', 'url', 'photos'];
-	this.isPhotoSet = false;
+	self.isPhotoSet = false;
 
 	self.on('unmount', () => {
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changed);
@@ -4365,11 +4374,11 @@ riot.tag2('niltea-post', '<div class="post post-single"> <div class="photo" if="
 		const content = __WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].content[0];
 		console.log(content);
 		contentKeys.forEach(key => {
-			this[key] = content[key];
+			self[key] = content[key];
 		});
 
-		this.isPhotoSet = this.photos.length > 1;
-		riot.update();
+		self.isPhotoSet = self.photos.length > 1;
+		self.update();
 	});
 });
 
