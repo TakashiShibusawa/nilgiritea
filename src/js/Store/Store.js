@@ -22,7 +22,10 @@ const store = new class ContentStore{
 	}
 
 	_setBlogInfo(action){
-		this._blogInfo = action(this._blogInfo);
+		const blogInfo = action(JSON.stringify(this._blogInfo));
+		// もしinfoが変わっていればisChangedが立つのでデータを差し替えてtrigger
+		if (!blogInfo.isChanged) return;
+		this._blogInfo = blogInfo.data;
 		RiotControl.trigger(this.ActionTypes.changedBlogInfo);
 	}
 	_setCurrent(action){

@@ -4236,7 +4236,10 @@ const store = new class ContentStore {
 	}
 
 	_setBlogInfo(action) {
-		this._blogInfo = action(this._blogInfo);
+		const blogInfo = action(JSON.stringify(this._blogInfo));
+		// もしinfoが変わっていればisChangedが立つのでデータを差し替えてtrigger
+		if (!blogInfo.isChanged) return;
+		this._blogInfo = blogInfo.data;
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changedBlogInfo);
 	}
 	_setCurrent(action) {
@@ -4284,8 +4287,6 @@ __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.addStore(store);
 
 const fetchParams = { mode: 'cors' };
 
-let blogInfo = {};
-
 const tumblrAPI = new class TumblrAPI {
 	async fetchAPI(uri) {
 		if (typeof uri !== 'string') return false;
@@ -4328,11 +4329,16 @@ const appAction = new class AppAction {
 				break;
 		}
 		// 成功フラグが立っていればcontrolに通知する
-		const fetchedBlogInfo = JSON.stringify(json.response.blog);
-		if (blogInfo !== fetchedBlogInfo) {
-			blogInfo = fetchedBlogInfo;
-			__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setBlogInfo, content => json.response.blog);
-		}
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setBlogInfo, oldInfo => {
+			let isChanged = false;
+			let data = null;
+			const fetchedBlogInfo = JSON.stringify(json.response.blog);
+			if (oldInfo !== fetchedBlogInfo) {
+				isChanged = true;
+				data = json.response.blog;
+			}
+			return { isChanged, data };
+		});
 		if (flg_result) __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setContent, content => article);
 		return flg_result;
 	}

@@ -5,8 +5,6 @@ import util from '../niltea_util.js';
 
 const fetchParams = {mode: 'cors'};
 
-let blogInfo = {};
-
 const tumblrAPI = new class TumblrAPI {
 	async fetchAPI (uri) {
 		if(typeof uri !== 'string') return false;
@@ -49,11 +47,16 @@ const appAction = new class AppAction {
 			break;
 		}
 		// 成功フラグが立っていればcontrolに通知する
-		const fetchedBlogInfo = JSON.stringify(json.response.blog);
-		if (blogInfo !== fetchedBlogInfo) {
-			blogInfo = fetchedBlogInfo;
-			RiotControl.trigger(Constant.setBlogInfo, (content) => json.response.blog);
-		}
+		RiotControl.trigger(Constant.setBlogInfo, (oldInfo) => {
+			let isChanged = false;
+			let data = null;
+			const fetchedBlogInfo = JSON.stringify(json.response.blog);
+			if (oldInfo !== fetchedBlogInfo) {
+				isChanged = true;
+				data = json.response.blog;
+			}
+			return {isChanged, data};
+		});
 		if (flg_result) RiotControl.trigger(Constant.setContent, (content) => article);
 		return flg_result;
 	}
