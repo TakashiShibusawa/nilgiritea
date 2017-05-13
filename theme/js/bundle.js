@@ -2969,7 +2969,11 @@ const appAction = new class AppAction {
 		switch (type) {
 			case 'info':
 				// ページリストを取得し、forEachで回す
-				json = await tumblrAPI.fetchAPI(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].getEndPoint(type));
+
+				console.log(type);
+				console.log(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].getEndPoint({ type }));
+				return;
+				json = await tumblrAPI.fetchAPI(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].getEndPoint({ type }));
 				json.forEach(page => {
 					// リソースIDが指定の物と違ったら飛ばす
 					if (page.resource_id !== resource) return false;
@@ -3212,7 +3216,7 @@ const constant = new class Constant {
 		Object.keys(query).forEach(key => query[key] ? queryString += `&${key}=${query[key]}` : queryString);
 		return queryString;
 	}
-	getEndPoint({ type, query }) {
+	getEndPoint({ type = 'post', query }) {
 		const queryString = this._setQS(query);
 		const endPoint = this.api.APIRoot + type + '?' + this._getApiKey() + queryString;
 		console.log(endPoint);

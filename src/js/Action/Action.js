@@ -22,7 +22,11 @@ const appAction = new class AppAction {
 		switch (type) {
 			case 'info':
 			// ページリストを取得し、forEachで回す
-			json = await tumblrAPI.fetchAPI(Constant.getEndPoint(type));
+
+			console.log(type)
+			console.log(Constant.getEndPoint({type}))
+			return;
+			json = await tumblrAPI.fetchAPI(Constant.getEndPoint({type}));
 			json.forEach(page => {
 				// リソースIDが指定の物と違ったら飛ばす
 				if (page.resource_id !== resource) return false;

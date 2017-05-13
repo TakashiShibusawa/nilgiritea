@@ -22,7 +22,7 @@ const constant = new class Constant{
 		Object.keys(query).forEach(key => (query[key]) ? queryString += `&${key}=${query[key]}` : queryString );
 		return queryString;
 	}
-	getEndPoint ({type, query}) {
+	getEndPoint ({type = 'post', query}) {
 		const queryString = this._setQS(query);
 		const endPoint = this.api.APIRoot + type + '?' + this._getApiKey() + queryString;
 		console.log(endPoint)
