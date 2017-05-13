@@ -3176,6 +3176,8 @@ const constant = new class Constant {
 			API_KEY: "api_key=Rak7GXrKPBB6uuTODOgQL3hPLpnTAf2b2IoUjAUoBd8yLoCthg",
 			APIRoot: "http://api.tumblr.com/v2/blog/nilgiritea.tumblr.com/"
 		};
+		// indexで取得する記事数
+		this.indexPostLimit = 3;
 		this.action = {
 			fetchArticle: "fetchArticle"
 		};
@@ -3234,12 +3236,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riot__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_riot_route__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Action_Action__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Store_Store__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_riotcontrol__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_riotcontrol__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_riotcontrol__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_riotcontrol__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Action_Action__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Store_Store__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Constant_Constant__ = __webpack_require__(5);
 
 var riot = __webpack_require__(0);
+
 
 
 
@@ -3257,24 +3261,33 @@ riot.tag2('niltea-base', '<section class="header" ref="header"></section> <secti
 
 	__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */].base('/');
 
+	const limit = __WEBPACK_IMPORTED_MODULE_5__Constant_Constant__["a" /* default */].indexPostLimit;
+
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/', () => {
 		riot.mount(self.refs.content, 'niltea-index');
-		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent({ type: 'posts' });
+		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].loadContent({ type: 'posts', query: { limit } });
 
-		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].setCurrent({ current: 'index', page: 1 });
+		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].setCurrent({ current: 'index', page: 1 });
+	});
+
+	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/index/*', page => {
+		riot.mount(self.refs.content, 'niltea-index');
+		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].loadContent({ type: 'posts', query: { limit, offset: limit * (page - 1) } });
+
+		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].setCurrent({ current: 'index', page: page });
 	});
 
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/post/*', id => {
 		riot.mount(self.refs.content, 'niltea-post');
-		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent({ type: 'posts', query: { id } });
-		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].setCurrent({ current: 'posts', id });
+		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].loadContent({ type: 'posts', query: { id } });
+		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].setCurrent({ current: 'posts', id });
 	});
 
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/about', () => {
 		riot.mount(self.refs.content, 'niltea-about');
-		if (!__WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].blogInfo) __WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent({ type: 'info' });
+		if (!__WEBPACK_IMPORTED_MODULE_4__Store_Store__["a" /* default */].blogInfo) __WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].loadContent({ type: 'info' });
 
-		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].setCurrent({ current: 'about' });
+		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].setCurrent({ current: 'about' });
 	});
 
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('*', () => {
@@ -3292,8 +3305,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Store_Store__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Constant_Constant__ = __webpack_require__(5);
 
 var riot = __webpack_require__(0);
+
 
 
 
@@ -3304,31 +3319,37 @@ riot.tag2('niltea-footer', '<footer class="footer"> <nav class="navigation" if="
 	self.hasNext = false;
 	self.prevPage = null;
 	self.nextPage = null;
+	self.maxPage = null;
 
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changedCurrent, () => {
-		self.pagingEnabled = false;
-		const current = __WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].current;
-		if (current.currentPage === 'index') {
-			self.pagingEnabled = true;
-			self.page = parseInt(current.page, 10);
-			const lastPage = 2;
+	const modPagenation = () => {
+		if (__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].current.currentPage !== 'index') return;
 
-			if (self.page >= 2) {
-				self.hasPrev = true;
-				self.prevPage = '/index/' + (self.page - 1);
-			} else {
-				self.hasPrev = false;
-			}
+		self.pagingEnabled = true;
+		self.page = parseInt(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].current.page, 10);
 
-			if (self.page < lastPage) {
-				self.hasNext = true;
-				self.nextPage = '/index/' + (self.page + 1);
-			} else {
-				self.hasNext = false;
-			}
+		if (self.page >= 2) {
+			self.hasPrev = true;
+			self.prevPage = self.page === 2 ? '/' : '/index/' + (self.page - 1);
+		} else {
+			self.hasPrev = false;
 		}
 
+		if (self.page < self.maxPage) {
+			self.hasNext = true;
+			self.nextPage = '/index/' + (self.page + 1);
+		} else {
+			self.hasNext = false;
+		}
 		self.update();
+	};
+
+	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changedBlogInfo, () => {
+		self.maxPage = Math.ceil(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].blogInfo.posts / __WEBPACK_IMPORTED_MODULE_2__Constant_Constant__["a" /* default */].indexPostLimit);
+		modPagenation();
+	});
+	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changedCurrent, () => {
+		self.pagingEnabled = false;
+		modPagenation();
 	});
 });
 

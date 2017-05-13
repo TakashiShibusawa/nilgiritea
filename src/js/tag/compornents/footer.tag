@@ -1,6 +1,7 @@
 import RiotControl from 'riotcontrol';
 
 import Store from '../../Store/Store';
+import Constant from "../../Constant/Constant";
 <niltea-footer>
 	<footer class="footer">
 		<nav class="navigation" if={pagingEnabled}>
@@ -19,31 +20,37 @@ import Store from '../../Store/Store';
 	self.hasNext = false;
 	self.prevPage = null;
 	self.nextPage = null;
-	// Subscribes Store.onChanged
-	RiotControl.on(Store.ActionTypes.changedCurrent, () => {
-		self.pagingEnabled = false;
-		const current = Store.current;
-		if(current.currentPage === 'index') {
-			self.pagingEnabled = true;
-			self.page = parseInt(current.page, 10);
-			const lastPage = 2;
+	self.maxPage = null;
 
-			if (self.page >= 2) {
-				self.hasPrev = true;
-				self.prevPage = '/index/' + (self.page - 1);
-			} else {
-				self.hasPrev = false;
-			}
+	const modPagenation = () => {
+		if(Store.current.currentPage !== 'index') return;
 
-			if (self.page < lastPage) {
-				self.hasNext = true;
-				self.nextPage = '/index/' + (self.page + 1);
-			} else {
-				self.hasNext = false;
-			}
+		self.pagingEnabled = true;
+		self.page = parseInt(Store.current.page, 10);
+
+		if (self.page >= 2) {
+			self.hasPrev = true;
+			self.prevPage = (self.page === 2) ? '/' : '/index/' + (self.page - 1);
+		} else {
+			self.hasPrev = false;
 		}
 
+		if (self.page < self.maxPage) {
+			self.hasNext = true;
+			self.nextPage = '/index/' + (self.page + 1);
+		} else {
+			self.hasNext = false;
+		}
 		self.update();
+	}
+	// Subscribes Store.onChanged
+	RiotControl.on(Store.ActionTypes.changedBlogInfo, () => {
+		self.maxPage = Math.ceil(Store.blogInfo.posts / Constant.indexPostLimit);
+		modPagenation();
+	});
+	RiotControl.on(Store.ActionTypes.changedCurrent, () => {
+		self.pagingEnabled = false;
+		modPagenation();
 	});
 	</script>
 	<style type="text/scss">

@@ -1,9 +1,10 @@
 import riot from 'riot';
 import route from 'riot-route';
+import RiotControl from 'riotcontrol';
 
 import Action from '../Action/Action';
 import Store from '../Store/Store';
-import RiotControl from 'riotcontrol';
+import Constant from "../Constant/Constant";
 
 <niltea-base>
 	<section class='header' ref='header'></section>
@@ -20,13 +21,21 @@ import RiotControl from 'riotcontrol';
 
 	// routing
 	route.base('/');
-
+	// indexで取得する記事数
+	const limit = Constant.indexPostLimit;
 	// Indexのロード
 	route('/', () => {
-		riot.mount(self.refs.content, 'niltea-index')
-		Action.loadContent({type: 'posts'});
+		riot.mount(self.refs.content, 'niltea-index');
+		Action.loadContent({type: 'posts', query: {limit}});
 		// document.title = `${Store.blogInfo.title}`;
 		Action.setCurrent({current: 'index', page: 1});
+	});
+	// index / pagenation
+	route('/index/*', (page) => {
+		riot.mount(self.refs.content, 'niltea-index');
+		Action.loadContent({type: 'posts', query: {limit, offset: limit * (page - 1)}});
+		// document.title = `${Store.blogInfo.title}`;
+		Action.setCurrent({current: 'index', page: page});
 	});
 
 	// post
@@ -35,6 +44,7 @@ import RiotControl from 'riotcontrol';
 		Action.loadContent({type: 'posts', query: {id}});
 		Action.setCurrent({current: 'posts', id});
 	});
+
 	// about
 	route('/about', () => {
 		riot.mount(self.refs.content, 'niltea-about')

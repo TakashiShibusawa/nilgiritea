@@ -4,6 +4,8 @@ const constant = new class Constant{
 			API_KEY  : "api_key=Rak7GXrKPBB6uuTODOgQL3hPLpnTAf2b2IoUjAUoBd8yLoCthg",
 			APIRoot : "http://api.tumblr.com/v2/blog/nilgiritea.tumblr.com/",
 		}
+		// indexで取得する記事数
+		this.indexPostLimit = 3;
 		this.action = {
 			fetchArticle: "fetchArticle",
 		}
