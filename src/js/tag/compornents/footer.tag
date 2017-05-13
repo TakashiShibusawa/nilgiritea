@@ -3,11 +3,10 @@ import RiotControl from 'riotcontrol';
 import Store from '../../Store/Store';
 <niltea-footer>
 	<footer class="footer">
-		<nav class="navigation" if={currentPage === 'index'}>
-			<a href="{PreviousPage}" class="previous">&lt; PREV</a>
-			<span class="current_page">{PageNumber}</span>
-			<virtual><a href="{URL}" class="previous">{PageNumber}</a></virtual>
-			<a href="{NextPage}" class="next">NEXT &gt;</a>
+		<nav class="navigation" if={pagingEnabled}>
+			<a if={hasPrev} href="{prevPage}" class="prev">&lt; PREV</a>
+			<span class="current_page">{page}</span>
+			<a if={hasNext} href="{nextPage}" class="next">NEXT &gt;</a>
 		</nav>
 		<div class="copyright">
 			<a class="nilgiriLogo txtHide" href="/">Designed by Nilgiri Tea</a>
@@ -15,9 +14,35 @@ import Store from '../../Store/Store';
 	</footer>
 	<script>
 	const self = this;
+	self.pagingEnabled = false;
+	self.hasPrev = false;
+	self.hasNext = false;
+	self.prevPage = null;
+	self.nextPage = null;
 	// Subscribes Store.onChanged
 	RiotControl.on(Store.ActionTypes.changedCurrent, () => {
-		self.currentPage = Store.current.currentPage;
+		self.pagingEnabled = false;
+		const current = Store.current;
+		if(current.currentPage === 'index') {
+			self.pagingEnabled = true;
+			self.page = parseInt(current.page, 10);
+			const lastPage = 2;
+
+			if (self.page >= 2) {
+				self.hasPrev = true;
+				self.prevPage = '/index/' + (self.page - 1);
+			} else {
+				self.hasPrev = false;
+			}
+
+			if (self.page < lastPage) {
+				self.hasNext = true;
+				self.nextPage = '/index/' + (self.page + 1);
+			} else {
+				self.hasNext = false;
+			}
+		}
+
 		self.update();
 	});
 	</script>

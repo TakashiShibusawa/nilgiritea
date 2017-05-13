@@ -25,8 +25,8 @@ import RiotControl from 'riotcontrol';
 	route('/', () => {
 		riot.mount(self.refs.content, 'niltea-index')
 		Action.loadContent({type: 'posts'});
-		document.title = `${Store.blogInfo.title}`;
-		Action.setCurrent({current: 'index'});
+		// document.title = `${Store.blogInfo.title}`;
+		Action.setCurrent({current: 'index', page: 1});
 	});
 
 	// post
@@ -39,7 +39,7 @@ import RiotControl from 'riotcontrol';
 	route('/about', () => {
 		riot.mount(self.refs.content, 'niltea-about')
 		if (!Store.blogInfo) Action.loadContent({type: 'info'});
-		document.title = `about | ${Store.blogInfo.title}`;
+		// document.title = `about | ${Store.blogInfo.title}`;
 		Action.setCurrent({current: 'about'});
 	});
 

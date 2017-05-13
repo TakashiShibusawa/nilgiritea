@@ -3010,9 +3010,9 @@ const appAction = new class AppAction {
 		};
 	}
 	setCurrent(currentInfo) {
-		const { current: currentPage, id = null } = currentInfo;
+		const { current: currentPage, id = null, page = null } = currentInfo;
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setCurrent, currentObj => {
-			return { currentPage, id };
+			return { currentPage, id, page };
 		});
 	}
 	resetCounter() {
@@ -3260,8 +3260,8 @@ riot.tag2('niltea-base', '<section class="header" ref="header"></section> <secti
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/', () => {
 		riot.mount(self.refs.content, 'niltea-index');
 		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent({ type: 'posts' });
-		document.title = `${__WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].blogInfo.title}`;
-		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].setCurrent({ current: 'index' });
+
+		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].setCurrent({ current: 'index', page: 1 });
 	});
 
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/post/*', id => {
@@ -3273,7 +3273,7 @@ riot.tag2('niltea-base', '<section class="header" ref="header"></section> <secti
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/about', () => {
 		riot.mount(self.refs.content, 'niltea-about');
 		if (!__WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].blogInfo) __WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent({ type: 'info' });
-		document.title = `about | ${__WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].blogInfo.title}`;
+
 		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].setCurrent({ current: 'about' });
 	});
 
@@ -3297,11 +3297,37 @@ var riot = __webpack_require__(0);
 
 
 
-riot.tag2('niltea-footer', '<footer class="footer"> <nav class="navigation" if="{currentPage === \'index\'}"> <a href="{PreviousPage}" class="previous">&lt; PREV</a> <span class="current_page">{PageNumber}</span> <virtual><a href="{URL}" class="previous">{PageNumber}</a></virtual> <a href="{NextPage}" class="next">NEXT &gt;</a> </nav> <div class="copyright"> <a class="nilgiriLogo txtHide" href="/">Designed by Nilgiri Tea</a> </div> </footer>', 'niltea-footer .navigation,[data-is="niltea-footer"] .navigation{ width: 100%; margin: 0 auto; padding: 20px 0 0; overflow: hidden; text-align: center; } niltea-footer .navigation .count,[data-is="niltea-footer"] .navigation .count{ float: left; } niltea-footer .navigation .links,[data-is="niltea-footer"] .navigation .links{ width: 100%; text-align: center; } niltea-footer .navigation.permalink .links,[data-is="niltea-footer"] .navigation.permalink .links{ overflow: hidden; } niltea-footer .navigation .links a,[data-is="niltea-footer"] .navigation .links a,niltea-footer .navigation .links span,[data-is="niltea-footer"] .navigation .links span{ display: inline-block; padding: 6px 9px; border-radius: 4px; text-decoration: none; font-size: 1.4em; color: #424b54; } niltea-footer .navigation .links a:hover,[data-is="niltea-footer"] .navigation .links a:hover{ background-color: #ddd; } niltea-footer .current_page,[data-is="niltea-footer"] .current_page{ background-color: #ddd; }', '', function (opts) {
+riot.tag2('niltea-footer', '<footer class="footer"> <nav class="navigation" if="{pagingEnabled}"> <a if="{hasPrev}" href="{prevPage}" class="prev">&lt; PREV</a> <span class="current_page">{page}</span> <a if="{hasNext}" href="{nextPage}" class="next">NEXT &gt;</a> </nav> <div class="copyright"> <a class="nilgiriLogo txtHide" href="/">Designed by Nilgiri Tea</a> </div> </footer>', 'niltea-footer .navigation,[data-is="niltea-footer"] .navigation{ width: 100%; margin: 0 auto; padding: 20px 0 0; overflow: hidden; text-align: center; } niltea-footer .navigation .count,[data-is="niltea-footer"] .navigation .count{ float: left; } niltea-footer .navigation .links,[data-is="niltea-footer"] .navigation .links{ width: 100%; text-align: center; } niltea-footer .navigation.permalink .links,[data-is="niltea-footer"] .navigation.permalink .links{ overflow: hidden; } niltea-footer .navigation .links a,[data-is="niltea-footer"] .navigation .links a,niltea-footer .navigation .links span,[data-is="niltea-footer"] .navigation .links span{ display: inline-block; padding: 6px 9px; border-radius: 4px; text-decoration: none; font-size: 1.4em; color: #424b54; } niltea-footer .navigation .links a:hover,[data-is="niltea-footer"] .navigation .links a:hover{ background-color: #ddd; } niltea-footer .current_page,[data-is="niltea-footer"] .current_page{ background-color: #ddd; }', '', function (opts) {
 	const self = this;
+	self.pagingEnabled = false;
+	self.hasPrev = false;
+	self.hasNext = false;
+	self.prevPage = null;
+	self.nextPage = null;
 
 	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changedCurrent, () => {
-		self.currentPage = __WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].current.currentPage;
+		self.pagingEnabled = false;
+		const current = __WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].current;
+		if (current.currentPage === 'index') {
+			self.pagingEnabled = true;
+			self.page = parseInt(current.page, 10);
+			const lastPage = 2;
+
+			if (self.page >= 2) {
+				self.hasPrev = true;
+				self.prevPage = '/index/' + (self.page - 1);
+			} else {
+				self.hasPrev = false;
+			}
+
+			if (self.page < lastPage) {
+				self.hasNext = true;
+				self.nextPage = '/index/' + (self.page + 1);
+			} else {
+				self.hasNext = false;
+			}
+		}
+
 		self.update();
 	});
 });

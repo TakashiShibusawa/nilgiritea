@@ -63,8 +63,8 @@ const appAction = new class AppAction {
 		};
 	}
 	setCurrent(currentInfo) {
-		const {current: currentPage, id = null} = currentInfo;
-		RiotControl.trigger(Constant.setCurrent, (currentObj) => { return {currentPage, id} });
+		const {current: currentPage, id = null, page = null} = currentInfo;
+		RiotControl.trigger(Constant.setCurrent, (currentObj) => { return {currentPage, id, page} });
 	}
 	resetCounter(){
 		RiotControl.trigger(Constant.resetCounter, (count)=> 0);
