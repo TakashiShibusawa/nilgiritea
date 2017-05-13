@@ -7,16 +7,6 @@ basic style
 =====================*/
 .fll { display: block; float: left; margin-right: 15px; }
 .flr { display: block; float: right; margin-left: 15px; }
-.ios .fll,
-.ios .flr {
-	float: none;
-	margin: 0 auto;
-}
-img.w100 { width: 100%; }
-img.wh100 {
-	width: 100%;
-	height: 100%;
-}
 
 /*=====================
 main structure
@@ -340,46 +330,15 @@ ol.notes .avatar_frame {
 	}
 }
 
-/* navigation */
-.navigation {
-	width: 100%;
-	margin: 0 auto;
-	padding: 20px 0 0;
-	overflow: hidden;
-	text-align: center;
-	.count { float: left; }
-	.links {
-		width: 100%;
-		text-align: center;
-	}
-	&.permalink .links { overflow: hidden; }
-	.links a,
-	.links span {
-		display: inline-block;
-		padding: 6px 9px;
-		border-radius: 4px;
-		text-decoration: none;
-		font-size: 1.4em;
-		color: #424b54;
-	}
-	.links a:hover { background-color: #ddd; }
-}
-.current_page { background-color: #ddd; }
 
 /*=====================
 copyright
 =====================*/
 .copyright { margin-top: 25px; }
 .nilgiriLogo {
-	background: url(http://s3.nilgiri-tea.net/tumblr/images/nilgiri.png) no-repeat;
+	background: url(/images/nilgiri.png) no-repeat;
 	width: 108px;
 	height: 34px;
 	margin: 0 auto;
 	display: block;
-}
-.Shibusawa {
-	margin-top: 13px;
-	text-align: center;
-	font-size: 1.2em;
-	color: #0e1012;
 }

@@ -10,11 +10,10 @@ import Store from '../../Store/Store';
 		</h1>
 		<nav class="gnav clearfix" id="gnav">
 			<ul>
-				<li class="gnav_item about" title="about"><a href="/#/about/" target="_top">about</a></li>
-				<li class="gnav_item blog" title="blog"><a href="/#/" target="_top">blog</a></li>
-				<li class="gnav_item twitter" title="twitter"><a href="http://www.twitter.com/{TwitterUsername}" target="_blank">twitter</a></li>
-				<li class="gnav_item pixiv" title="pixiv"><a href="http://www.pixiv.net/member.php?id={pixiv}" target="_blank">pixiv</a></li>
-				<li class="gnav_item github" title="github"><a href="https://github.com/niltea" target="_blank">GitHub</a></li>
+				<li class="gnav_item about" title="about"><a href="/about/" target="_top">about</a></li>
+				<li class="gnav_item pixiv" title="Pixiv"><a href="http://www.pixiv.net/member.php?id={pixiv}" target="_blank">pixiv</a></li>
+				<li class="gnav_item twitter lsf" title="Twitter"><a href="http://www.twitter.com/{TwitterUsername}" target="_blank">twitter</a></li>
+				<li class="gnav_item github lsf" title="GitHub"><a href="https://github.com/niltea" target="_blank">github</a></li>
 			</ul>
 		</nav>
 	</header>
@@ -65,14 +64,15 @@ import Store from '../../Store/Store';
 		.gnav {
 			float: left;
 			padding-left: 40px;
-			padding-top: 23px;
+			padding-top: 15px;
 			max-width: 80%;
 		}
 		.gnav_item {
 			display: inline-block;
 			line-height: 1em;
+			font-size: 2.0em;
 			+ .gnav_item {
-				margin-left: 2em;
+				margin-left: 1.5em;
 			}
 			&:first-child { margin: 0; }
 			&.active,
@@ -80,7 +80,18 @@ import Store from '../../Store/Store';
 				/*border-color: #2d73a8;*/
 			}
 			a {
-				font-size: 1.8em;
+				font-size: 1em;
+			}
+			&.lsf a {
+				font-size: 1.2em;
+			}
+			&.pixiv a {
+				width: 18px;
+				height: 18px;
+				display: block;
+				background: url(/images/pixiv.svg) 0 0 no-repeat;
+				background-size: 100%;
+				@include txtHide;
 			}
 		}
 		@media screen and (max-width: 37.5em) {

@@ -11,7 +11,6 @@ import Store from '../../Store/Store';
 		</nav>
 		<div class="copyright">
 			<a class="nilgiriLogo txtHide" href="http://www.nilgiri-tea.net/">Designed by Nilgiri Tea</a>
-			<div class="Shibusawa">&copy; Nilgiri Tea</div>
 		</div>
 	</footer>
 	<script>
@@ -22,4 +21,31 @@ import Store from '../../Store/Store';
 		self.update();
 	});
 	</script>
+	<style type="text/scss">
+	/* navigation */
+	.navigation {
+		width: 100%;
+		margin: 0 auto;
+		padding: 20px 0 0;
+		overflow: hidden;
+		text-align: center;
+		.count { float: left; }
+		.links {
+			width: 100%;
+			text-align: center;
+		}
+		&.permalink .links { overflow: hidden; }
+		.links a,
+		.links span {
+			display: inline-block;
+			padding: 6px 9px;
+			border-radius: 4px;
+			text-decoration: none;
+			font-size: 1.4em;
+			color: #424b54;
+		}
+		.links a:hover { background-color: #ddd; }
+	}
+	.current_page { background-color: #ddd; }
+	</style>
 </niltea-footer>
