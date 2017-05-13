@@ -25,7 +25,6 @@ const constant = new class Constant{
 	getEndPoint ({type = 'post', query}) {
 		const queryString = this._setQS(query);
 		const endPoint = this.api.APIRoot + type + '?' + this._getApiKey() + queryString;
-		console.log(endPoint)
 		return endPoint;
 	}
 

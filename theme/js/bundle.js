@@ -2963,39 +2963,13 @@ const tumblrAPI = new class TumblrAPI {
 
 const appAction = new class AppAction {
 	async loadContent({ type, query }) {
-		let json = null,
-		    article = null,
-		    flg_result = false;
-		switch (type) {
-			case 'info':
-				// ページリストを取得し、forEachで回す
+		let article = null;
 
-				console.log(type);
-				console.log(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].getEndPoint({ type }));
-				return;
-				json = await tumblrAPI.fetchAPI(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].getEndPoint({ type }));
-				json.forEach(page => {
-					// リソースIDが指定の物と違ったら飛ばす
-					if (page.resource_id !== resource) return false;
+		//json の取得
+		const json = await tumblrAPI.fetchAPI(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].getEndPoint({ type, query }));
+		if (!json) return false;
 
-					// 記事が見つかったときの処理
-					flg_result = true;
-					// 記事を整形してtriggerする
-					article = this._loadArticle(page);
-				});
-				break;
-
-			default:
-				//posts の取得
-				json = await tumblrAPI.fetchAPI(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].getEndPoint({ type, query }));
-				// jsonがきちんと返ってきたら成功フラグをtrueにする
-				if (json) {
-					article = this._loadArticle(json.response.posts);
-					flg_result = true;
-				}
-				break;
-		}
-		// 成功フラグが立っていればcontrolに通知する
+		// 正常取得時の動作
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setBlogInfo, oldInfo => {
 			let isChanged = false;
 			let data = null;
@@ -3006,10 +2980,14 @@ const appAction = new class AppAction {
 			}
 			return { isChanged, data };
 		});
-		if (flg_result) __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setContent, content => article);
-		return flg_result;
+
+		article = this._loadArticle(json.response.posts);
+		if (article) __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setContent, content => article);
+		return true;
 	}
 	_loadArticle(posts_fetched) {
+		// postsがないとき(infoを取得したとき)
+		if (!posts_fetched) return null;
 		const posts_formatted = [];
 		posts_fetched.forEach(article => {
 			const articleData = this._getArticleData(article);
@@ -3219,7 +3197,6 @@ const constant = new class Constant {
 	getEndPoint({ type = 'post', query }) {
 		const queryString = this._setQS(query);
 		const endPoint = this.api.APIRoot + type + '?' + this._getApiKey() + queryString;
-		console.log(endPoint);
 		return endPoint;
 	}
 
