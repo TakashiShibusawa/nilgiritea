@@ -79,8 +79,9 @@ const appAction = new class AppAction {
 			reblog_key : post.reblog_key
 		};
 	}
-	decrementCounter(){
-		RiotControl.trigger(Constant.decrementCounter, (count)=> count-1);
+	setCurrent(currentInfo) {
+		const {current: currentPage, postID = null} = currentInfo;
+		RiotControl.trigger(Constant.setCurrent, (currentObj) => { return {currentPage, postID} });
 	}
 	resetCounter(){
 		RiotControl.trigger(Constant.resetCounter, (count)=> 0);

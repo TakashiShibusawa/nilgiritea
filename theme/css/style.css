@@ -438,7 +438,8 @@ ol.notes .avatar_frame {
   width: 100%;
   margin: 0 auto;
   padding: 20px 0 0;
-  overflow: hidden; }
+  overflow: hidden;
+  text-align: center; }
   .navigation .count {
     float: left; }
   .navigation .links {

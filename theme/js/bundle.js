@@ -3002,11 +3002,26 @@ if (true) module.exports = RiotControl;
 /***/ }),
 /* 3 */,
 /* 4 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Store_Store__ = __webpack_require__(15);
 
 var riot = __webpack_require__(0);
-riot.tag2('niltea-footer', '<footer class="footer"> <nav class="navigation"> <div class="links"> <a href="{PreviousPage}" class="previous">&lt; PREV</a> <span class="current_page">{PageNumber}</span> <virtual><a href="{URL}" class="previous">{PageNumber}</a></virtual> <a href="{NextPage}" class="next">NEXT &gt;</a> </div> </nav> <nav class="navigation permalink"> <div class="links"> <a href="{NextPost}" class="left">Prev</a> <a href="{PreviousPost}" class="right">Next</a> </div> </nav> <div class="copyright"> <a class="nilgiriLogo txtHide" href="http://www.nilgiri-tea.net/">Designed by Nilgiri Tea</a> <div class="Shibusawa">&copy; Nilgiri Tea</div> </div> </footer>', '', '', function (opts) {});
+
+
+
+riot.tag2('niltea-footer', '<footer class="footer"> <nav class="navigation" if="{currentPage === \'index\'}"> <a href="{PreviousPage}" class="previous">&lt; PREV</a> <span class="current_page">{PageNumber}</span> <virtual><a href="{URL}" class="previous">{PageNumber}</a></virtual> <a href="{NextPage}" class="next">NEXT &gt;</a> </nav> <div class="copyright"> <a class="nilgiriLogo txtHide" href="http://www.nilgiri-tea.net/">Designed by Nilgiri Tea</a> <div class="Shibusawa">&copy; Nilgiri Tea</div> </div> </footer>', '', '', function (opts) {
+	const self = this;
+
+	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changedCurrent, () => {
+		self.currentPage = __WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].current.currentPage;
+		self.update();
+	});
+});
 
 /***/ }),
 /* 5 */
@@ -4104,11 +4119,6 @@ var riot = __webpack_require__(0);
 riot.tag2('niltea-base', '<section class="header" ref="header"></section> <section class="content" ref="content"></section> <section class="footer" ref="footer"></section>', '', '', function (opts) {
 	const self = this;
 
-	const loadIndex = () => {
-		riot.mount(self.refs.content, 'niltea-index');
-		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent('posts');
-	};
-
 	self.on('mount', () => {
 		riot.mount(self.refs.header, 'niltea-header');
 		riot.mount(self.refs.footer, 'niltea-footer');
@@ -4116,11 +4126,16 @@ riot.tag2('niltea-base', '<section class="header" ref="header"></section> <secti
 
 	__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */].base('/');
 
-	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/', loadIndex);
+	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/', () => {
+		riot.mount(self.refs.content, 'niltea-index');
+		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent('posts');
+		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].setCurrent({ current: 'index' });
+	});
 
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/post/*', postID => {
 		riot.mount(self.refs.content, 'niltea-post');
 		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].loadContent('posts', postID);
+		__WEBPACK_IMPORTED_MODULE_2__Action_Action__["a" /* default */].setCurrent({ current: 'posts', postID });
 	});
 
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('*', () => {
@@ -4193,7 +4208,7 @@ const store = new class ContentStore {
 		return this._blogInfo;
 	}
 	get current() {
-		return this._currentPage;
+		return this._current;
 	}
 	get content() {
 		return this._content;
@@ -4213,7 +4228,7 @@ const store = new class ContentStore {
 
 		this._blogInfo = null;
 		this._content = '';
-		this._currentPage = '';
+		this._current = '';
 		this._pageTitle = '';
 		this.on(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setBlogInfo, this._setBlogInfo.bind(this));
 		this.on(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setCurrent, this._setCurrent.bind(this));
@@ -4224,12 +4239,12 @@ const store = new class ContentStore {
 		this._blogInfo = action(this._blogInfo);
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changedBlogInfo);
 	}
-	_setCurrent(currentAction) {
-		// Actionから渡されたcurrent操作関数がcurrentActionへ代入される
+	_setCurrent(action) {
+		// Actionから渡されたcurrent操作関数がactionへ代入される
 		// それを用いてcurrentの内容を変更する
-		this._currentPage = currentAction(this._content);
+		this._current = action(this._current);
 		// Storeの内容が変わったよー、というのをControlへ通知する（そして関係する動作を叩いてもらう
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changed);
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changedCurrent);
 	}
 	_setContent(contentAction) {
 		this._content = contentAction(this._content);
@@ -4243,7 +4258,8 @@ const store = new class ContentStore {
 
 store.ActionTypes = {
 	changedBlogInfo: "changedBlogInfo",
-	changed: "content_store_changed"
+	changed: "content_store_changed",
+	changedCurrent: "changedCurrent"
 };
 __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.addStore(store);
 
@@ -4342,8 +4358,11 @@ const appAction = new class AppAction {
 			reblog_key: post.reblog_key
 		};
 	}
-	decrementCounter() {
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].decrementCounter, count => count - 1);
+	setCurrent(currentInfo) {
+		const { current: currentPage, postID = null } = currentInfo;
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setCurrent, currentObj => {
+			return { currentPage, postID };
+		});
 	}
 	resetCounter() {
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].resetCounter, count => 0);
@@ -4382,7 +4401,6 @@ riot.tag2('niltea-post', '<div class="post post-single"> <h2 class="post_title">
 			self[key] = content[key];
 		});
 		this.caption = this.caption.replace(/<h2>(?:[a-zA-Z/d々〇〻ぁ-んァ-ヶー\u3400-\u9FFF\uF900-\uFAFF]|[\uD840-\uD87F][\uDC00-\uDFFF])+<\/h2>/, '');
-		console.log(this.caption);
 
 		self.isPhotoSet = self.photos.length > 1;
 		self.update();

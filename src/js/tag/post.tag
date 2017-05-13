@@ -42,7 +42,6 @@ import Store from '../Store/Store';
 			const content = Store.content[0];
 			contentKeys.forEach(key => { self[key] = content[key] });
 			this.caption = this.caption.replace(/<h2>(?:[a-zA-Z/d々〇〻ぁ-んァ-ヶー\u3400-\u9FFF\uF900-\uFAFF]|[\uD840-\uD87F][\uDC00-\uDFFF])+<\/h2>/, '')
-console.log(this.caption)
 
 			// photosが複数であればphososetであると判断
 			self.isPhotoSet = (self.photos.length > 1);

@@ -12,12 +12,6 @@ import RiotControl from 'riotcontrol';
 	<script>
 		const self = this;
 
-	// Indexのロードを行う関数
-	const loadIndex = () => {
-		riot.mount(self.refs.content, 'niltea-index')
-		Action.loadContent('posts');
-	};
-
 	self.on('mount', () => {
 		riot.mount(self.refs.header, 'niltea-header');
 		riot.mount(self.refs.footer, 'niltea-footer');
@@ -27,12 +21,18 @@ import RiotControl from 'riotcontrol';
 	// routing
 	route.base('/');
 
-	route('/', loadIndex);
+	// Indexのロード
+	route('/', () => {
+		riot.mount(self.refs.content, 'niltea-index')
+		Action.loadContent('posts');
+		Action.setCurrent({current: 'index'});
+	});
 
 	// post
 	route('/post/*', (postID) => {
 		riot.mount(self.refs.content, 'niltea-post');
 		Action.loadContent('posts', postID);
+		Action.setCurrent({current: 'posts', postID});
 	});
 
 	// default
