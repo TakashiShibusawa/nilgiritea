@@ -140,9 +140,8 @@ body {
   background-color: #fff; }
 
 #wrapper {
-  min-width: 640px;
-  max-width: 980px;
   margin: 0 auto;
+  padding: 1% 1% 5%;
   font-size: 62.5%; }
 
 iframe#tumblr_controls {
@@ -159,11 +158,11 @@ iframe#tumblr_controls {
 /*=====================
 post
 =====================*/
-.postContainer {
-  padding: 40px 0 5px;
-  border-bottom: 2px solid #303233; }
-
 .post {
+  padding: 40px 0 40px;
+  border-bottom: 1px solid #303233; }
+
+.post-item {
   width: 290px;
   margin: 0 15px 30px 0;
   border-radius: 3px;
@@ -171,46 +170,46 @@ post
   box-shadow: 0 0 5px #282a2f;
   float: left;
   background-color: #fff; }
-  .post.singular {
+  .post-item.singular {
     width: 610px;
     margin: 0 auto 30px;
     float: none; }
-  .post h2 {
+  .post-item h2 {
     padding: 20px 20px 0;
     font-size: 1.8em;
     font-weight: bold; }
-    .post h2.post_title {
+    .post-item h2.post_title {
       padding: 15px 20px 0;
       font-size: 1.6em; }
-  .post.singular h2 {
+  .post-item.singular h2 {
     font-size: 2.2em;
     padding: 20px 20px 10px; }
-  .post h3 {
+  .post-item h3 {
     border-top: 1px dotted #303233;
     font-size: 2.0em;
     font-weight: bold;
     padding-top: 20px;
     padding-top: 5px; }
-  .post h4 {
+  .post-item h4 {
     font-size: 1.8em;
     font-weight: bold;
     padding-top: 10px; }
-  .post p {
+  .post-item p {
     padding: 15px 20px 0;
     font-size: 1.4em;
     color: #171a1d;
     text-align: justify; }
-  .post h3 + p,
-  .post h4 + p {
+  .post-item h3 + p,
+  .post-item h4 + p {
     padding-top: 0; }
-  .post a {
+  .post-item a {
     color-color: Accent; }
-  .post a:hover {
+  .post-item a:hover {
     text-decoration: underline;
     color-color: Hover; }
-  .post img {
+  .post-item img {
     max-width: 100%; }
-  .post .imgLink {
+  .post-item .imgLink {
     display: block; }
 
 @media screen and (max-width: 970px) {

@@ -1,10 +1,12 @@
 import RiotControl from "riotcontrol"
-import ActionTypes from "../Constant/Constant"
 import Constant from "../Constant/Constant";
 import "whatwg-fetch";
 import util from '../niltea_util.js';
 
 const fetchParams = {mode: 'cors'};
+
+let blogInfo = {};
+
 const tumblrAPI = new class TumblrAPI {
 	async fetchAPI (uri) {
 		if(typeof uri !== 'string') return false;
@@ -47,20 +49,21 @@ const appAction = new class AppAction {
 			break;
 		}
 		// 成功フラグが立っていればcontrolに通知する
-		if (flg_result) RiotControl.trigger(ActionTypes.setContent, (content) => article);
+		const fetchedBlogInfo = JSON.stringify(json.response.blog);
+		if (blogInfo !== fetchedBlogInfo) {
+			blogInfo = fetchedBlogInfo;
+			RiotControl.trigger(Constant.setBlogInfo, (content) => json.response.blog);
+		}
+		if (flg_result) RiotControl.trigger(Constant.setContent, (content) => article);
 		return flg_result;
 	}
-	_loadArticle (articles) {
-		const articleList = [];
-		// 単一記事の場合はObjectが渡されてくるはずなので、forEachで回すためにArrayに突っ込む
-		if (Object.prototype.toString.call(articles) !== '[object Array]') {
-			articles = [articles];
-		}
-		articles.forEach((article) => {
+	_loadArticle (posts_fetched) {
+		const posts_formatted = [];
+		posts_fetched.forEach((article) => {
 			const articleData = this._getArticleData(article);
-			articleList.push(articleData);
+			posts_formatted.push(articleData);
 		});
-		return articleList;
+		return posts_formatted;
 	}
 	_getArticleData (post) {
 		return {
@@ -74,10 +77,10 @@ const appAction = new class AppAction {
 		};
 	}
 	decrementCounter(){
-		RiotControl.trigger(ActionTypes.decrementCounter, (count)=> count-1);
+		RiotControl.trigger(Constant.decrementCounter, (count)=> count-1);
 	}
 	resetCounter(){
-		RiotControl.trigger(ActionTypes.resetCounter, (count)=> 0);
+		RiotControl.trigger(Constant.resetCounter, (count)=> 0);
 	}
 }
 

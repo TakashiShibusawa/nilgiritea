@@ -3035,6 +3035,8 @@ const constant = new class Constant {
 		this.action = {
 			fetchArticle: "fetchArticle"
 		};
+		// action types
+		this.setBlogInfo = 'setBlogInfo';
 		this.setCurrent = 'setCurrent';
 		this.setContent = 'setContent';
 	}
@@ -4071,8 +4073,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riot__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_riot_route__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Action_Action__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Store_Store__ = __webpack_require__(15);
 
 var riot = __webpack_require__(0);
+
 
 
 
@@ -4105,6 +4109,12 @@ riot.tag2('niltea-base', '<section class="header" ref="header"></section> <secti
 		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/');
 	});
 	__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */].start(true);
+
+	RiotControl.on(__WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].ActionTypes.changedBlogInfo, () => {
+		const content = __WEBPACK_IMPORTED_MODULE_3__Store_Store__["a" /* default */].blogInfo;
+		console.log('changedBlogInfo');
+		console.log(content);
+	});
 });
 
 /***/ }),
@@ -4126,7 +4136,7 @@ var riot = __webpack_require__(0);
 
 
 
-riot.tag2('niltea-index', '<section id="article_list" class="article_list"> <niltea-list-item articlelist="{articleList}"></niltea-list-item> </section>', '', '', function (opts) {
+riot.tag2('niltea-index', '<section id="article_list" class="post"> <niltea-list-item articlelist="{articleList}"></niltea-list-item> </section>', '', '', function (opts) {
 		const self = this;
 		self.articleList = {};
 
@@ -4142,7 +4152,7 @@ riot.tag2('niltea-index', '<section id="article_list" class="article_list"> <nil
 		});
 });
 
-riot.tag2('niltea-list-item', '<article each="{item in opts.articlelist}" class="article-list_item"> <a class="photo" href="/post/{item.id}" if="{item.photos}" each="{item.photos}"> {console.log(original_size)} <img riot-src="{alt_sizes[4] ? alt_sizes[4].url : alt_sizes[3].url}" alt=""> </a> <h3 class="title">{item.title}</h3> </article>', '', '', function (opts) {
+riot.tag2('niltea-list-item', '<article each="{item in opts.articlelist}" class="post_item"> <a class="photo" href="/post/{item.id}" if="{item.photos}" each="{item.photos}"> {console.log(original_size)} <img riot-src="{alt_sizes[4] ? alt_sizes[4].url : alt_sizes[3].url}" alt=""> </a> <h3 class="title">{item.title}</h3> </article>', '', '', function (opts) {
 		const self = this;
 		self.on('update', () => {
 				console.log(opts.articlelist);
@@ -4167,6 +4177,9 @@ riot.tag2('niltea-index-list-lead', '<span class="line" each="{content in lines}
 
 
 const store = new class ContentStore {
+	get blogInfo() {
+		return this._blogInfo;
+	}
 	get current() {
 		return this._currentPage;
 	}
@@ -4186,14 +4199,19 @@ const store = new class ContentStore {
 	constructor() {
 		riot.observable(this);
 
+		this._blogInfo = null;
 		this._content = '';
 		this._currentPage = '';
 		this._pageTitle = '';
-
+		this.on(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setBlogInfo, this._setBlogInfo.bind(this));
 		this.on(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setCurrent, this._setCurrent.bind(this));
 		this.on(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setContent, this._setContent.bind(this));
 	}
 
+	_setBlogInfo(action) {
+		this._blogInfo = action(this._blogInfo);
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changedBlogInfo);
+	}
 	_setCurrent(currentAction) {
 		// Actionから渡されたcurrent操作関数がcurrentActionへ代入される
 		// それを用いてcurrentの内容を変更する
@@ -4211,7 +4229,10 @@ const store = new class ContentStore {
 	}
 }();
 
-store.ActionTypes = { changed: "content_store_changed" };
+store.ActionTypes = {
+	changedBlogInfo: "changedBlogInfo",
+	changed: "content_store_changed"
+};
 __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.addStore(store);
 
 /* harmony default export */ __webpack_exports__["a"] = (store);
@@ -4233,8 +4254,10 @@ __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.addStore(store);
 
 
 
-
 const fetchParams = { mode: 'cors' };
+
+let blogInfo = {};
+
 const tumblrAPI = new class TumblrAPI {
 	async fetchAPI(uri) {
 		if (typeof uri !== 'string') return false;
@@ -4277,20 +4300,21 @@ const appAction = new class AppAction {
 				break;
 		}
 		// 成功フラグが立っていればcontrolに通知する
+		const fetchedBlogInfo = JSON.stringify(json.response.blog);
+		if (blogInfo !== fetchedBlogInfo) {
+			blogInfo = fetchedBlogInfo;
+			__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setBlogInfo, content => json.response.blog);
+		}
 		if (flg_result) __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setContent, content => article);
 		return flg_result;
 	}
-	_loadArticle(articles) {
-		const articleList = [];
-		// 単一記事の場合はObjectが渡されてくるはずなので、forEachで回すためにArrayに突っ込む
-		if (Object.prototype.toString.call(articles) !== '[object Array]') {
-			articles = [articles];
-		}
-		articles.forEach(article => {
+	_loadArticle(posts_fetched) {
+		const posts_formatted = [];
+		posts_fetched.forEach(article => {
 			const articleData = this._getArticleData(article);
-			articleList.push(articleData);
+			posts_formatted.push(articleData);
 		});
-		return articleList;
+		return posts_formatted;
 	}
 	_getArticleData(post) {
 		return {
@@ -4328,7 +4352,7 @@ var riot = __webpack_require__(0);
 
 
 
-riot.tag2('niltea-post', '<div id="post"> <div class="photoContainer" if="{photos}"> <a class="photo" if="{!isPhotoSet}" each="{photos}" href="{original_size.url}"> <img riot-src="{alt_sizes[0].url}" alt=""> </a> <a class="photo photoSetItem" if="{isPhotoSet}" each="{photos}" href="{original_size.url}"> <img riot-src="{alt_sizes[0].url}" alt=""> </a> </div> <span>{caption}</span> </div>', '', '', function (opts) {
+riot.tag2('niltea-post', '<div class="post post-single"> <div class="photo" if="{photos}"> <a class="photo_item photo_item-single" if="{!isPhotoSet}" each="{photos}" href="{original_size.url}"> <img riot-src="{alt_sizes[0].url}" alt=""> </a> <a class="photo_item photo_item-set" if="{isPhotoSet}" each="{photos}" href="{original_size.url}"> <img riot-src="{alt_sizes[0].url}" alt=""> </a> </div> <span>{caption}</span> </div>', '', '', function (opts) {
 	const self = this;
 	const contentKeys = ['id', 'caption', 'title', 'date', 'type', 'url', 'photos'];
 	this.isPhotoSet = false;

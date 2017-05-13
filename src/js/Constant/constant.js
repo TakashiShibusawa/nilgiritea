@@ -7,6 +7,8 @@ const constant = new class Constant{
 		this.action = {
 			fetchArticle: "fetchArticle",
 		}
+		// action types
+		this.setBlogInfo= 'setBlogInfo';
 		this.setCurrent = 'setCurrent';
 		this.setContent = 'setContent';
 	}

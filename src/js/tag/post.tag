@@ -2,14 +2,14 @@ import RiotControl from 'riotcontrol';
 
 import Store from '../Store/Store';
 <niltea-post>
-	<div id="post">
+	<div class="post post-single">
 		<!-- Photo -->
-		<div class="photoContainer" if={photos}>
+		<div class="photo" if={photos}>
 
-			<a class="photo" if={!isPhotoSet} each={photos} href='{original_size.url}'>
+			<a class="photo_item photo_item-single" if={!isPhotoSet} each={photos} href='{original_size.url}'>
 				<img src="{alt_sizes[0].url}" alt="">
 			</a>
-			<a class="photo photoSetItem" if={isPhotoSet} each={photos} href='{original_size.url}'>
+			<a class="photo_item photo_item-set" if={isPhotoSet} each={photos} href='{original_size.url}'>
 				<img src="{alt_sizes[0].url}" alt="">
 			</a>
 		</div>

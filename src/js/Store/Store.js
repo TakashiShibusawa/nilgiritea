@@ -2,6 +2,7 @@ import RiotControl from "riotcontrol"
 import Constant from "../Constant/Constant"
 
 const store = new class ContentStore{
+	get blogInfo(){ return this._blogInfo; }
 	get current(){ return this._currentPage; }
 	get content(){ return this._content; }
 	get baseURL(){ return 'http://nilgiri-tea.net/'; }
@@ -11,14 +12,19 @@ const store = new class ContentStore{
 	constructor(){
 		riot.observable(this);
 
+		this._blogInfo = null;
 		this._content = '';
 		this._currentPage = '';
 		this._pageTitle = '';
-
-		this.on(Constant.setCurrent, this._setCurrent.bind(this));
-		this.on(Constant.setContent, this._setContent.bind(this));
+		this.on(Constant.setBlogInfo, this._setBlogInfo.bind(this));
+		this.on(Constant.setCurrent,  this._setCurrent.bind(this));
+		this.on(Constant.setContent,  this._setContent.bind(this));
 	}
 
+	_setBlogInfo(action){
+		this._blogInfo = action(this._blogInfo);
+		RiotControl.trigger(this.ActionTypes.changedBlogInfo);
+	}
 	_setCurrent(currentAction){
 		// Actionから渡されたcurrent操作関数がcurrentActionへ代入される
 		// それを用いてcurrentの内容を変更する
@@ -36,7 +42,10 @@ const store = new class ContentStore{
 	}
 }();
 
-store.ActionTypes = { changed: "content_store_changed" };
+store.ActionTypes = {
+	changedBlogInfo: "changedBlogInfo",
+	changed: "content_store_changed"
+};
 RiotControl.addStore(store);
 
 export default store
