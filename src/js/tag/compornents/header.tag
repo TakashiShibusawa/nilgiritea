@@ -32,12 +32,14 @@ import Store from '../../Store/Store';
 	</script>
 	<style type="text/scss">
 		@import "../../../css/includes/mixin";
+		.mainHeader {
+			@include clearfix;
+			position: fixed;
+			width: 100%;
+		}
 		a {
 			text-decoration: none;
 			color: #000;
-		}
-		.mainHeader {
-			@include clearfix;
 		}
 		h1 {
 			float: left;

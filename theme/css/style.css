@@ -159,8 +159,10 @@ iframe#tumblr_controls {
 post
 =====================*/
 .post {
-  padding: 40px 0 40px;
-  border-bottom: 1px solid #303233; }
+  padding: 120px 0 40px;
+  border-bottom: 1px solid #303233;
+  max-width: 1200px;
+  margin: 0 auto; }
 
 .post-item {
   width: 290px;

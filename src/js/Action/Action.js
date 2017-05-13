@@ -70,10 +70,13 @@ const appAction = new class AppAction {
 			id      : post.id,
 			caption : post.caption,
 			title   : post.slug,
+			slug    : post.slug,
 			date    : post.timestamp,
 			type    : post.type,
 			url     : post.short_url,
 			photos  : post.photos,
+			photoset_layout : post.photoset_layout,
+			reblog_key : post.reblog_key
 		};
 	}
 	decrementCounter(){

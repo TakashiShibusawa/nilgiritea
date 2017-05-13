@@ -3,6 +3,7 @@ import RiotControl from 'riotcontrol';
 import Store from '../Store/Store';
 <niltea-post>
 	<div class="post post-single">
+		<h2 class="post_title">{title}</h2>
 		<!-- Photo -->
 		<div class="photo" if={photos}>
 
@@ -13,7 +14,8 @@ import Store from '../Store/Store';
 				<img src="{alt_sizes[0].url}" alt="">
 			</a>
 		</div>
-		<span>{caption}</span>
+		<span><raw content='{caption}' /></span>
+		<a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="rblg" target='_blank'>reblog</a>
 	</div>
 
 	<script>
@@ -26,6 +28,8 @@ import Store from '../Store/Store';
 			'type',
 			'url',
 			'photos',
+			'photoset_layout',
+			'reblog_key',
 		];
 		self.isPhotoSet = false;
 
@@ -36,8 +40,10 @@ import Store from '../Store/Store';
 		// Subscribes Store.onChanged
 		RiotControl.on(Store.ActionTypes.changed, () => {
 			const content = Store.content[0];
-			console.log(content)
 			contentKeys.forEach(key => { self[key] = content[key] });
+			this.caption = this.caption.replace(/<h2>(?:[a-zA-Z/d々〇〻ぁ-んァ-ヶー\u3400-\u9FFF\uF900-\uFAFF]|[\uD840-\uD87F][\uDC00-\uDFFF])+<\/h2>/, '')
+console.log(this.caption)
+
 			// photosが複数であればphososetであると判断
 			self.isPhotoSet = (self.photos.length > 1);
 			self.update();

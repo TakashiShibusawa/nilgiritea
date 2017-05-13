@@ -3021,7 +3021,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var riot = __webpack_require__(0);
 
 
-riot.tag2('niltea-header', '<header class="mainHeader"> <h1> <a href="/" class="home"> <span class="mainTitle">{title}</span> <span class="siteDescription"><raw content="{description}"></raw></span> </a> </h1> <nav class="gnav clearfix" id="gnav"> <ul> <li class="gnav_item about" title="about"><a href="/#/about/" target="_top">about</a></li> <li class="gnav_item blog" title="blog"><a href="/#/" target="_top">blog</a></li> <li class="gnav_item twitter" title="twitter"><a href="http://www.twitter.com/{TwitterUsername}" target="_blank">twitter</a></li> <li class="gnav_item pixiv" title="pixiv"><a href="http://www.pixiv.net/member.php?id={pixiv}" target="_blank">pixiv</a></li> <li class="gnav_item github" title="github"><a href="https://github.com/niltea" target="_blank">GitHub</a></li> </ul> </nav> </header>', 'niltea-header .clearfix,[data-is="niltea-header"] .clearfix{ zoom: 1; } niltea-header .clearfix:after,[data-is="niltea-header"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-header .txtHide,[data-is="niltea-header"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-header a,[data-is="niltea-header"] a{ text-decoration: none; color: #000; } niltea-header .mainHeader,[data-is="niltea-header"] .mainHeader{ zoom: 1; } niltea-header .mainHeader:after,[data-is="niltea-header"] .mainHeader:after{ content: ""; clear: both; display: block; } niltea-header h1,[data-is="niltea-header"] h1{ float: left; padding-left: 2%; } niltea-header h1 a,[data-is="niltea-header"] h1 a{ display: block; } niltea-header h1 .mainTitle,[data-is="niltea-header"] h1 .mainTitle{ display: block; font-size: 3.8em; line-height: 1em; letter-spacing: 0.05em; } niltea-header h1 .siteDescription,[data-is="niltea-header"] h1 .siteDescription{ display: block; margin-top: 10px; font-weight: 400; font-size: 1.0em; line-height: 1em; letter-spacing: 0.15em; } niltea-header .gnav,[data-is="niltea-header"] .gnav{ float: left; padding-left: 40px; padding-top: 23px; max-width: 80%; } niltea-header .gnav_item,[data-is="niltea-header"] .gnav_item{ display: inline-block; line-height: 1em; } niltea-header .gnav_item + .gnav_item,[data-is="niltea-header"] .gnav_item + .gnav_item{ margin-left: 2em; } niltea-header .gnav_item:first-child,[data-is="niltea-header"] .gnav_item:first-child{ margin: 0; } niltea-header .gnav_item.active,[data-is="niltea-header"] .gnav_item.active,niltea-header .gnav_item:hover,[data-is="niltea-header"] .gnav_item:hover{ } niltea-header .gnav_item a,[data-is="niltea-header"] .gnav_item a{ font-size: 1.8em; } @media screen and (max-width: 37.5em) { niltea-header h1,[data-is="niltea-header"] h1,niltea-header .gnav,[data-is="niltea-header"] .gnav{ float: none; } niltea-header .gnav,[data-is="niltea-header"] .gnav{ padding-left: 2%; padding-top: 23px; } }', '', function (opts) {
+riot.tag2('niltea-header', '<header class="mainHeader"> <h1> <a href="/" class="home"> <span class="mainTitle">{title}</span> <span class="siteDescription"><raw content="{description}"></raw></span> </a> </h1> <nav class="gnav clearfix" id="gnav"> <ul> <li class="gnav_item about" title="about"><a href="/#/about/" target="_top">about</a></li> <li class="gnav_item blog" title="blog"><a href="/#/" target="_top">blog</a></li> <li class="gnav_item twitter" title="twitter"><a href="http://www.twitter.com/{TwitterUsername}" target="_blank">twitter</a></li> <li class="gnav_item pixiv" title="pixiv"><a href="http://www.pixiv.net/member.php?id={pixiv}" target="_blank">pixiv</a></li> <li class="gnav_item github" title="github"><a href="https://github.com/niltea" target="_blank">GitHub</a></li> </ul> </nav> </header>', 'niltea-header .clearfix,[data-is="niltea-header"] .clearfix{ zoom: 1; } niltea-header .clearfix:after,[data-is="niltea-header"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-header .txtHide,[data-is="niltea-header"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-header .mainHeader,[data-is="niltea-header"] .mainHeader{ zoom: 1; position: fixed; width: 100%; } niltea-header .mainHeader:after,[data-is="niltea-header"] .mainHeader:after{ content: ""; clear: both; display: block; } niltea-header a,[data-is="niltea-header"] a{ text-decoration: none; color: #000; } niltea-header h1,[data-is="niltea-header"] h1{ float: left; padding-left: 2%; } niltea-header h1 a,[data-is="niltea-header"] h1 a{ display: block; } niltea-header h1 .mainTitle,[data-is="niltea-header"] h1 .mainTitle{ display: block; font-size: 3.8em; line-height: 1em; letter-spacing: 0.05em; } niltea-header h1 .siteDescription,[data-is="niltea-header"] h1 .siteDescription{ display: block; margin-top: 10px; font-weight: 400; font-size: 1.0em; line-height: 1em; letter-spacing: 0.15em; } niltea-header .gnav,[data-is="niltea-header"] .gnav{ float: left; padding-left: 40px; padding-top: 23px; max-width: 80%; } niltea-header .gnav_item,[data-is="niltea-header"] .gnav_item{ display: inline-block; line-height: 1em; } niltea-header .gnav_item + .gnav_item,[data-is="niltea-header"] .gnav_item + .gnav_item{ margin-left: 2em; } niltea-header .gnav_item:first-child,[data-is="niltea-header"] .gnav_item:first-child{ margin: 0; } niltea-header .gnav_item.active,[data-is="niltea-header"] .gnav_item.active,niltea-header .gnav_item:hover,[data-is="niltea-header"] .gnav_item:hover{ } niltea-header .gnav_item a,[data-is="niltea-header"] .gnav_item a{ font-size: 1.8em; } @media screen and (max-width: 37.5em) { niltea-header h1,[data-is="niltea-header"] h1,niltea-header .gnav,[data-is="niltea-header"] .gnav{ float: none; } niltea-header .gnav,[data-is="niltea-header"] .gnav{ padding-left: 2%; padding-top: 23px; } }', '', function (opts) {
 		const self = this;
 		self.title = '';
 		self.description = '';
@@ -4333,10 +4333,13 @@ const appAction = new class AppAction {
 			id: post.id,
 			caption: post.caption,
 			title: post.slug,
+			slug: post.slug,
 			date: post.timestamp,
 			type: post.type,
 			url: post.short_url,
-			photos: post.photos
+			photos: post.photos,
+			photoset_layout: post.photoset_layout,
+			reblog_key: post.reblog_key
 		};
 	}
 	decrementCounter() {
@@ -4364,9 +4367,9 @@ var riot = __webpack_require__(0);
 
 
 
-riot.tag2('niltea-post', '<div class="post post-single"> <div class="photo" if="{photos}"> <a class="photo_item photo_item-single" if="{!isPhotoSet}" each="{photos}" href="{original_size.url}"> <img riot-src="{alt_sizes[0].url}" alt=""> </a> <a class="photo_item photo_item-set" if="{isPhotoSet}" each="{photos}" href="{original_size.url}"> <img riot-src="{alt_sizes[0].url}" alt=""> </a> </div> <span>{caption}</span> </div>', '', '', function (opts) {
+riot.tag2('niltea-post', '<div class="post post-single"> <h2 class="post_title">{title}</h2> <div class="photo" if="{photos}"> <a class="photo_item photo_item-single" if="{!isPhotoSet}" each="{photos}" href="{original_size.url}"> <img riot-src="{alt_sizes[0].url}" alt=""> </a> <a class="photo_item photo_item-set" if="{isPhotoSet}" each="{photos}" href="{original_size.url}"> <img riot-src="{alt_sizes[0].url}" alt=""> </a> </div> <span><raw content="{caption}"></raw></span> <a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="rblg" target="_blank">reblog</a> </div>', '', '', function (opts) {
 	const self = this;
-	const contentKeys = ['id', 'caption', 'title', 'date', 'type', 'url', 'photos'];
+	const contentKeys = ['id', 'caption', 'title', 'date', 'type', 'url', 'photos', 'photoset_layout', 'reblog_key'];
 	self.isPhotoSet = false;
 
 	self.on('unmount', () => {
@@ -4375,10 +4378,11 @@ riot.tag2('niltea-post', '<div class="post post-single"> <div class="photo" if="
 
 	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changed, () => {
 		const content = __WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].content[0];
-		console.log(content);
 		contentKeys.forEach(key => {
 			self[key] = content[key];
 		});
+		this.caption = this.caption.replace(/<h2>(?:[a-zA-Z/d々〇〻ぁ-んァ-ヶー\u3400-\u9FFF\uF900-\uFAFF]|[\uD840-\uD87F][\uDC00-\uDFFF])+<\/h2>/, '');
+		console.log(this.caption);
 
 		self.isPhotoSet = self.photos.length > 1;
 		self.update();

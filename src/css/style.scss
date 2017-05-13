@@ -34,7 +34,6 @@ body{
 #wrapper {
 	margin: 0 auto;
 	// min-width: 640px;
-	// max-width: 980px;
 	padding: 2% 1% 5%;
 	font-size: 62.5%;
 }
@@ -51,8 +50,10 @@ iframe#tumblr_controls { top: 8px !important; }
 post
 =====================*/
 .post {
-	padding: 40px 0 40px;
+	padding: 120px 0 40px;
 	border-bottom: 1px solid #303233;
+	max-width: 1200px;
+	margin: 0 auto;
 }
 .post-item {
 	width: 290px;
