@@ -31,8 +31,9 @@ import Store from '../Store/Store';
 <niltea-list-item>
 	<article each={item in opts.articlelist} class='article-list_item'>
 		<a class="photo" href='{original_size.url}' if={item.photos} each={item.photos}>
+			{console.log(original_size)}
 			<!-- <img src="{original_size.url}" alt=""> -->
-			<img src="{alt_sizes[4].url || alt_sizes[3].url}" alt="">
+			<img src="{alt_sizes[4] ? alt_sizes[4].url : alt_sizes[3].url}" alt="">
 		</a>
 		<h3 class='title'>{item.title}</h3>
 		href='/articles/{item.id}'

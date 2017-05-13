@@ -4135,7 +4135,7 @@ riot.tag2('niltea-index', '<section id="article_list" class="article_list"> <nil
 		});
 });
 
-riot.tag2('niltea-list-item', '<article each="{item in opts.articlelist}" class="article-list_item"> <a class="photo" href="{original_size.url}" if="{item.photos}" each="{item.photos}"> <img riot-src="{alt_sizes[4].url || alt_sizes[3].url}" alt=""> </a> <h3 class="title">{item.title}</h3> href=\'/articles/{item.id}\' </article>', '', '', function (opts) {
+riot.tag2('niltea-list-item', '<article each="{item in opts.articlelist}" class="article-list_item"> <a class="photo" href="{original_size.url}" if="{item.photos}" each="{item.photos}"> {console.log(original_size)} <img riot-src="{alt_sizes[4] ? alt_sizes[4].url : alt_sizes[3].url}" alt=""> </a> <h3 class="title">{item.title}</h3> href=\'/articles/{item.id}\' </article>', '', '', function (opts) {
 		const self = this;
 		self.on('update', () => {
 				console.log(opts.articlelist);
