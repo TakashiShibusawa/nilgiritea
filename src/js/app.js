@@ -10,6 +10,7 @@ require('./tag/about.tag')
 require('./tag/compornents/header.tag')
 require('./tag/compornents/footer.tag')
 require('./tag/compornents/raw.tag')
+require('./tag/compornents/loader.tag')
 
 riot.mount('#wrapper', 'niltea-base');
 

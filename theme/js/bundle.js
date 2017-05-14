@@ -3016,7 +3016,11 @@ const appAction = new class AppAction {
 		});
 	}
 	setLoader() {
-		__WEBPACK_IMPORTED_MODULE_3__niltea_util_js__["a" /* default */].loader();
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setLoader, null);
+	}
+	contentLoaded() {
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].contentLoaded, null);
+		console.log('content loaded');
 	}
 }();
 
@@ -3028,7 +3032,7 @@ const appAction = new class AppAction {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony default export */ __webpack_exports__["a"] = (new class Util {
+/* unused harmony default export */ var _unused_webpack_default_export = (new class Util {
 	constructor() {
 		this.browser = this.browser();
 		document.body.classList.add(this.browser.isPC ? 'pc' : 'sp');
@@ -3192,6 +3196,8 @@ const constant = new class Constant {
 		this.setCurrent = 'setCurrent';
 		this.setContent = 'setContent';
 		this.setLoader = 'setLoader';
+		this.setLoader = 'setLoader';
+		this.contentLoaded = 'contentLoaded';
 	}
 
 	_getApiKey() {
@@ -3258,12 +3264,13 @@ var riot = __webpack_require__(0);
 
 
 
-riot.tag2('niltea-base', '<section class="header" ref="header"></section> <section class="content" ref="content"></section> <section class="footer" ref="footer"></section>', '', '', function (opts) {
+riot.tag2('niltea-base', '<section class="header" ref="header"></section> <section class="content" ref="content"></section> <section class="footer" ref="footer"></section> <section class="loader" ref="loader"></section>', '', '', function (opts) {
 	const self = this;
 
 	self.on('mount', () => {
 		riot.mount(self.refs.header, 'niltea-header');
 		riot.mount(self.refs.footer, 'niltea-footer');
+		riot.mount(self.refs.loader, 'niltea-loader');
 	});
 
 	__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */].base('/');
@@ -3581,6 +3588,7 @@ __webpack_require__(6);
 __webpack_require__(9);
 __webpack_require__(8);
 __webpack_require__(10);
+__webpack_require__(17);
 
 riot.mount('#wrapper', 'niltea-base');
 
@@ -4572,6 +4580,136 @@ route.parser();
   self.fetch.polyfill = true
 })(typeof self !== 'undefined' ? self : this);
 
+
+/***/ }),
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Store_Store__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Constant_Constant__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__class_loader__ = __webpack_require__(18);
+
+var riot = __webpack_require__(0);
+
+
+
+
+
+
+
+
+riot.tag2('niltea-loader', '<div class="loader" ref="loader"> </div>', '', '', function (opts) {
+
+	const self = this;
+
+	const contentLoaded = __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].contentLoaded;
+	const activateLoader = () => {
+
+		__WEBPACK_IMPORTED_MODULE_4__class_loader__["a" /* default */].activateLoader(contentLoaded);
+	};
+
+	self.on('mount', activateLoader);
+	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].setLoader, activateLoader);
+});
+
+/***/ }),
+/* 18 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (new class Loader {
+	constructor(callback) {
+		document.addEventListener('DOMContentLoaded', () => {
+			console.log('Loader constructor called');
+			const images = this.loadElements();
+			console.log(images);
+			this.imgLoadWatcher({
+				images: images,
+				onComplete: () => {
+					if (!callback) return;
+					callback();
+				},
+				onEach: (expectedCount, receivedCount) => {
+					const p = Math.round(receivedCount / expectedCount * 100);
+					// progress.textContent = p;
+				}
+			});
+		});
+	}
+	activateLoader() {
+		console.log('Loader activateLoader called');
+	}
+	loadElements() {
+		console.log('Loader loadElements called');
+		const images = [];
+		const bgi = "background-image";
+		const targets_img = [].slice.call(document.getElementsByTagName('img'));
+		console.log(targets_img);
+		targets_img.forEach(el => {
+			let _src = el.getAttribute('src');
+			// srcが空なら中断
+			if (!_src) return;
+			images.push(_src);
+		});
+		const targets_bgi = [].slice.call(document.getElementsByClassName('loader_bgi'));
+		targets_bgi.forEach(el => {
+			// elementが空なら中断
+			if (!el) return;
+			// 背景画像を取得し、取得できなければ中断
+			let _src = el.style[bgi] || getComputedStyle(el, "")[bgi];
+			if (!_src || _src == 'none') return;
+
+			// 画像を取り出す
+			_src = _src.replace(/^url\(|\"|\)$/g, '');
+			images.push(_src);
+		});
+		return images;
+	}
+	imgLoadWatcher(setting) {
+		// if images is empty, go to loaded Function
+		if (setting.images === null || setting.images.length <= 0) {
+			if (setting.onComplete) {
+				setTimeout(() => {
+					setting.onComplete();
+				}, 500);
+			}
+			return;
+		}
+		//画像の数だけloadListenerが呼ばれたらcallbackが呼ばれる;
+		const loadListener = ((expectedCount, onEach, onComplete) => {
+			let receivedCount = 0;
+			return e => {
+				// remove temporary image
+				const tgt = e.target;
+				if (tgt) tgt.parentNode.removeChild(tgt);
+
+				receivedCount++;
+				if (onEach) onEach(expectedCount, receivedCount);
+				if (receivedCount === expectedCount) {
+					if (onComplete) {
+						setTimeout(() => {
+							onComplete();
+						}, 500);
+					}
+				}
+			};
+		})(setting.images.length, setting.onEach, setting.onComplete);
+
+		[].forEach.call(setting.images, url => {
+			let img = new Image();
+			document.body.appendChild(img);
+			img.width = img.height = 1;
+			img.onload = loadListener.bind(img);
+			img.src = url;
+			img = null;
+		});
+	}
+}());
 
 /***/ })
 /******/ ]);

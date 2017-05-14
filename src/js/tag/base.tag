@@ -10,12 +10,14 @@ import Constant from "../Constant/Constant";
 	<section class='header' ref='header'></section>
 	<section class='content' ref='content'></section>
 	<section class='footer' ref='footer'></section>
+	<section class='loader' ref='loader'></section>
 	<script>
 		const self = this;
 
 	self.on('mount', () => {
 		riot.mount(self.refs.header, 'niltea-header');
 		riot.mount(self.refs.footer, 'niltea-footer');
+		riot.mount(self.refs.loader, 'niltea-loader');
 	});
 
 
