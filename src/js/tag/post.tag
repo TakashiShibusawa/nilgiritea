@@ -10,13 +10,13 @@ import Store from '../Store/Store';
 			<!-- single -->
 			<div if={!isPhotoSet} class="photo_rowContainer layout_itemCount-1" ref='rowContainer'>
 				<a class="photo_item photo_item-single" if={!isPhotoSet} each={photos} href='{original_size.url}' onclick={this.openModal}>
-					<img src="{alt_sizes[0].url}" alt="" ref='photoItem'>
+					<figure class="photo_item_image" style="background-image: url({alt_sizes[0].url})"></figure>
 				</a>
 			</div>
 			<!-- set -->
 			<div if={isPhotoSet} each={row in photoset} class="photo_rowContainer layout_itemCount-{row.length}" ref='rowContainer'>
 				<a class="photo_item photo_item-set" each={row} href='{original_size.url}' onclick={this.openModal}>
-					<img src="{alt_sizes[0].url}" alt="" ref='photoItem'>
+					<figure class="photo_item_image" style="background-image: url({alt_sizes[0].url})"></figure>
 				</a>
 			</div>
 		</section>
@@ -141,6 +141,7 @@ import Store from '../Store/Store';
 		}
 		.photo_item-set {
 			display: inline-block;
+			height: 400px;
 			.layout_itemCount-2 & {
 				width: 50%;
 			}
@@ -148,9 +149,11 @@ import Store from '../Store/Store';
 				width: 33%;
 			}
 		}
-		img {
+		.photo_item_image {
 			width: 100%;
-			vertical-align: top;
+			height: 800px;
+			background: center center no-repeat;
+			background-size: cover;
 		}
 
 		/*text*/
