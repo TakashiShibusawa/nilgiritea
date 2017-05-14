@@ -3015,8 +3015,8 @@ const appAction = new class AppAction {
 			return { currentPage, id, page };
 		});
 	}
-	resetCounter() {
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].resetCounter, count => 0);
+	setLoader() {
+		__WEBPACK_IMPORTED_MODULE_3__niltea_util_js__["a" /* default */].loader();
 	}
 }();
 
@@ -3191,6 +3191,7 @@ const constant = new class Constant {
 		this.setBlogInfo = 'setBlogInfo';
 		this.setCurrent = 'setCurrent';
 		this.setContent = 'setContent';
+		this.setLoader = 'setLoader';
 	}
 
 	_getApiKey() {
@@ -3431,11 +3432,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Store_Store__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__niltea_util_js__ = __webpack_require__(4);
 
 var riot = __webpack_require__(0);
-
-
 
 
 
@@ -3449,7 +3447,7 @@ riot.tag2('niltea-index', '<section id="article_list" class="post"> <niltea-list
 				self.update();
 		});
 
-		self.on('updated', __WEBPACK_IMPORTED_MODULE_3__niltea_util_js__["a" /* default */].loader);
+		self.on('updated', __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].setLoader);
 		self.on('mount', () => {});
 
 		self.on('unmount', () => {
@@ -3478,11 +3476,10 @@ riot.tag2('niltea-index-list-lead', '<span class="line" each="{content in lines}
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Store_Store__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__niltea_util_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Store_Store__ = __webpack_require__(2);
 
 var riot = __webpack_require__(0);
-
 
 
 
@@ -3537,18 +3534,18 @@ riot.tag2('niltea-post', '<article class="post post-single"> <h2 class="post_tit
 		});
 	};
 
-	self.on('updated', __WEBPACK_IMPORTED_MODULE_2__niltea_util_js__["a" /* default */].loader);
+	self.on('updated', __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].setLoader);
 	self.on('mount', () => {
 		window.addEventListener('resize', layoutPhotoset);
 	});
 
 	self.on('unmount', () => {
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changed);
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changed);
 		window.removeEventListener('resize', layoutPhotoset);
 	});
 
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changed, () => {
-		const content = __WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].content[0];
+	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changed, () => {
+		const content = __WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].content[0];
 		contentKeys.forEach(key => {
 			self[key] = content[key];
 		});
@@ -3559,7 +3556,7 @@ riot.tag2('niltea-post', '<article class="post post-single"> <h2 class="post_tit
 		self.isPhotoSet = self.photos.length > 1;
 		if (self.isPhotoSet) self.photoset = setPhotoLayout();
 
-		document.title = `${self.title} | ${__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].blogInfo.title}`;
+		document.title = `${self.title} | ${__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].blogInfo.title}`;
 		self.update();
 		afterUpdate();
 	});

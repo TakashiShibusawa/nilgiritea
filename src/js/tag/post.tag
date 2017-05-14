@@ -1,8 +1,7 @@
 import RiotControl from 'riotcontrol';
 
+import Action from '../Action/Action';
 import Store from '../Store/Store';
-
-import util from '../niltea_util.js';
 <niltea-post>
 	<article class="post post-single">
 		<h2 class="post_title"><raw content='{title}' /></h2>
@@ -91,7 +90,7 @@ import util from '../niltea_util.js';
 			})
 		}
 
-		self.on('updated', util.loader );
+		self.on('updated', Action.setLoader );
 		self.on('mount', () => {
 			window.addEventListener('resize', layoutPhotoset);
 		});

@@ -13,6 +13,7 @@ const constant = new class Constant{
 		this.setBlogInfo= 'setBlogInfo';
 		this.setCurrent = 'setCurrent';
 		this.setContent = 'setContent';
+		this.setLoader  = 'setLoader';
 	}
 
 	_getApiKey(){
