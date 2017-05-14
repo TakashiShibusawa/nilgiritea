@@ -6,10 +6,13 @@ import Store from '../Store/Store';
 		<h2 class="post_title">{title}</h2>
 		<!-- Photo -->
 		<section class="photo" if={photos} ref='photo'>
-
-			<a class="photo_item photo_item-single" if={!isPhotoSet} each={photos} href='{original_size.url}'>
-				<img src="{alt_sizes[0].url}" alt="" ref='photoItem'>
-			</a>
+			<!-- single -->
+			<div if={!isPhotoSet} class="photo_rowContainer layout_itemCount-1" ref='rowContainer'>
+				<a class="photo_item photo_item-single" if={!isPhotoSet} each={photos} href='{original_size.url}'>
+					<img src="{alt_sizes[0].url}" alt="" ref='photoItem'>
+				</a>
+			</div>
+			<!-- set -->
 			<div if={isPhotoSet} each={row in photoset} class="photo_rowContainer layout_itemCount-{row.length}" ref='rowContainer'>
 				<a class="photo_item photo_item-set" each={row} href='{original_size.url}'>
 					<img src="{alt_sizes[0].url}" alt="" ref='photoItem'>
@@ -56,6 +59,7 @@ import Store from '../Store/Store';
 
 		// レイアウトに応じて行ごと画像をセットする
 		const setPhotoLayout = () => {
+			if (!self.isPhotoSet) return;
 			const photoset = [];
 			const layout = self.photoset_layout.split('');
 			let photoIndex = 0;
@@ -110,6 +114,8 @@ import Store from '../Store/Store';
 	<style type="text/scss">
 		/*photo*/
 		.photo {
+			max-width: 800px;
+			margin: 0 auto;
 			text-align: center;
 		}
 		.photo_item {
@@ -119,6 +125,7 @@ import Store from '../Store/Store';
 			line-height: 1;
 			font-size: 0;
 		}
+		/*photoset container*/
 		.photo_rowContainer {
 			overflow: hidden;
 			line-height: 1;
@@ -140,12 +147,13 @@ import Store from '../Store/Store';
 
 		/*text*/
 		.post_text {
-			border-radius: 2px;
-			background-color: #3dffcf;
+			max-width: 800px;
 			margin: 6vw auto 0;
-			width: 60%;
 			padding: 2em;
 			min-width: 25em;
+			box-sizing: border-box;
+			border-radius: 2px;
+			background-color: #3dffcf;
 			font-size: 1.6em;
 			line-height: 1.75em;
 			letter-spacing: 0.1em;
