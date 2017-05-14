@@ -1,38 +1,53 @@
+const debug = false;
+const backgroundImageClassname = 'loader_bgi';
+
+const log = (!debug) ? arg => null : (...arg) => console.log(...arg);
 export default new class Loader {
-	constructor (callback) {
+	constructor () {
 		document.addEventListener('DOMContentLoaded', () => {
-			console.log('Loader constructor called');
-			const images = this.loadElements();
-			console.log(images)
-			this.imgLoadWatcher({
-				images: images,
-				onComplete: () => {
-					if (!callback) return;
-					callback();
-				},
-				onEach: (expectedCount, receivedCount) => {
-					const p = Math.round(receivedCount / expectedCount * 100);
-					// progress.textContent = p;
-				}
-			});
+			log('Loader constructor called');
 		});
 	}
-	activateLoader () {
-		console.log('Loader activateLoader called');
+	activateLoader (onComplete, onEach, progressContainer) {
+		log('Loader activateLoader called');
+		// ロード済みの画像数
+		this.receivedCount = 0;
+		// 画像を探してくる
+		this.images = this.findImages();
+		this.expectedCount = this.images.length;
+		// 完了時の動作が定義されていればそれを使う
+		this.onComplete = (typeof onComplete === 'function') ? onComplete : this.contentLoaded;
+		// 画像読み込みごとの動作が定義されていればそれを使う。
+		// なければ定義する
+		if (typeof onEach !== 'function') {
+			this.progressContainer = (progressContainer) ? progressContainer : document.getElementById('progressContainer');
+			onEach = (!this.progressContainer) ? null : (receivedCount) => {
+				const progress = Math.round(receivedCount / this.expectedCount * 100) + '%';
+				this.progressContainer.textContent = progress;
+			};
+		}
+		this.onEach = onEach;
+
+		log('images', this.images)
+		log('onComplete', this.onComplete)
+		log('onEach', this.onEach)
+		this.setWatcher();
 	}
-	loadElements () {
-		console.log('Loader loadElements called');
+	findImages () {
+		log('Loader findImages called');
 		const images = [];
-		const bgi = "background-image";
+		// img要素を探してくる
 		const targets_img = [].slice.call(document.getElementsByTagName('img'));
-		console.log(targets_img);
 		targets_img.forEach((el) => {
 			let _src = el.getAttribute('src');
 			// srcが空なら中断
 			if (!_src) return;
 			images.push(_src);
 		});
-		const targets_bgi = [].slice.call(document.getElementsByClassName('loader_bgi'));
+
+
+		const targets_bgi = [].slice.call(document.getElementsByClassName(backgroundImageClassname));
+		const bgi = "background-image";
 		targets_bgi.forEach((el) => {
 			// elementが空なら中断
 			if (!el) return;
@@ -40,47 +55,42 @@ export default new class Loader {
 			let _src = el.style[bgi] || getComputedStyle(el, "")[bgi];
 			if (!_src || _src == 'none') return;
 
-			// 画像を取り出す
-			_src = _src.replace(/^url\(|\"|\)$/g, '');
-			images.push(_src);
+			// 画像をpush
+			images.push(_src.replace(/^url\(|\"|\)$/g, ''));
 		});
 		return images;
 	}
-	imgLoadWatcher (setting) {
+	setWatcher () {
+		log('Loader setWatcher called');
 		// if images is empty, go to loaded Function
-		if(setting.images === null || setting.images.length <= 0) {
-			if (setting.onComplete) {
-				setTimeout(() => {
-					setting.onComplete();
-				}, 500);
+		if(!this.images || this.images.length <= 0) {
+			if (this.onComplete) {
+				this.onComplete();
 			}
 			return;
 		}
-		//画像の数だけloadListenerが呼ばれたらcallbackが呼ばれる;
-		const loadListener = ((expectedCount, onEach, onComplete) => {
-			let receivedCount = 0;
-			return (e) => {
-				// remove temporary image
-				const tgt = e.target;
-				if (tgt) tgt.parentNode.removeChild(tgt);
 
-				receivedCount++;
-				if (onEach) onEach(expectedCount, receivedCount);
-				if(receivedCount === expectedCount) {
-					if (onComplete) {
-						setTimeout(() => { onComplete(); }, 500);
-					}
-				}
-			};
-		})(setting.images.length, setting.onEach, setting.onComplete);
-
-		[].forEach.call(setting.images, url => {
-			let img = new Image;
+		//画像の数だけ_loadListenerが呼ばれたらcallbackが呼ばれる
+		// const _loadListener(expectedCount = , setting.onEach, setting.onComplete);
+		this.images.forEach(url => {
+			const img = new Image;
 			document.body.appendChild(img);
 			img.width = img.height = 1;
-			img.onload = loadListener.bind(img);
+			img.onload = this._loadListener.bind(this);
 			img.src = url;
-			img = null;
 		});
 	};
+	_loadListener (e) {
+		// remove temporary image
+		const tgt = e.target;
+		if (tgt) tgt.parentNode.removeChild(tgt);
+		this.receivedCount += 1;
+		if (this.onEach) this.onEach(this.receivedCount);
+		if(this.receivedCount >= this.expectedCount) {
+			this.onComplete();
+		}
+	}
+	contentLoaded () {
+		log('Loader contentLoaded called');
+	}
 }

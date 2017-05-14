@@ -4603,17 +4603,25 @@ var riot = __webpack_require__(0);
 
 
 
-riot.tag2('niltea-loader', '<div class="loader" ref="loader"> </div>', '', '', function (opts) {
+riot.tag2('niltea-loader', '<div class="loader_container" ref="loader"> <figure class="logo"></figure> <div id="progressContainer"></div> </div>', 'niltea-loader .clearfix,[data-is="niltea-loader"] .clearfix{ zoom: 1; } niltea-loader .clearfix:after,[data-is="niltea-loader"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-loader .txtHide,[data-is="niltea-loader"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-loader .loader_container,[data-is="niltea-loader"] .loader_container{ position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 9999; background-color: #fff; transition: 0s; } niltea-loader .loader_container .logo,[data-is="niltea-loader"] .loader_container .logo{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; position: absolute; left: 0; right: 0; top: 0; bottom: 0; margin: auto; background: url(/images/nilgiri.png) no-repeat; width: 108px; height: 34px; display: block; } niltea-loader .loader_container.disabled,[data-is="niltea-loader"] .loader_container.disabled{ transition: opacity 0.7s linear 0s, height 1s linear 0.3s; opacity: 0; height: 0; }', '', function (opts) {
 
 	const self = this;
 
-	const contentLoaded = __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].contentLoaded;
+	const contentLoaded = () => {
+		setTimeout(() => {
+			self.refs.loader.classList.add('disabled');
+		}, 0);
+
+		__WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].contentLoaded();
+	};
 	const activateLoader = () => {
 
+		setTimeout(() => {
+			self.refs.loader.classList.remove('disabled');
+		}, 0);
 		__WEBPACK_IMPORTED_MODULE_4__class_loader__["a" /* default */].activateLoader(contentLoaded);
 	};
 
-	self.on('mount', activateLoader);
 	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].setLoader, activateLoader);
 });
 
@@ -4622,41 +4630,55 @@ riot.tag2('niltea-loader', '<div class="loader" ref="loader"> </div>', '', '', f
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+const debug = false;
+const backgroundImageClassname = 'loader_bgi';
+
+const log = !debug ? arg => null : (...arg) => console.log(...arg);
 /* harmony default export */ __webpack_exports__["a"] = (new class Loader {
-	constructor(callback) {
+	constructor() {
 		document.addEventListener('DOMContentLoaded', () => {
-			console.log('Loader constructor called');
-			const images = this.loadElements();
-			console.log(images);
-			this.imgLoadWatcher({
-				images: images,
-				onComplete: () => {
-					if (!callback) return;
-					callback();
-				},
-				onEach: (expectedCount, receivedCount) => {
-					const p = Math.round(receivedCount / expectedCount * 100);
-					// progress.textContent = p;
-				}
-			});
+			log('Loader constructor called');
 		});
 	}
-	activateLoader() {
-		console.log('Loader activateLoader called');
+	activateLoader(onComplete, onEach, progressContainer) {
+		log('Loader activateLoader called');
+		// ロード済みの画像数
+		this.receivedCount = 0;
+		// 画像を探してくる
+		this.images = this.findImages();
+		this.expectedCount = this.images.length;
+		// 完了時の動作が定義されていればそれを使う
+		this.onComplete = typeof onComplete === 'function' ? onComplete : this.contentLoaded;
+		// 画像読み込みごとの動作が定義されていればそれを使う。
+		// なければ定義する
+		if (typeof onEach !== 'function') {
+			this.progressContainer = progressContainer ? progressContainer : document.getElementById('progressContainer');
+			onEach = !this.progressContainer ? null : receivedCount => {
+				const progress = Math.round(receivedCount / this.expectedCount * 100) + '%';
+				this.progressContainer.textContent = progress;
+			};
+		}
+		this.onEach = onEach;
+
+		log('images', this.images);
+		log('onComplete', this.onComplete);
+		log('onEach', this.onEach);
+		this.setWatcher();
 	}
-	loadElements() {
-		console.log('Loader loadElements called');
+	findImages() {
+		log('Loader findImages called');
 		const images = [];
-		const bgi = "background-image";
+		// img要素を探してくる
 		const targets_img = [].slice.call(document.getElementsByTagName('img'));
-		console.log(targets_img);
 		targets_img.forEach(el => {
 			let _src = el.getAttribute('src');
 			// srcが空なら中断
 			if (!_src) return;
 			images.push(_src);
 		});
-		const targets_bgi = [].slice.call(document.getElementsByClassName('loader_bgi'));
+
+		const targets_bgi = [].slice.call(document.getElementsByClassName(backgroundImageClassname));
+		const bgi = "background-image";
 		targets_bgi.forEach(el => {
 			// elementが空なら中断
 			if (!el) return;
@@ -4664,50 +4686,43 @@ riot.tag2('niltea-loader', '<div class="loader" ref="loader"> </div>', '', '', f
 			let _src = el.style[bgi] || getComputedStyle(el, "")[bgi];
 			if (!_src || _src == 'none') return;
 
-			// 画像を取り出す
-			_src = _src.replace(/^url\(|\"|\)$/g, '');
-			images.push(_src);
+			// 画像をpush
+			images.push(_src.replace(/^url\(|\"|\)$/g, ''));
 		});
 		return images;
 	}
-	imgLoadWatcher(setting) {
+	setWatcher() {
+		log('Loader setWatcher called');
 		// if images is empty, go to loaded Function
-		if (setting.images === null || setting.images.length <= 0) {
-			if (setting.onComplete) {
-				setTimeout(() => {
-					setting.onComplete();
-				}, 500);
+		if (!this.images || this.images.length <= 0) {
+			if (this.onComplete) {
+				this.onComplete();
 			}
 			return;
 		}
-		//画像の数だけloadListenerが呼ばれたらcallbackが呼ばれる;
-		const loadListener = ((expectedCount, onEach, onComplete) => {
-			let receivedCount = 0;
-			return e => {
-				// remove temporary image
-				const tgt = e.target;
-				if (tgt) tgt.parentNode.removeChild(tgt);
 
-				receivedCount++;
-				if (onEach) onEach(expectedCount, receivedCount);
-				if (receivedCount === expectedCount) {
-					if (onComplete) {
-						setTimeout(() => {
-							onComplete();
-						}, 500);
-					}
-				}
-			};
-		})(setting.images.length, setting.onEach, setting.onComplete);
-
-		[].forEach.call(setting.images, url => {
-			let img = new Image();
+		//画像の数だけ_loadListenerが呼ばれたらcallbackが呼ばれる
+		// const _loadListener(expectedCount = , setting.onEach, setting.onComplete);
+		this.images.forEach(url => {
+			const img = new Image();
 			document.body.appendChild(img);
 			img.width = img.height = 1;
-			img.onload = loadListener.bind(img);
+			img.onload = this._loadListener.bind(this);
 			img.src = url;
-			img = null;
 		});
+	}
+	_loadListener(e) {
+		// remove temporary image
+		const tgt = e.target;
+		if (tgt) tgt.parentNode.removeChild(tgt);
+		this.receivedCount += 1;
+		if (this.onEach) this.onEach(this.receivedCount);
+		if (this.receivedCount >= this.expectedCount) {
+			this.onComplete();
+		}
+	}
+	contentLoaded() {
+		log('Loader contentLoaded called');
 	}
 }());
 
