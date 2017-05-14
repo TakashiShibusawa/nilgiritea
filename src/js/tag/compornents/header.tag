@@ -34,6 +34,7 @@ import Store from '../../Store/Store';
 		.mainHeader {
 			@include clearfix;
 			position: fixed;
+			z-index: 500;
 			width: 100%;
 		}
 		a {

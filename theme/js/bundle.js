@@ -2996,12 +2996,14 @@ const appAction = new class AppAction {
 		return posts_formatted;
 	}
 	_getArticleData(post) {
+		const title = post.caption.match(/<h2>.+<\/h2>/);
+		const title_stripped = title ? title[0].replace(/<\/?h2>/g, '') : 'no title';
 		return {
 			id: post.id,
 			caption: post.caption,
-			title: post.slug,
+			title: title_stripped,
 			slug: post.slug,
-			date: post.timestamp,
+			date: post.timestamp * 1000,
 			type: post.type,
 			url: post.short_url,
 			photos: post.photos,
@@ -3192,7 +3194,7 @@ const constant = new class Constant {
 			APIRoot: "http://api.tumblr.com/v2/blog/nilgiritea.tumblr.com/"
 		};
 		// indexで取得する記事数
-		this.indexPostLimit = 3;
+		this.indexPostLimit = 5;
 		this.action = {
 			fetchArticle: "fetchArticle"
 		};
@@ -3415,7 +3417,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var riot = __webpack_require__(0);
 
 
-riot.tag2('niltea-header', '<header class="mainHeader"> <h1> <a href="/" class="home"> <span class="mainTitle">{title}</span> <span class="siteDescription"><raw content="{description}"></raw></span> </a> </h1> <nav class="gnav clearfix" id="gnav"> <ul> <li class="gnav_item about" title="about"><a href="/about">about</a></li> <li class="gnav_item pixiv" title="Pixiv"><a href="https://pixiv.me/kicky" target="_blank">pixiv</a></li> <li class="gnav_item twitter lsf" title="Twitter"><a href="https://twitter.com/niltea" target="_blank">twitter</a></li> <li class="gnav_item github lsf" title="GitHub"><a href="https://github.com/niltea" target="_blank">github</a></li> </ul> </nav> </header>', 'niltea-header .clearfix,[data-is="niltea-header"] .clearfix{ zoom: 1; } niltea-header .clearfix:after,[data-is="niltea-header"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-header .txtHide,[data-is="niltea-header"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-header .mainHeader,[data-is="niltea-header"] .mainHeader{ zoom: 1; position: fixed; width: 100%; } niltea-header .mainHeader:after,[data-is="niltea-header"] .mainHeader:after{ content: ""; clear: both; display: block; } niltea-header a,[data-is="niltea-header"] a{ text-decoration: none; color: #000; } niltea-header h1,[data-is="niltea-header"] h1{ float: left; padding-left: 2%; } niltea-header h1 a,[data-is="niltea-header"] h1 a{ display: block; } niltea-header h1 .mainTitle,[data-is="niltea-header"] h1 .mainTitle{ display: block; font-size: 3.8em; line-height: 1em; letter-spacing: 0.05em; } niltea-header h1 .siteDescription,[data-is="niltea-header"] h1 .siteDescription{ display: block; margin-top: 10px; font-weight: 400; font-size: 1.0em; line-height: 1em; letter-spacing: 0.15em; } niltea-header .gnav,[data-is="niltea-header"] .gnav{ float: left; padding-left: 40px; padding-top: 15px; max-width: 80%; } niltea-header .gnav_item,[data-is="niltea-header"] .gnav_item{ display: inline-block; line-height: 1em; font-size: 2.0em; } niltea-header .gnav_item + .gnav_item,[data-is="niltea-header"] .gnav_item + .gnav_item{ margin-left: 1.5em; } niltea-header .gnav_item:first-child,[data-is="niltea-header"] .gnav_item:first-child{ margin: 0; } niltea-header .gnav_item.active,[data-is="niltea-header"] .gnav_item.active,niltea-header .gnav_item:hover,[data-is="niltea-header"] .gnav_item:hover{ } niltea-header .gnav_item a,[data-is="niltea-header"] .gnav_item a{ font-size: 1em; } niltea-header .gnav_item.lsf a,[data-is="niltea-header"] .gnav_item.lsf a{ font-size: 1.2em; } niltea-header .gnav_item.pixiv a,[data-is="niltea-header"] .gnav_item.pixiv a{ width: 18px; height: 18px; display: block; background: url(/images/pixiv.svg) 0 0 no-repeat; background-size: 100%; text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } @media screen and (max-width: 37.5em) { niltea-header h1,[data-is="niltea-header"] h1,niltea-header .gnav,[data-is="niltea-header"] .gnav{ float: none; } niltea-header .gnav,[data-is="niltea-header"] .gnav{ padding-left: 2%; padding-top: 23px; } }', '', function (opts) {
+riot.tag2('niltea-header', '<header class="mainHeader"> <h1> <a href="/" class="home"> <span class="mainTitle">{title}</span> <span class="siteDescription"><raw content="{description}"></raw></span> </a> </h1> <nav class="gnav clearfix" id="gnav"> <ul> <li class="gnav_item about" title="about"><a href="/about">about</a></li> <li class="gnav_item pixiv" title="Pixiv"><a href="https://pixiv.me/kicky" target="_blank">pixiv</a></li> <li class="gnav_item twitter lsf" title="Twitter"><a href="https://twitter.com/niltea" target="_blank">twitter</a></li> <li class="gnav_item github lsf" title="GitHub"><a href="https://github.com/niltea" target="_blank">github</a></li> </ul> </nav> </header>', 'niltea-header .clearfix,[data-is="niltea-header"] .clearfix{ zoom: 1; } niltea-header .clearfix:after,[data-is="niltea-header"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-header .txtHide,[data-is="niltea-header"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-header .mainHeader,[data-is="niltea-header"] .mainHeader{ zoom: 1; position: fixed; z-index: 500; width: 100%; } niltea-header .mainHeader:after,[data-is="niltea-header"] .mainHeader:after{ content: ""; clear: both; display: block; } niltea-header a,[data-is="niltea-header"] a{ text-decoration: none; color: #000; } niltea-header h1,[data-is="niltea-header"] h1{ float: left; padding-left: 2%; } niltea-header h1 a,[data-is="niltea-header"] h1 a{ display: block; } niltea-header h1 .mainTitle,[data-is="niltea-header"] h1 .mainTitle{ display: block; font-size: 3.8em; line-height: 1em; letter-spacing: 0.05em; } niltea-header h1 .siteDescription,[data-is="niltea-header"] h1 .siteDescription{ display: block; margin-top: 10px; font-weight: 400; font-size: 1.0em; line-height: 1em; letter-spacing: 0.15em; } niltea-header .gnav,[data-is="niltea-header"] .gnav{ float: left; padding-left: 40px; padding-top: 15px; max-width: 80%; } niltea-header .gnav_item,[data-is="niltea-header"] .gnav_item{ display: inline-block; line-height: 1em; font-size: 2.0em; } niltea-header .gnav_item + .gnav_item,[data-is="niltea-header"] .gnav_item + .gnav_item{ margin-left: 1.5em; } niltea-header .gnav_item:first-child,[data-is="niltea-header"] .gnav_item:first-child{ margin: 0; } niltea-header .gnav_item.active,[data-is="niltea-header"] .gnav_item.active,niltea-header .gnav_item:hover,[data-is="niltea-header"] .gnav_item:hover{ } niltea-header .gnav_item a,[data-is="niltea-header"] .gnav_item a{ font-size: 1em; } niltea-header .gnav_item.lsf a,[data-is="niltea-header"] .gnav_item.lsf a{ font-size: 1.2em; } niltea-header .gnav_item.pixiv a,[data-is="niltea-header"] .gnav_item.pixiv a{ width: 18px; height: 18px; display: block; background: url(/images/pixiv.svg) 0 0 no-repeat; background-size: 100%; text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } @media screen and (max-width: 37.5em) { niltea-header h1,[data-is="niltea-header"] h1,niltea-header .gnav,[data-is="niltea-header"] .gnav{ float: none; } niltea-header .gnav,[data-is="niltea-header"] .gnav{ padding-left: 2%; padding-top: 23px; } }', '', function (opts) {
 		const self = this;
 		self.title = '';
 		self.description = '';
@@ -3473,11 +3475,15 @@ riot.tag2('niltea-index', '<section id="article_list" class="post"> <niltea-list
 		});
 });
 
-riot.tag2('niltea-list-item', '<article each="{item in opts.articlelist}" class="post_item"> <a class="photo" href="/post/{item.id}" if="{item.photos}" each="{item.photos}"> <img riot-src="{alt_sizes[4] ? alt_sizes[4].url : alt_sizes[3].url}" alt=""> </a> <h3 class="title">{item.title}</h3> </article>', '', '', function (opts) {
+riot.tag2('niltea-list-item', '<article each="{item in opts.articlelist}" riot-style="background-image: url({item.photos ? item.photos[0].original_size.url : null});" class="post_item loader_bgi"> <a class="post_item_link" href="/post/{item.id}"> <div class="post_item_info"> <h3 class="post_item_title"><raw content="{item.title}"></raw></h3> <section class="post_item_meta"> <span class="post_item_date">{this.formatDate(item.date)}</span> <span class="post_item_notes">66 notes</span> </section> </div> </a> </article>', 'niltea-list-item .post_item,[data-is="niltea-list-item"] .post_item{ will-change: filter; width: 100%; height: 350px; margin: 15px auto 0; background: #888 center center no-repeat; background-size: cover; transition: filter 0.4s; } niltea-list-item .post_item:hover,[data-is="niltea-list-item"] .post_item:hover{ transition: filter 0.2s; filter: brightness(1.1); } niltea-list-item .post_item:first-child,[data-is="niltea-list-item"] .post_item:first-child{ margin-top: 0; } niltea-list-item .post_item_link,[data-is="niltea-list-item"] .post_item_link{ display: block; width: 100%; height: 100%; box-sizing: border-box; padding: 25px; text-decoration: none; color: #000; } niltea-list-item .post_item_info,[data-is="niltea-list-item"] .post_item_info{ width: 100%; height: 100%; box-sizing: border-box; border: 5px solid #000; border-radius: 2px; background-color: rgba(255, 255, 255, 0.6); display: flex; flex-direction: column; justify-content: flex-end; padding: 15px; } niltea-list-item .post_item_date,[data-is="niltea-list-item"] .post_item_date,niltea-list-item .post_item_notes,[data-is="niltea-list-item"] .post_item_notes{ display: block; } niltea-list-item .post_item_title,[data-is="niltea-list-item"] .post_item_title{ font-size: 2.6em; } niltea-list-item .post_item_date,[data-is="niltea-list-item"] .post_item_date{ font-size: 1.6em; } niltea-list-item .post_item_notes,[data-is="niltea-list-item"] .post_item_notes{ font-size: 1.0em; }', '', function (opts) {
 		const self = this;
 		self.on('update', () => {
 				console.log(opts.articlelist);
 		});
+		self.formatDate = date => {
+				const _date = new Date(date);
+				return `${_date.getFullYear()} / ${_date.getMonth() + 1} / ${_date.getDate()}`;
+		};
 });
 
 riot.tag2('niltea-index-list-lead', '<span class="line" each="{content in lines}">{content}</span>', '', '', function (opts) {
@@ -3570,8 +3576,6 @@ riot.tag2('niltea-post', '<article class="post post-single"> <h2 class="post_tit
 		contentKeys.forEach(key => {
 			self[key] = content[key];
 		});
-		const title = self.caption.match(/<h2>.+<\/h2>/);
-		self.title = title ? title[0].replace(/<\/?h2>/g, '') : 'no title';
 		self.caption = self.caption.replace(/<h2>.+<\/h2>/, '');
 
 		self.isPhotoSet = self.photos.length > 1;

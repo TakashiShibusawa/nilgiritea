@@ -49,12 +49,14 @@ const appAction = new class AppAction {
 		return posts_formatted;
 	}
 	_getArticleData (post) {
+		const title = post.caption.match(/<h2>.+<\/h2>/);
+		const title_stripped = title ? title[0].replace(/<\/?h2>/g, '') : 'no title';
 		return {
 			id      : post.id,
 			caption : post.caption,
-			title   : post.slug,
+			title   : title_stripped,
 			slug    : post.slug,
-			date    : post.timestamp,
+			date    : post.timestamp * 1000,
 			type    : post.type,
 			url     : post.short_url,
 			photos  : post.photos,

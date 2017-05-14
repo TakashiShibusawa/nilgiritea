@@ -106,8 +106,6 @@ import Store from '../Store/Store';
 		RiotControl.on(Store.ActionTypes.changed, () => {
 			const content = Store.content[0];
 			contentKeys.forEach(key => { self[key] = content[key] });
-			const title = self.caption.match(/<h2>.+<\/h2>/);
-			self.title = title ? title[0].replace(/<\/?h2>/g, '') : 'no title';
 			self.caption = self.caption.replace(/<h2>.+<\/h2>/, '')
 
 			// photosが複数であればphososetであると判断

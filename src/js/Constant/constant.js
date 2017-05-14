@@ -5,7 +5,7 @@ const constant = new class Constant{
 			APIRoot : "http://api.tumblr.com/v2/blog/nilgiritea.tumblr.com/",
 		}
 		// indexで取得する記事数
-		this.indexPostLimit = 3;
+		this.indexPostLimit = 5;
 		this.action = {
 			fetchArticle: "fetchArticle",
 		}
