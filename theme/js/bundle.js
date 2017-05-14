@@ -3412,6 +3412,7 @@ riot.tag2('niltea-header', '<header class="mainHeader"> <h1> <a href="/" class="
 
 var riot = __webpack_require__(0);
 riot.tag2('raw', '<span></span>', '', '', function (opts) {
+    this.root.innerHTML = opts.content;
     this.on('update', () => this.root.innerHTML = opts.content);
 });
 
@@ -3475,10 +3476,11 @@ var riot = __webpack_require__(0);
 
 
 
-riot.tag2('niltea-post', '<article class="post post-single"> <h2 class="post_title">{title}</h2> <section class="photo" if="{photos}" ref="photo"> <div if="{!isPhotoSet}" class="photo_rowContainer layout_itemCount-1" ref="rowContainer"> <a class="photo_item photo_item-single" if="{!isPhotoSet}" each="{photos}" href="{original_size.url}"> <img riot-src="{alt_sizes[0].url}" alt="" ref="photoItem"> </a> </div> <div if="{isPhotoSet}" each="{row in photoset}" class="photo_rowContainer layout_itemCount-{row.length}" ref="rowContainer"> <a class="photo_item photo_item-set" each="{row}" href="{original_size.url}"> <img riot-src="{alt_sizes[0].url}" alt="" ref="photoItem"> </a> </div> </section> <section class="post_text"><raw content="{caption}"></raw></section> <div class="post_meta"> <a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="reblog lsf" target="_blank">retweet</a> <a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="like lsf" target="_blank">{heart}</a> </div> </article>', 'niltea-post .photo,[data-is="niltea-post"] .photo{ max-width: 800px; margin: 0 auto; text-align: center; } niltea-post .photo_item,[data-is="niltea-post"] .photo_item{ display: block; width: 100%; line-height: 1; font-size: 0; } niltea-post .photo_rowContainer,[data-is="niltea-post"] .photo_rowContainer{ overflow: hidden; line-height: 1; font-size: 0; } niltea-post .photo_item-set,[data-is="niltea-post"] .photo_item-set{ display: inline-block; } niltea-post .layout_itemCount-2 .photo_item-set,[data-is="niltea-post"] .layout_itemCount-2 .photo_item-set{ width: 50%; } niltea-post .layout_itemCount-3 .photo_item-set,[data-is="niltea-post"] .layout_itemCount-3 .photo_item-set{ width: 33%; } niltea-post img,[data-is="niltea-post"] img{ width: 100%; vertical-align: top; } niltea-post .post_text,[data-is="niltea-post"] .post_text{ max-width: 800px; margin: 6vw auto 0; padding: 2em; min-width: 25em; box-sizing: border-box; border-radius: 2px; background-color: #3dffcf; font-size: 1.6em; line-height: 1.75em; letter-spacing: 0.1em; } niltea-post .post_meta,[data-is="niltea-post"] .post_meta{ margin: 3vw auto 0; font-size: 1.3em; width: 60%; min-width: 25em; } niltea-post .post_meta a,[data-is="niltea-post"] .post_meta a{ text-decoration: none; font-size: 2em; margin-right: 0.5em; } niltea-post .post_meta .reblog,[data-is="niltea-post"] .post_meta .reblog{ color: #222; } niltea-post .post_meta .like,[data-is="niltea-post"] .post_meta .like{ color: #c22; } @media screen and (max-width: 37.5em) { niltea-post .post_title,[data-is="niltea-post"] .post_title{ font-size: 2.2em; } niltea-post .post_text,[data-is="niltea-post"] .post_text{ font-size: 1.4em; } }', '', function (opts) {
+riot.tag2('niltea-post', '<article class="post post-single"> <h2 class="post_title"><raw content="{title}"></raw></h2> <section class="photo" if="{photos}" ref="photo"> <div if="{!isPhotoSet}" class="photo_rowContainer layout_itemCount-1" ref="rowContainer"> <a class="photo_item photo_item-single" if="{!isPhotoSet}" each="{photos}" href="{original_size.url}"> <img riot-src="{alt_sizes[0].url}" alt="" ref="photoItem"> </a> </div> <div if="{isPhotoSet}" each="{row in photoset}" class="photo_rowContainer layout_itemCount-{row.length}" ref="rowContainer"> <a class="photo_item photo_item-set" each="{row}" href="{original_size.url}"> <img riot-src="{alt_sizes[0].url}" alt="" ref="photoItem"> </a> </div> </section> <section class="post_text" if="{caption}"><raw content="{caption}"></raw></section> <div class="post_meta"> <a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="reblog lsf" target="_blank">retweet</a> <a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="like lsf" target="_blank">{heart}</a> </div> </article>', 'niltea-post .photo,[data-is="niltea-post"] .photo{ max-width: 800px; margin: 0 auto; border-radius: 2px; overflow: hidden; text-align: center; } niltea-post .photo_item,[data-is="niltea-post"] .photo_item{ display: block; width: 100%; line-height: 1; font-size: 0; } niltea-post .photo_rowContainer,[data-is="niltea-post"] .photo_rowContainer{ overflow: hidden; line-height: 1; font-size: 0; } niltea-post .photo_item-set,[data-is="niltea-post"] .photo_item-set{ display: inline-block; } niltea-post .layout_itemCount-2 .photo_item-set,[data-is="niltea-post"] .layout_itemCount-2 .photo_item-set{ width: 50%; } niltea-post .layout_itemCount-3 .photo_item-set,[data-is="niltea-post"] .layout_itemCount-3 .photo_item-set{ width: 33%; } niltea-post img,[data-is="niltea-post"] img{ width: 100%; vertical-align: top; } niltea-post .post_text,[data-is="niltea-post"] .post_text{ max-width: 800px; min-width: 25em; margin: 4vw auto 0; padding: 2em; box-sizing: border-box; border-radius: 2px; background-color: #3dffcf; font-size: 1.4em; line-height: 1.75em; letter-spacing: 0.1em; } niltea-post .post_meta,[data-is="niltea-post"] .post_meta{ max-width: 800px; min-width: 25em; margin: 2vw auto 0; font-size: 1.3em; } niltea-post .post_meta a,[data-is="niltea-post"] .post_meta a{ text-decoration: none; font-size: 2em; margin-right: 0.5em; } niltea-post .post_meta .reblog,[data-is="niltea-post"] .post_meta .reblog{ color: #222; } niltea-post .post_meta .like,[data-is="niltea-post"] .post_meta .like{ color: #c22; } @media screen and (max-width: 37.5em) { niltea-post .post_title,[data-is="niltea-post"] .post_title{ font-size: 2.2em; } niltea-post .post_text,[data-is="niltea-post"] .post_text{ font-size: 1.4em; } }', '', function (opts) {
 	const self = this;
 	const contentKeys = ['id', 'caption', 'title', 'date', 'type', 'url', 'photos', 'photoset_layout', 'reblog_key'];
 	self.isPhotoSet = false;
+	self.title = '';
 	self.heart = 'heartempty';
 
 	const layoutPhotoset = () => {
@@ -3538,12 +3540,14 @@ riot.tag2('niltea-post', '<article class="post post-single"> <h2 class="post_tit
 		contentKeys.forEach(key => {
 			self[key] = content[key];
 		});
-		this.caption = this.caption.replace(/<h2>(?:[a-zA-Z/d々〇〻ぁ-んァ-ヶー\u3400-\u9FFF\uF900-\uFAFF]|[\uD840-\uD87F][\uDC00-\uDFFF])+<\/h2>/, '');
+		const title = self.caption.match(/<h2>.+<\/h2>/);
+		self.title = title ? title[0].replace(/<\/?h2>/g, '') : 'no title';
+		self.caption = self.caption.replace(/<h2>.+<\/h2>/, '');
 
 		self.isPhotoSet = self.photos.length > 1;
 		if (self.isPhotoSet) self.photoset = setPhotoLayout();
 
-		document.title = `${this.title} | ${__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].blogInfo.title}`;
+		document.title = `${self.title} | ${__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].blogInfo.title}`;
 		self.update();
 		afterUpdate();
 	});

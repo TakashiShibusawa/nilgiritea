@@ -3,7 +3,7 @@ import RiotControl from 'riotcontrol';
 import Store from '../Store/Store';
 <niltea-post>
 	<article class="post post-single">
-		<h2 class="post_title">{title}</h2>
+		<h2 class="post_title"><raw content='{title}' /></h2>
 		<!-- Photo -->
 		<section class="photo" if={photos} ref='photo'>
 			<!-- single -->
@@ -19,7 +19,7 @@ import Store from '../Store/Store';
 				</a>
 			</div>
 		</section>
-		<section class='post_text'><raw content='{caption}' /></section>
+		<section class='post_text' if={caption}><raw content='{caption}' /></section>
 		<div class="post_meta">
 			<a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="reblog lsf" target='_blank'>retweet</a>
 			<a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="like lsf" target='_blank'>{heart}</a>
@@ -40,6 +40,7 @@ import Store from '../Store/Store';
 			'reblog_key',
 		];
 		self.isPhotoSet = false;
+		self.title = '';
 		self.heart = 'heartempty';
 
 		const layoutPhotoset = () => {
@@ -100,13 +101,15 @@ import Store from '../Store/Store';
 		RiotControl.on(Store.ActionTypes.changed, () => {
 			const content = Store.content[0];
 			contentKeys.forEach(key => { self[key] = content[key] });
-			this.caption = this.caption.replace(/<h2>(?:[a-zA-Z/d々〇〻ぁ-んァ-ヶー\u3400-\u9FFF\uF900-\uFAFF]|[\uD840-\uD87F][\uDC00-\uDFFF])+<\/h2>/, '')
+			const title = self.caption.match(/<h2>.+<\/h2>/);
+			self.title = title ? title[0].replace(/<\/?h2>/g, '') : 'no title';
+			self.caption = self.caption.replace(/<h2>.+<\/h2>/, '')
 
 			// photosが複数であればphososetであると判断
 			self.isPhotoSet = (self.photos.length > 1);
 			if (self.isPhotoSet) self.photoset = setPhotoLayout();
 
-			document.title = `${this.title} | ${Store.blogInfo.title}`;
+			document.title = `${self.title} | ${Store.blogInfo.title}`;
 			self.update();
 			afterUpdate();
 		});
@@ -116,6 +119,8 @@ import Store from '../Store/Store';
 		.photo {
 			max-width: 800px;
 			margin: 0 auto;
+			border-radius: 2px;
+			overflow: hidden;
 			text-align: center;
 		}
 		.photo_item {
@@ -148,21 +153,21 @@ import Store from '../Store/Store';
 		/*text*/
 		.post_text {
 			max-width: 800px;
-			margin: 6vw auto 0;
-			padding: 2em;
 			min-width: 25em;
+			margin: 4vw auto 0;
+			padding: 2em;
 			box-sizing: border-box;
 			border-radius: 2px;
 			background-color: #3dffcf;
-			font-size: 1.6em;
+			font-size: 1.4em;
 			line-height: 1.75em;
 			letter-spacing: 0.1em;
 		}
 		.post_meta {
-			margin: 3vw auto 0;
-			font-size: 1.3em;
-			width: 60%;
+			max-width: 800px;
 			min-width: 25em;
+			margin: 2vw auto 0;
+			font-size: 1.3em;
 			a {
 				text-decoration: none;
 				font-size: 2em;
