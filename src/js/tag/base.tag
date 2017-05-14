@@ -10,6 +10,7 @@ import Constant from "../Constant/Constant";
 	<section class='header' ref='header'></section>
 	<section class='content' ref='content'></section>
 	<section class='footer' ref='footer'></section>
+	<section class='modal' ref='modal'></section>
 	<section class='loader' ref='loader'></section>
 	<script>
 		const self = this;
@@ -43,6 +44,7 @@ import Constant from "../Constant/Constant";
 	// post
 	route('/post/*', (id) => {
 		riot.mount(self.refs.content, 'niltea-post');
+		riot.mount(self.refs.modal, 'niltea-modal');
 		Action.loadContent({type: 'posts', query: {id}});
 		Action.setCurrent({current: 'posts', id});
 	});

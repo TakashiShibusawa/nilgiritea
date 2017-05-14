@@ -11,32 +11,6 @@ require('./tag/compornents/header.tag')
 require('./tag/compornents/footer.tag')
 require('./tag/compornents/raw.tag')
 require('./tag/compornents/loader.tag')
+require('./tag/compornents/modal.tag')
 
 riot.mount('#wrapper', 'niltea-base');
-
-// $(function(){
-// 	var $container = $('.postContainer');
-// 	var $post = $container.children('.post').first();
-// 	var isPermaLink = ($post.hasClass('permaLink'))? true : false;
-// 	if(isPermaLink === false){
-// 		$container.imagesLoaded(function(){
-// 			$container.masonry({
-// 				itemSelector: '.post',
-// 				columnWidth: 290,
-// 				gutter: 30
-// 			});
-// 		});
-// 		// photosetResize();
-// 	}
-// });
-// Photoset Resize Code by Kevin - EXCOLO.TUMBLR.COM 
-// function photosetResize() {
-// 	$('iframe.photoset').each(function(){
-// 		var newSize = 290;
-// 		var newSrc = $(this).attr('src').replace('500',newSize);
-// 		$(this).attr('src', newSrc).width(newSize);
-// 		var high = $(this).css('height');
-// 		var calculate = parseInt(high, 10)* newSize/500;
-// 		$(this).css('height', calculate);
-// 	});
-// }

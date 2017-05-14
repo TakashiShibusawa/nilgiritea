@@ -3269,7 +3269,7 @@ var riot = __webpack_require__(0);
 
 
 
-riot.tag2('niltea-base', '<section class="header" ref="header"></section> <section class="content" ref="content"></section> <section class="footer" ref="footer"></section> <section class="loader" ref="loader"></section>', '', '', function (opts) {
+riot.tag2('niltea-base', '<section class="header" ref="header"></section> <section class="content" ref="content"></section> <section class="footer" ref="footer"></section> <section class="modal" ref="modal"></section> <section class="loader" ref="loader"></section>', '', '', function (opts) {
 	const self = this;
 
 	self.on('mount', () => {
@@ -3298,6 +3298,7 @@ riot.tag2('niltea-base', '<section class="header" ref="header"></section> <secti
 
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/post/*', id => {
 		riot.mount(self.refs.content, 'niltea-post');
+		riot.mount(self.refs.modal, 'niltea-modal');
 		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].loadContent({ type: 'posts', query: { id } });
 		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].setCurrent({ current: 'posts', id });
 	});
@@ -3596,35 +3597,9 @@ __webpack_require__(9);
 __webpack_require__(8);
 __webpack_require__(10);
 __webpack_require__(17);
+__webpack_require__(19);
 
 riot.mount('#wrapper', 'niltea-base');
-
-// $(function(){
-// 	var $container = $('.postContainer');
-// 	var $post = $container.children('.post').first();
-// 	var isPermaLink = ($post.hasClass('permaLink'))? true : false;
-// 	if(isPermaLink === false){
-// 		$container.imagesLoaded(function(){
-// 			$container.masonry({
-// 				itemSelector: '.post',
-// 				columnWidth: 290,
-// 				gutter: 30
-// 			});
-// 		});
-// 		// photosetResize();
-// 	}
-// });
-// Photoset Resize Code by Kevin - EXCOLO.TUMBLR.COM 
-// function photosetResize() {
-// 	$('iframe.photoset').each(function(){
-// 		var newSize = 290;
-// 		var newSrc = $(this).attr('src').replace('500',newSize);
-// 		$(this).attr('src', newSrc).width(newSize);
-// 		var high = $(this).css('height');
-// 		var calculate = parseInt(high, 10)* newSize/500;
-// 		$(this).css('height', calculate);
-// 	});
-// }
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
@@ -4733,6 +4708,35 @@ const log = !debug ? arg => null : (...arg) => console.log(...arg);
 		log('Loader contentLoaded called');
 	}
 }());
+
+/***/ }),
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Store_Store__ = __webpack_require__(2);
+
+var riot = __webpack_require__(0);
+
+
+
+
+riot.tag2('niltea-modal', '<div class="modal" ref="modal"> <div class="modal_bg" ref="modalBg">modal bg</div> <figure class="content" ref="content"></figure> </div>', 'niltea-modal .clearfix,[data-is="niltea-modal"] .clearfix{ zoom: 1; } niltea-modal .clearfix:after,[data-is="niltea-modal"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-modal .txtHide,[data-is="niltea-modal"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; }', '', function (opts) {
+	const self = this;
+
+	const unMountSelf = () => {
+		if (__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].current.currentPage === 'posts') return;
+		self.unmount(true);
+	};
+	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changedCurrent, unMountSelf);
+	self.on('unmount', () => {
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changedCurrent, unMountSelf);
+	});
+});
 
 /***/ })
 /******/ ]);
