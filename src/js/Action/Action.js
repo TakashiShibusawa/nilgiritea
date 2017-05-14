@@ -75,6 +75,9 @@ const appAction = new class AppAction {
 	contentLoaded () {
 		RiotControl.trigger(Constant.contentLoaded, null);
 	}
+	openModal (event) {
+		RiotControl.trigger(Constant.openModal, event);
+	}
 }
 
 // export default AppAction

@@ -9,18 +9,18 @@ import Store from '../Store/Store';
 		<section class="photo" if={photos} ref='photo'>
 			<!-- single -->
 			<div if={!isPhotoSet} class="photo_rowContainer layout_itemCount-1" ref='rowContainer'>
-				<a class="photo_item photo_item-single" if={!isPhotoSet} each={photos} href='{original_size.url}'>
+				<a class="photo_item photo_item-single" if={!isPhotoSet} each={photos} href='{original_size.url}' onclick={this.openModal}>
 					<img src="{alt_sizes[0].url}" alt="" ref='photoItem'>
 				</a>
 			</div>
 			<!-- set -->
 			<div if={isPhotoSet} each={row in photoset} class="photo_rowContainer layout_itemCount-{row.length}" ref='rowContainer'>
-				<a class="photo_item photo_item-set" each={row} href='{original_size.url}'>
+				<a class="photo_item photo_item-set" each={row} href='{original_size.url}' onclick={this.openModal}>
 					<img src="{alt_sizes[0].url}" alt="" ref='photoItem'>
 				</a>
 			</div>
 		</section>
-		<section class='post_text' if={caption}><raw content='{caption}' /></section>
+		<section class='post_text' if={caption} onclick={this.openModal}><raw content='{caption}' /></section>
 		<div class="post_meta">
 			<a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="reblog lsf" target='_blank'>retweet</a>
 			<a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="like lsf" target='_blank'>{heart}</a>
@@ -43,6 +43,8 @@ import Store from '../Store/Store';
 		self.isPhotoSet = false;
 		self.title = '';
 		self.heart = 'heartempty';
+		// open Modal
+		self.openModal = Action.openModal;
 
 		const layoutPhotoset = () => {
 			const layout = self.photoset_layout.split('');

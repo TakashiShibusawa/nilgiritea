@@ -16,6 +16,7 @@ const constant = new class Constant{
 		this.showLoader    = 'showLoader';
 		this.setLoader     = 'setLoader';
 		this.contentLoaded = 'contentLoaded';
+		this.openModal     = 'openModal';
 	}
 
 	_getApiKey(){
