@@ -75,7 +75,6 @@ import Constant from "../../Constant/Constant";
 			self.hasNext = false;
 			self.nextPagenations = null;
 		}
-		console.log(self.nextPagenations)
 		self.update();
 	}
 	// Subscribes Store.onChanged

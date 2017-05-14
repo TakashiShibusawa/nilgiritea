@@ -134,4 +134,10 @@ export default new class Util{
 		string = string.replace(/{!img:(([a-z0-9:/.\-_]|&#x2F;)+):!img}/g, '<img src="$1">');
 		return string
 	}
+
+	loader() {
+		console.log('loader is called 8)');
+
+		Action.contentLoaded();
+	}
 }

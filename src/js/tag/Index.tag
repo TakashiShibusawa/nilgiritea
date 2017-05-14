@@ -3,6 +3,7 @@ import RiotControl from 'riotcontrol';
 import Action from '../Action/Action';
 import Store from '../Store/Store';
 
+import util from '../niltea_util.js';
 <niltea-index>
 	<section id="article_list" class='post'>
 		<niltea-list-item articleList={articleList}></niltea-list-item>
@@ -17,6 +18,7 @@ import Store from '../Store/Store';
 			self.update();
 		});
 
+		self.on('updated', util.loader );
 		self.on('mount', () => {
 		});
 
@@ -36,7 +38,7 @@ import Store from '../Store/Store';
 	</article>
 	<script>
 		const self = this;
-		self.on('update', () => {console.log(opts.articlelist)})
+		self.on('update', () => {console.log(opts.articlelist)});
 	</script>
 
 </niltea-list-item>

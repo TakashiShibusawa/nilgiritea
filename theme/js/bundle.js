@@ -3028,7 +3028,7 @@ const appAction = new class AppAction {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* unused harmony default export */ var _unused_webpack_default_export = (new class Util {
+/* harmony default export */ __webpack_exports__["a"] = (new class Util {
 	constructor() {
 		this.browser = this.browser();
 		document.body.classList.add(this.browser.isPC ? 'pc' : 'sp');
@@ -3162,6 +3162,12 @@ const appAction = new class AppAction {
 		string = string.replace(/&lt;br &#x2F;&gt;/g, '<br />');
 		string = string.replace(/{!img:(([a-z0-9:/.\-_]|&#x2F;)+):!img}/g, '<img src="$1">');
 		return string;
+	}
+
+	loader() {
+		console.log('loader is called 8)');
+
+		Action.contentLoaded();
 	}
 }());
 
@@ -3368,7 +3374,6 @@ riot.tag2('niltea-footer', '<footer class="footer"> <nav class="navigation" if="
 			self.hasNext = false;
 			self.nextPagenations = null;
 		}
-		console.log(self.nextPagenations);
 		self.update();
 	};
 
@@ -3426,8 +3431,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Store_Store__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__niltea_util_js__ = __webpack_require__(4);
 
 var riot = __webpack_require__(0);
+
 
 
 
@@ -3442,6 +3449,7 @@ riot.tag2('niltea-index', '<section id="article_list" class="post"> <niltea-list
 				self.update();
 		});
 
+		self.on('updated', __WEBPACK_IMPORTED_MODULE_3__niltea_util_js__["a" /* default */].loader);
 		self.on('mount', () => {});
 
 		self.on('unmount', () => {
@@ -3471,8 +3479,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Store_Store__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__niltea_util_js__ = __webpack_require__(4);
 
 var riot = __webpack_require__(0);
+
+
 
 
 
@@ -3526,6 +3537,7 @@ riot.tag2('niltea-post', '<article class="post post-single"> <h2 class="post_tit
 		});
 	};
 
+	self.on('updated', __WEBPACK_IMPORTED_MODULE_2__niltea_util_js__["a" /* default */].loader);
 	self.on('mount', () => {
 		window.addEventListener('resize', layoutPhotoset);
 	});
