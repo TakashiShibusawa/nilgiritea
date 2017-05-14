@@ -6,7 +6,9 @@ import Constant from "../../Constant/Constant";
 	<footer class="footer">
 		<nav class="navigation" if={pagingEnabled}>
 			<a if={hasPrev} href="{prevPage}" class="prev">&lt; PREV</a>
-			<span class="current_page">{page}</span>
+			<a each={page in prevPagenations} href="{page.href}" class="num">{page.num}</a>
+			<span class="current">{page}</span>
+			<a each={page in nextPagenations} href="{page.href}" class="num">{page.num}</a>
 			<a if={hasNext} href="{nextPage}" class="next">NEXT &gt;</a>
 		</nav>
 		<div class="copyright">
@@ -23,7 +25,14 @@ import Constant from "../../Constant/Constant";
 	self.maxPage = null;
 
 	const modPagenation = () => {
-		if(Store.current.currentPage !== 'index') return;
+		const pagenations = 2;
+		// index以外の時はpagingを消してreturn
+		if(Store.current.currentPage !== 'index') {
+			self.pagingEnabled = false;
+			self.update();
+			return;
+		}
+		if(!self.maxPage) return;
 
 		self.pagingEnabled = true;
 		self.page = parseInt(Store.current.page, 10);
@@ -31,16 +40,42 @@ import Constant from "../../Constant/Constant";
 		if (self.page >= 2) {
 			self.hasPrev = true;
 			self.prevPage = (self.page === 2) ? '/' : '/index/' + (self.page - 1);
+			self.prevPagenations = (() => {
+				const pagenation = [
+					{href: '/', num: 1},
+				];
+				if (self.page === 2 ) return pagenation;
+				for (let i = self.page - pagenations, l = self.page - 1; i <= l; i += 1) {
+					if (i === 1) continue;
+					pagenation.push({href: '/index/' + i, num: i});
+				}
+				return pagenation;
+			})();
 		} else {
 			self.hasPrev = false;
+			self.prevPagenations = null;
 		}
 
 		if (self.page < self.maxPage) {
 			self.hasNext = true;
 			self.nextPage = '/index/' + (self.page + 1);
+			self.nextPagenations = (() => {
+				const pagenation = [
+					{href: '/index/' + self.maxPage, num: self.maxPage},
+				];
+				// 最終のひとつ手前であれば最終ページだけ出して帰る
+				if (self.page === self.maxPage - 1 ) return pagenation;
+				for (let i = self.page + pagenations, l = self.page + 1; i >= l; i -= 1) {
+					if (i === self.maxPage) continue;
+					pagenation.unshift({href: '/index/' + i, num: i});
+				}
+				return pagenation;
+			})();
 		} else {
 			self.hasNext = false;
+			self.nextPagenations = null;
 		}
+		console.log(self.nextPagenations)
 		self.update();
 	}
 	// Subscribes Store.onChanged
@@ -48,10 +83,7 @@ import Constant from "../../Constant/Constant";
 		self.maxPage = Math.ceil(Store.blogInfo.posts / Constant.indexPostLimit);
 		modPagenation();
 	});
-	RiotControl.on(Store.ActionTypes.changedCurrent, () => {
-		self.pagingEnabled = false;
-		modPagenation();
-	});
+	RiotControl.on(Store.ActionTypes.changedCurrent, modPagenation );
 	</script>
 	<style type="text/scss">
 	/* navigation */
@@ -61,23 +93,25 @@ import Constant from "../../Constant/Constant";
 		padding: 20px 0 0;
 		overflow: hidden;
 		text-align: center;
-		.count { float: left; }
-		.links {
-			width: 100%;
-			text-align: center;
-		}
-		&.permalink .links { overflow: hidden; }
-		.links a,
-		.links span {
-			display: inline-block;
-			padding: 6px 9px;
-			border-radius: 4px;
+		display: flex;
+		justify-content: center;
+		a,
+		.current {
+			display: block;
+			padding: 3px 9px;
+			margin: 0 0.2em;
+			border-radius: 2px;
+			background-color: #eee;
 			text-decoration: none;
 			font-size: 1.4em;
-			color: #424b54;
+			color: #444;
+			font-weight: 500;
 		}
-		.links a:hover { background-color: #ddd; }
+		a:hover { background-color: #aaa; }
+		.current {
+			background-color: #aaa;
+			color: #ddd;
+		}
 	}
-	.current_page { background-color: #ddd; }
 	</style>
 </niltea-footer>
