@@ -10,12 +10,12 @@ const constant = new class Constant{
 			fetchArticle: "fetchArticle",
 		}
 		// action types
-		this.setBlogInfo  = 'setBlogInfo';
-		this.setCurrent   = 'setCurrent';
-		this.setContent   = 'setContent';
-		this.setLoader    = 'setLoader';
-		this.setLoader    = 'setLoader';
-		this.contentLoaded= 'contentLoaded';
+		this.setBlogInfo   = 'setBlogInfo';
+		this.setCurrent    = 'setCurrent';
+		this.setContent    = 'setContent';
+		this.showLoader    = 'showLoader';
+		this.setLoader     = 'setLoader';
+		this.contentLoaded = 'contentLoaded';
 	}
 
 	_getApiKey(){

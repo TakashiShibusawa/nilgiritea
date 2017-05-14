@@ -66,12 +66,14 @@ const appAction = new class AppAction {
 		const {current: currentPage, id = null, page = null} = currentInfo;
 		RiotControl.trigger(Constant.setCurrent, (currentObj) => { return {currentPage, id, page} });
 	}
+	showLoader () {
+		RiotControl.trigger(Constant.showLoader, null);
+	}
 	setLoader () {
 		RiotControl.trigger(Constant.setLoader, null);
 	}
 	contentLoaded () {
 		RiotControl.trigger(Constant.contentLoaded, null);
-		console.log('content loaded')
 	}
 }
 

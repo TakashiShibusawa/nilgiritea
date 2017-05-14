@@ -91,6 +91,7 @@ import Store from '../Store/Store';
 		}
 
 		self.on('updated', Action.setLoader );
+		self.on('before-mount', Action.showLoader );
 		self.on('mount', () => {
 			window.addEventListener('resize', layoutPhotoset);
 		});

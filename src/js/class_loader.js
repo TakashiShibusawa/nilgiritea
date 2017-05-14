@@ -64,9 +64,7 @@ export default new class Loader {
 		log('Loader setWatcher called');
 		// if images is empty, go to loaded Function
 		if(!this.images || this.images.length <= 0) {
-			if (this.onComplete) {
-				this.onComplete();
-			}
+			this.onComplete();
 			return;
 		}
 

@@ -8,8 +8,10 @@ import loader from "../../class_loader";
 
 <niltea-loader>
 	<div class="loader_container" ref='loader'>
-		<figure class="logo"></figure>
-		<div id="progressContainer"></div>
+		<div class="loadingMsg">
+			<figure class="logo"></figure>
+			<span class="progress">loading Contents...<span id="progressContainer">0%</span></span>
+		</div>
 	</div>
 	<script>
 	// loader関係の処理がここに
@@ -29,13 +31,16 @@ import loader from "../../class_loader";
 		// loader.contentLoaded();
 		Action.contentLoaded();
 	};
+	const showLoader = () => {
+		setTimeout(() => {self.refs.loader.classList.remove('disabled');}, 0);
+	}
 	const activateLoader = () => {
 		// loaderをアクティブにする処理
-		setTimeout(() => {self.refs.loader.classList.remove('disabled');}, 0);
 		loader.activateLoader(contentLoaded);
 	};
 
 	// self.on('mount', activateLoader )
+	RiotControl.on(Constant.showLoader, showLoader );
 	RiotControl.on(Constant.setLoader, activateLoader );
 	</script>
 	<style type="text/scss">
@@ -48,24 +53,36 @@ import loader from "../../class_loader";
 			height: 100%;
 			z-index: 9999;
 			background-color: #fff;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			.loadingMsg {
+				position: relative;
+			}
 			.logo {
 				@include txtHide;
-				position: absolute;
-				left: 0;
-				right: 0;
-				top: 0;
-				bottom: 0;
-				margin: auto;
+				margin: 0 auto 10px;
 				background: url(/images/nilgiri.png) no-repeat;
 				width: 108px;
 				height: 34px;
 				display: block;
 			}
+			.progress {
+				color: #111;
+			}
 			transition: 0s;
 			&.disabled {
-				transition: opacity 0.7s linear 0s, height 1s linear 0.3s;
+				transition: opacity 0.5s linear 0.2s, height 0s linear 0.5s;
 				opacity: 0;
 				height: 0;
+				.logo {
+					opacity: 0;
+					transition: opacity 0.3s linear 0.2s;
+				}
+				.progress {
+					opacity: 0;
+					transition: opacity 0.3s linear 0s;
+				}
 			}
 		}
 	</style>

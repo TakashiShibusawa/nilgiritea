@@ -3015,12 +3015,14 @@ const appAction = new class AppAction {
 			return { currentPage, id, page };
 		});
 	}
+	showLoader() {
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].showLoader, null);
+	}
 	setLoader() {
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setLoader, null);
 	}
 	contentLoaded() {
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].contentLoaded, null);
-		console.log('content loaded');
 	}
 }();
 
@@ -3195,7 +3197,7 @@ const constant = new class Constant {
 		this.setBlogInfo = 'setBlogInfo';
 		this.setCurrent = 'setCurrent';
 		this.setContent = 'setContent';
-		this.setLoader = 'setLoader';
+		this.showLoader = 'showLoader';
 		this.setLoader = 'setLoader';
 		this.contentLoaded = 'contentLoaded';
 	}
@@ -3237,7 +3239,10 @@ var riot = __webpack_require__(0);
 
 
 riot.tag2('niltea-about', '<section id="about" class="post page"> <h2 class="post_title">about page</h2> </section>', '', '', function (opts) {
-    const self = this;
+  const self = this;
+  self.on('updated', __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].setLoader);
+  self.on('mount', __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].setLoader);
+  self.on('before-mount', __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].showLoader);
 });
 
 /***/ }),
@@ -3455,6 +3460,7 @@ riot.tag2('niltea-index', '<section id="article_list" class="post"> <niltea-list
 		});
 
 		self.on('updated', __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].setLoader);
+		self.on('before-mount', __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].showLoader);
 		self.on('mount', () => {});
 
 		self.on('unmount', () => {
@@ -3542,6 +3548,7 @@ riot.tag2('niltea-post', '<article class="post post-single"> <h2 class="post_tit
 	};
 
 	self.on('updated', __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].setLoader);
+	self.on('before-mount', __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].showLoader);
 	self.on('mount', () => {
 		window.addEventListener('resize', layoutPhotoset);
 	});
@@ -4603,7 +4610,7 @@ var riot = __webpack_require__(0);
 
 
 
-riot.tag2('niltea-loader', '<div class="loader_container" ref="loader"> <figure class="logo"></figure> <div id="progressContainer"></div> </div>', 'niltea-loader .clearfix,[data-is="niltea-loader"] .clearfix{ zoom: 1; } niltea-loader .clearfix:after,[data-is="niltea-loader"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-loader .txtHide,[data-is="niltea-loader"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-loader .loader_container,[data-is="niltea-loader"] .loader_container{ position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 9999; background-color: #fff; transition: 0s; } niltea-loader .loader_container .logo,[data-is="niltea-loader"] .loader_container .logo{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; position: absolute; left: 0; right: 0; top: 0; bottom: 0; margin: auto; background: url(/images/nilgiri.png) no-repeat; width: 108px; height: 34px; display: block; } niltea-loader .loader_container.disabled,[data-is="niltea-loader"] .loader_container.disabled{ transition: opacity 0.7s linear 0s, height 1s linear 0.3s; opacity: 0; height: 0; }', '', function (opts) {
+riot.tag2('niltea-loader', '<div class="loader_container" ref="loader"> <div class="loadingMsg"> <figure class="logo"></figure> <span class="progress">loading Contents...<span id="progressContainer">0%</span></span> </div> </div>', 'niltea-loader .clearfix,[data-is="niltea-loader"] .clearfix{ zoom: 1; } niltea-loader .clearfix:after,[data-is="niltea-loader"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-loader .txtHide,[data-is="niltea-loader"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-loader .loader_container,[data-is="niltea-loader"] .loader_container{ position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 9999; background-color: #fff; display: flex; align-items: center; justify-content: center; transition: 0s; } niltea-loader .loader_container .loadingMsg,[data-is="niltea-loader"] .loader_container .loadingMsg{ position: relative; } niltea-loader .loader_container .logo,[data-is="niltea-loader"] .loader_container .logo{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; margin: 0 auto 10px; background: url(/images/nilgiri.png) no-repeat; width: 108px; height: 34px; display: block; } niltea-loader .loader_container .progress,[data-is="niltea-loader"] .loader_container .progress{ color: #111; } niltea-loader .loader_container.disabled,[data-is="niltea-loader"] .loader_container.disabled{ transition: opacity 0.5s linear 0.2s, height 0s linear 0.5s; opacity: 0; height: 0; } niltea-loader .loader_container.disabled .logo,[data-is="niltea-loader"] .loader_container.disabled .logo{ opacity: 0; transition: opacity 0.3s linear 0.2s; } niltea-loader .loader_container.disabled .progress,[data-is="niltea-loader"] .loader_container.disabled .progress{ opacity: 0; transition: opacity 0.3s linear 0s; }', '', function (opts) {
 
 	const self = this;
 
@@ -4614,14 +4621,17 @@ riot.tag2('niltea-loader', '<div class="loader_container" ref="loader"> <figure 
 
 		__WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].contentLoaded();
 	};
-	const activateLoader = () => {
-
+	const showLoader = () => {
 		setTimeout(() => {
 			self.refs.loader.classList.remove('disabled');
 		}, 0);
+	};
+	const activateLoader = () => {
+
 		__WEBPACK_IMPORTED_MODULE_4__class_loader__["a" /* default */].activateLoader(contentLoaded);
 	};
 
+	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].showLoader, showLoader);
 	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].setLoader, activateLoader);
 });
 
@@ -4695,9 +4705,7 @@ const log = !debug ? arg => null : (...arg) => console.log(...arg);
 		log('Loader setWatcher called');
 		// if images is empty, go to loaded Function
 		if (!this.images || this.images.length <= 0) {
-			if (this.onComplete) {
-				this.onComplete();
-			}
+			this.onComplete();
 			return;
 		}
 

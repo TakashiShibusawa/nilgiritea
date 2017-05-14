@@ -10,5 +10,8 @@ import Store from '../Store/Store';
 	</section>
 	<script>
 		const self = this;
+		self.on('updated', Action.setLoader );
+		self.on('mount', Action.setLoader );
+		self.on('before-mount', Action.showLoader );
 	</script>
 </niltea-about>
