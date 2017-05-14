@@ -24,3 +24,23 @@
   -o-font-smoothing: antialiased;
   font-smoothing: antialiased;
 }
+
+@font-face {
+    font-family: 'Metropolis';
+    src: url('/fonts/Metropolis/Metropolis-Regular.eot');
+    src: url('/fonts/Metropolis/Metropolis-Regular.woff2') format('woff2'),
+         url('/fonts/Metropolis/Metropolis-Regular.woff') format('woff'),
+         url('/fonts/Metropolis/Metropolis-Regular.eot') format('embedded-opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Metropolis';
+    src: url('/fonts/Metropolis/Metropolis-Medium.eot');
+    src: url('/fonts/Metropolis/Metropolis-Medium.woff2') format('woff2'),
+         url('/fonts/Metropolis/Metropolis-Medium.woff') format('woff'),
+         url('/fonts/Metropolis/Metropolis-Medium.eot') format('embedded-opentype');
+    font-weight: 500;
+    font-style: normal;
+}

@@ -15,7 +15,7 @@ html{
 	-webkit-text-size-adjust: 100%;
 }
 body{
-	font-family: "Helvetica Neue", "Arial", "ヒラギノ角ゴ Pro", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Sans-serif;
+	font-family: Metropolis, "Helvetica Neue", "Arial", "Noto Sans Japanese", "ヒラギノ角ゴ Pro", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Sans-serif;
 	line-height: 1.5;
 	line-break: strict;
 	margin: 0 auto;
@@ -276,9 +276,6 @@ ol.notes .avatar_frame {
 	text-decoration: none;
 }
 
-.meta {
-	padding: 10px 20px 15px;
-}
 .dateNote {
 	width: 110px;
 	float: left;

@@ -120,6 +120,20 @@ input, select {
   -o-font-smoothing: antialiased;
   font-smoothing: antialiased; }
 
+@font-face {
+  font-family: 'Metropolis';
+  src: url("/fonts/Metropolis/Metropolis-Regular.eot");
+  src: url("/fonts/Metropolis/Metropolis-Regular.woff2") format("woff2"), url("/fonts/Metropolis/Metropolis-Regular.woff") format("woff"), url("/fonts/Metropolis/Metropolis-Regular.eot") format("embedded-opentype");
+  font-weight: 400;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Metropolis';
+  src: url("/fonts/Metropolis/Metropolis-Medium.eot");
+  src: url("/fonts/Metropolis/Metropolis-Medium.woff2") format("woff2"), url("/fonts/Metropolis/Metropolis-Medium.woff") format("woff"), url("/fonts/Metropolis/Metropolis-Medium.eot") format("embedded-opentype");
+  font-weight: 500;
+  font-style: normal; }
+
 /*=====================
 basic style
 =====================*/
@@ -140,7 +154,7 @@ html {
   -webkit-text-size-adjust: 100%; }
 
 body {
-  font-family: "Helvetica Neue", "Arial", "\30D2\30E9\30AE\30CE\89D2\30B4   Pro", "Hiragino Kaku Gothic Pro", "\30E1\30A4\30EA\30AA", Meiryo, Sans-serif;
+  font-family: Metropolis, "Helvetica Neue", "Arial", "Noto Sans Japanese", "\30D2\30E9\30AE\30CE\89D2\30B4   Pro", "Hiragino Kaku Gothic Pro", "\30E1\30A4\30EA\30AA", Meiryo, Sans-serif;
   line-height: 1.5;
   line-break: strict;
   margin: 0 auto;
@@ -394,9 +408,6 @@ ol.notes .avatar_frame {
   font-size: 1.3em;
   color: #c1c2c2;
   text-decoration: none; }
-
-.meta {
-  padding: 10px 20px 15px; }
 
 .dateNote {
   width: 110px;
