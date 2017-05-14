@@ -34,7 +34,7 @@ import Store from '../Store/Store';
 				<h3 class='post_item_title'><raw content={item.title} /></h3>
 				<section class="post_item_meta">
 					<span class="post_item_date">{this.formatDate(item.date)}</span>
-					<span class="post_item_notes">66 notes</span>
+					<span class="post_item_notes">{item.note_count} notes</span>
 				</section>
 			</div>
 		</a>

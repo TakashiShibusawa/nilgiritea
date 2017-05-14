@@ -61,7 +61,8 @@ const appAction = new class AppAction {
 			url     : post.short_url,
 			photos  : post.photos,
 			photoset_layout : post.photoset_layout,
-			reblog_key : post.reblog_key
+			reblog_key : post.reblog_key,
+			note_count: post.note_count,
 		};
 	}
 	setCurrent(currentInfo) {
