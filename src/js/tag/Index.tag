@@ -2,27 +2,87 @@ import RiotControl from 'riotcontrol';
 
 import Action from '../Action/Action';
 import Store from '../Store/Store';
+import Constant from "../Constant/Constant";
+
+import util from '../niltea_util.js';
 <niltea-index>
-	<section id="article_list" class='post'>
+	<section id="article_list" class='post' ref='articleList'>
 		<niltea-list-item articleList={articleList}></niltea-list-item>
 	</section>
 	<script>
 		const self = this;
 		self.articleList = {};
+		self.cords = {};
+
+		const getElmSize = e => {
+			requestAnimationFrame(() => {
+				const scrollTop = ~~(util.getScrollTop());
+				const winHeight = ~~(window.innerHeight);
+
+				// postの最下部の位置を取得する
+				// x = 最上部位置 + 要素高さ - 下パディング
+				// ただし最上部位置はscroll位置によって変化するのでscrollTopを足す
+				const postRect = self.refs.articleList.getBoundingClientRect();
+				const postTop = postRect.top;
+				const postHeight = postRect.height;
+				const postPB = parseInt(getComputedStyle(self.refs.articleList).paddingBottom, 10);
+				const postBtm = ~~(postTop + postHeight - postPB + scrollTop);
+
+				// 一つ目の記事の高さを取る
+				const firstArticle = self.refs.articleList.getElementsByClassName('post_item')[0];
+				const articleHeight = firstArticle.getBoundingClientRect().height;
+
+				// トリガ位置の計算
+				// post最下部から記事高さ(を元にした数値)を引く
+				self.cords.triggerPos = postBtm - articleHeight;
+				self.cords.winHeight = winHeight;
+			});
+		};
+
+
+		self.is_infiniteScrollActive = false;
+		const scrollHandler = e => {
+			requestAnimationFrame(() => {
+				if (self.is_infiniteScrollActive) return;
+				const scrollTop = ~~(util.getScrollTop());
+				// ウィンドウ下部の座標
+				const winBtmPos = scrollTop + self.cords.winHeight;
+
+				if (winBtmPos >= self.cords.triggerPos) {
+					self.is_infiniteScrollActive = true;
+					console.log('トリガ位置より下にスクロールしたよ');
+					// call infiniteScroll
+
+					// for debug
+					setTimeout(() => {self.is_infiniteScrollActive = false;}, 1000)
+				}
+			});
+		};
 
 		// Subscribes Store.onChanged
 		RiotControl.on(Store.ActionTypes.changed, () => {
 			self.articleList = Store.content;
 			self.update();
+			self.is_infiniteScrollActive = false;
+		});
+		RiotControl.on(Constant.contentLoaded, () => {
+			console.log('hoge')
+			getElmSize();
 		});
 
-		self.on('updated', Action.setLoader );
+		self.on('updated', () => {
+			Action.setLoader();
+		});
 		self.on('before-mount', Action.showLoader );
 		self.on('mount', () => {
+			window.addEventListener('scroll', scrollHandler);
+			window.addEventListener('resize', getElmSize);
 		});
 
 		self.on('unmount', () => {
 			RiotControl.off(Store.ActionTypes.changed);
+			window.removeEventListener('scroll', scrollHandler);
+			window.removeEventListener('resize', getElmSize);
 		});
 	</script>
 </niltea-index>
@@ -55,14 +115,15 @@ import Store from '../Store/Store';
 			margin: 15px auto 0;
 			background: #888 center center no-repeat;
 			background-size: cover;
-			transition: filter 0.4s;
-			&:hover {
-				transition: filter 0.2s;
-				filter: brightness(1.1);
-			}
 			&:first-child { margin-top: 0; }
 		}
 		.post_item_link {
+			background-color: rgba(#fff, 0.6);
+			transition: background-color 0.2s;
+			&:hover {
+				transition: background-color 0.4s;
+				background-color: rgba(#fff, 0);
+			}
 			display: block;
 			width: 100%;
 			height: 100%;
@@ -77,7 +138,6 @@ import Store from '../Store/Store';
 			box-sizing: border-box;
 			border: 5px solid #000;
 			border-radius: 2px;
-			background-color: rgba(#fff, 0.6);
 			display: flex;
 			flex-direction: column;
 			justify-content: flex-end;

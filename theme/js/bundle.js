@@ -3040,7 +3040,7 @@ const appAction = new class AppAction {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* unused harmony default export */ var _unused_webpack_default_export = (new class Util {
+/* harmony default export */ __webpack_exports__["a"] = (new class Util {
 	constructor() {
 		this.browser = this.browser();
 		document.body.classList.add(this.browser.isPC ? 'pc' : 'sp');
@@ -3452,45 +3452,101 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Store_Store__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Constant_Constant__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__niltea_util_js__ = __webpack_require__(4);
 
 var riot = __webpack_require__(0);
 
 
 
 
-riot.tag2('niltea-index', '<section id="article_list" class="post"> <niltea-list-item articlelist="{articleList}"></niltea-list-item> </section>', '', '', function (opts) {
-		const self = this;
-		self.articleList = {};
 
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changed, () => {
-				self.articleList = __WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].content;
-				self.update();
+
+
+riot.tag2('niltea-index', '<section id="article_list" class="post" ref="articleList"> <niltea-list-item articlelist="{articleList}"></niltea-list-item> </section>', '', '', function (opts) {
+	const self = this;
+	self.articleList = {};
+	self.cords = {};
+
+	const getElmSize = e => {
+		requestAnimationFrame(() => {
+			const scrollTop = ~~__WEBPACK_IMPORTED_MODULE_4__niltea_util_js__["a" /* default */].getScrollTop();
+			const winHeight = ~~window.innerHeight;
+
+			const postRect = self.refs.articleList.getBoundingClientRect();
+			const postTop = postRect.top;
+			const postHeight = postRect.height;
+			const postPB = parseInt(getComputedStyle(self.refs.articleList).paddingBottom, 10);
+			const postBtm = ~~(postTop + postHeight - postPB + scrollTop);
+
+			const firstArticle = self.refs.articleList.getElementsByClassName('post_item')[0];
+			const articleHeight = firstArticle.getBoundingClientRect().height;
+
+			self.cords.triggerPos = postBtm - articleHeight;
+			self.cords.winHeight = winHeight;
 		});
+	};
 
-		self.on('updated', __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].setLoader);
-		self.on('before-mount', __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].showLoader);
-		self.on('mount', () => {});
+	self.is_infiniteScrollActive = false;
+	const scrollHandler = e => {
+		requestAnimationFrame(() => {
+			if (self.is_infiniteScrollActive) return;
+			const scrollTop = ~~__WEBPACK_IMPORTED_MODULE_4__niltea_util_js__["a" /* default */].getScrollTop();
 
-		self.on('unmount', () => {
-				__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changed);
+			const winBtmPos = scrollTop + self.cords.winHeight;
+
+			if (winBtmPos >= self.cords.triggerPos) {
+				self.is_infiniteScrollActive = true;
+				console.log('トリガ位置より下にスクロールしたよ');
+
+				setTimeout(() => {
+					self.is_infiniteScrollActive = false;
+				}, 1000);
+			}
 		});
+	};
+
+	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changed, () => {
+		self.articleList = __WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].content;
+		self.update();
+		self.is_infiniteScrollActive = false;
+	});
+	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].contentLoaded, () => {
+		console.log('hoge');
+		getElmSize();
+	});
+
+	self.on('updated', () => {
+		__WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].setLoader();
+	});
+	self.on('before-mount', __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].showLoader);
+	self.on('mount', () => {
+		window.addEventListener('scroll', scrollHandler);
+		window.addEventListener('resize', getElmSize);
+	});
+
+	self.on('unmount', () => {
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changed);
+		window.removeEventListener('scroll', scrollHandler);
+		window.removeEventListener('resize', getElmSize);
+	});
 });
 
-riot.tag2('niltea-list-item', '<article each="{item in opts.articlelist}" riot-style="background-image: url({item.photos ? item.photos[0].original_size.url : null});" class="post_item loader_bgi"> <a class="post_item_link" href="/post/{item.id}"> <div class="post_item_info"> <h3 class="post_item_title"><raw content="{item.title}"></raw></h3> <section class="post_item_meta"> <span class="post_item_date">{this.formatDate(item.date)}</span> <span class="post_item_notes">{item.note_count} notes</span> </section> </div> </a> </article>', 'niltea-list-item .post_item,[data-is="niltea-list-item"] .post_item{ will-change: filter; width: 100%; height: 350px; margin: 15px auto 0; background: #888 center center no-repeat; background-size: cover; transition: filter 0.4s; } niltea-list-item .post_item:hover,[data-is="niltea-list-item"] .post_item:hover{ transition: filter 0.2s; filter: brightness(1.1); } niltea-list-item .post_item:first-child,[data-is="niltea-list-item"] .post_item:first-child{ margin-top: 0; } niltea-list-item .post_item_link,[data-is="niltea-list-item"] .post_item_link{ display: block; width: 100%; height: 100%; box-sizing: border-box; padding: 25px; text-decoration: none; color: #000; } niltea-list-item .post_item_info,[data-is="niltea-list-item"] .post_item_info{ width: 100%; height: 100%; box-sizing: border-box; border: 5px solid #000; border-radius: 2px; background-color: rgba(255, 255, 255, 0.6); display: flex; flex-direction: column; justify-content: flex-end; padding: 15px; } niltea-list-item .post_item_date,[data-is="niltea-list-item"] .post_item_date,niltea-list-item .post_item_notes,[data-is="niltea-list-item"] .post_item_notes{ display: block; } niltea-list-item .post_item_title,[data-is="niltea-list-item"] .post_item_title{ font-size: 2.6em; } niltea-list-item .post_item_date,[data-is="niltea-list-item"] .post_item_date{ font-size: 1.6em; } niltea-list-item .post_item_notes,[data-is="niltea-list-item"] .post_item_notes{ font-size: 1.0em; }', '', function (opts) {
-		const self = this;
-		self.on('update', () => {
-				console.log(opts.articlelist);
-		});
-		self.formatDate = date => {
-				const _date = new Date(date);
-				return `${_date.getFullYear()} / ${_date.getMonth() + 1} / ${_date.getDate()}`;
-		};
+riot.tag2('niltea-list-item', '<article each="{item in opts.articlelist}" riot-style="background-image: url({item.photos ? item.photos[0].original_size.url : null});" class="post_item loader_bgi"> <a class="post_item_link" href="/post/{item.id}"> <div class="post_item_info"> <h3 class="post_item_title"><raw content="{item.title}"></raw></h3> <section class="post_item_meta"> <span class="post_item_date">{this.formatDate(item.date)}</span> <span class="post_item_notes">{item.note_count} notes</span> </section> </div> </a> </article>', 'niltea-list-item .post_item,[data-is="niltea-list-item"] .post_item{ will-change: filter; width: 100%; height: 350px; margin: 15px auto 0; background: #888 center center no-repeat; background-size: cover; } niltea-list-item .post_item:first-child,[data-is="niltea-list-item"] .post_item:first-child{ margin-top: 0; } niltea-list-item .post_item_link,[data-is="niltea-list-item"] .post_item_link{ background-color: rgba(255, 255, 255, 0.6); transition: background-color 0.2s; display: block; width: 100%; height: 100%; box-sizing: border-box; padding: 25px; text-decoration: none; color: #000; } niltea-list-item .post_item_link:hover,[data-is="niltea-list-item"] .post_item_link:hover{ transition: background-color 0.4s; background-color: rgba(255, 255, 255, 0); } niltea-list-item .post_item_info,[data-is="niltea-list-item"] .post_item_info{ width: 100%; height: 100%; box-sizing: border-box; border: 5px solid #000; border-radius: 2px; display: flex; flex-direction: column; justify-content: flex-end; padding: 15px; } niltea-list-item .post_item_date,[data-is="niltea-list-item"] .post_item_date,niltea-list-item .post_item_notes,[data-is="niltea-list-item"] .post_item_notes{ display: block; } niltea-list-item .post_item_title,[data-is="niltea-list-item"] .post_item_title{ font-size: 2.6em; } niltea-list-item .post_item_date,[data-is="niltea-list-item"] .post_item_date{ font-size: 1.6em; } niltea-list-item .post_item_notes,[data-is="niltea-list-item"] .post_item_notes{ font-size: 1.0em; }', '', function (opts) {
+	const self = this;
+	self.on('update', () => {
+		console.log(opts.articlelist);
+	});
+	self.formatDate = date => {
+		const _date = new Date(date);
+		return `${_date.getFullYear()} / ${_date.getMonth() + 1} / ${_date.getDate()}`;
+	};
 });
 
 riot.tag2('niltea-index-list-lead', '<span class="line" each="{content in lines}">{content}</span>', '', '', function (opts) {
-		let content = opts.content;
-		content = content.replace('</p>', '').replace('<p>', '');
-		this.lines = content.split('<br />');
+	let content = opts.content;
+	content = content.replace('</p>', '').replace('<p>', '');
+	this.lines = content.split('<br />');
 });
 
 /***/ }),
