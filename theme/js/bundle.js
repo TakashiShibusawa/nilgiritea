@@ -2962,10 +2962,20 @@ const tumblrAPI = new class TumblrAPI {
 }();
 
 const appAction = new class AppAction {
-	async loadContent({ type, query }) {
-		let article = null;
-
-		//json の取得
+	// コンテンツのロードを行い、Storeに通知を行うメソッド
+	// isIncrementがtrueであれば追加読み込み
+	async loadContent({ type, query, isIncrement = false }) {
+		const article = await this.fetchContent({ type, query });
+		if (!article) return false;
+		// RiotControl.trigger(Constant.setContent, (content) => article);
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setContent, content => {
+			return isIncrement ? content.concat(article) : article;
+		});
+		return true;
+	}
+	// コンテンツのロードを行う
+	async fetchContent({ type, query }) {
+		//APIを叩いてjson取得してもらう。正常に帰ってこなかったらreturn
 		const json = await tumblrAPI.fetchAPI(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].getEndPoint({ type, query }));
 		if (!json) return false;
 
@@ -2973,6 +2983,7 @@ const appAction = new class AppAction {
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setBlogInfo, oldInfo => {
 			let isChanged = false;
 			let data = null;
+			// 取得してきたblogInfoをObjectに突っ込む
 			const fetchedBlogInfo = JSON.stringify(json.response.blog);
 			if (oldInfo !== fetchedBlogInfo) {
 				isChanged = true;
@@ -2981,11 +2992,11 @@ const appAction = new class AppAction {
 			return { isChanged, data };
 		});
 
-		article = this._loadArticle(json.response.posts);
-		if (article) __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setContent, content => article);
-		return true;
+		// 記事データの整形を行い、返ってきたデータがあればそれをreturn
+		const article = this._formatArticle(json.response.posts);
+		return article || false;
 	}
-	_loadArticle(posts_fetched) {
+	_formatArticle(posts_fetched) {
 		// postsがないとき(infoを取得したとき)
 		if (!posts_fetched) return null;
 		const posts_formatted = [];
@@ -3029,6 +3040,9 @@ const appAction = new class AppAction {
 	}
 	openModal(event) {
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].openModal, event);
+	}
+	callInfScr() {
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].callInfScr, null);
 	}
 }();
 
@@ -3203,10 +3217,12 @@ const constant = new class Constant {
 		this.setBlogInfo = 'setBlogInfo';
 		this.setCurrent = 'setCurrent';
 		this.setContent = 'setContent';
+		this.addContent = 'addContent';
 		this.showLoader = 'showLoader';
 		this.setLoader = 'setLoader';
 		this.contentLoaded = 'contentLoaded';
 		this.openModal = 'openModal';
+		this.callInfScr = 'callInfScr';
 	}
 
 	_getApiKey() {
@@ -3487,34 +3503,57 @@ riot.tag2('niltea-index', '<section id="article_list" class="post" ref="articleL
 		});
 	};
 
-	self.is_infiniteScrollActive = false;
+	self.is_infScrActive = false;
+	self.is_lastPageLoaded = false;
 	const scrollHandler = e => {
 		requestAnimationFrame(() => {
-			if (self.is_infiniteScrollActive) return;
+			if (self.is_infScrActive || self.is_lastPageLoaded) return;
 			const scrollTop = ~~__WEBPACK_IMPORTED_MODULE_4__niltea_util_js__["a" /* default */].getScrollTop();
 
 			const winBtmPos = scrollTop + self.cords.winHeight;
 
 			if (winBtmPos >= self.cords.triggerPos) {
-				self.is_infiniteScrollActive = true;
-				console.log('トリガ位置より下にスクロールしたよ');
 
-				setTimeout(() => {
-					self.is_infiniteScrollActive = false;
-				}, 1000);
+				__WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].callInfScr();
 			}
 		});
 	};
 
+	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].callInfScr, () => {
+
+		if (self.is_infScrActive) return;
+
+		self.is_infScrActive = true;
+
+		const currentPage = __WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].current.page;
+
+		const nextPage = currentPage + 1;
+
+		const limit = __WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].indexPostLimit;
+
+		const maxPage = Math.ceil(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].blogInfo.posts / limit);
+
+		__WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].loadContent({ isIncrement: true, type: 'posts', query: { limit, offset: limit * currentPage } });
+
+		if (nextPage <= maxPage) {
+			__WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].setCurrent({ current: 'index', page: nextPage });
+		}
+
+		if (currentPage >= maxPage) {
+			self.is_lastPageLoaded = true;
+		}
+	});
+
 	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changed, () => {
 		self.articleList = __WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].content;
 		self.update();
-		self.is_infiniteScrollActive = false;
 	});
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].contentLoaded, () => {
-		console.log('hoge');
+
+	const contentLoadHandler = () => {
 		getElmSize();
-	});
+		self.is_infScrActive = false;
+	};
+	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].contentLoaded, contentLoadHandler);
 
 	self.on('updated', () => {
 		__WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].setLoader();
@@ -3527,6 +3566,7 @@ riot.tag2('niltea-index', '<section id="article_list" class="post" ref="articleL
 
 	self.on('unmount', () => {
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changed);
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].contentLoaded, contentLoadHandler);
 		window.removeEventListener('scroll', scrollHandler);
 		window.removeEventListener('resize', getElmSize);
 	});
@@ -3534,9 +3574,6 @@ riot.tag2('niltea-index', '<section id="article_list" class="post" ref="articleL
 
 riot.tag2('niltea-list-item', '<article each="{item in opts.articlelist}" riot-style="background-image: url({item.photos ? item.photos[0].original_size.url : null});" class="post_item loader_bgi"> <a class="post_item_link" href="/post/{item.id}"> <div class="post_item_info"> <h3 class="post_item_title"><raw content="{item.title}"></raw></h3> <section class="post_item_meta"> <span class="post_item_date">{this.formatDate(item.date)}</span> <span class="post_item_notes">{item.note_count} notes</span> </section> </div> </a> </article>', 'niltea-list-item .post_item,[data-is="niltea-list-item"] .post_item{ will-change: filter; width: 100%; height: 350px; margin: 15px auto 0; background: #888 center center no-repeat; background-size: cover; } niltea-list-item .post_item:first-child,[data-is="niltea-list-item"] .post_item:first-child{ margin-top: 0; } niltea-list-item .post_item_link,[data-is="niltea-list-item"] .post_item_link{ background-color: rgba(255, 255, 255, 0.6); transition: background-color 0.2s; display: block; width: 100%; height: 100%; box-sizing: border-box; padding: 25px; text-decoration: none; color: #000; } niltea-list-item .post_item_link:hover,[data-is="niltea-list-item"] .post_item_link:hover{ transition: background-color 0.4s; background-color: rgba(255, 255, 255, 0); } niltea-list-item .post_item_info,[data-is="niltea-list-item"] .post_item_info{ width: 100%; height: 100%; box-sizing: border-box; border: 5px solid #000; border-radius: 2px; display: flex; flex-direction: column; justify-content: flex-end; padding: 15px; } niltea-list-item .post_item_date,[data-is="niltea-list-item"] .post_item_date,niltea-list-item .post_item_notes,[data-is="niltea-list-item"] .post_item_notes{ display: block; } niltea-list-item .post_item_title,[data-is="niltea-list-item"] .post_item_title{ font-size: 2.6em; } niltea-list-item .post_item_date,[data-is="niltea-list-item"] .post_item_date{ font-size: 1.6em; } niltea-list-item .post_item_notes,[data-is="niltea-list-item"] .post_item_notes{ font-size: 1.0em; }', '', function (opts) {
 	const self = this;
-	self.on('update', () => {
-		console.log(opts.articlelist);
-	});
 	self.formatDate = date => {
 		const _date = new Date(date);
 		return `${_date.getFullYear()} / ${_date.getMonth() + 1} / ${_date.getDate()}`;

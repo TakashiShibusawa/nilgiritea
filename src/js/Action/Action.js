@@ -15,10 +15,20 @@ const tumblrAPI = new class TumblrAPI {
 };
 
 const appAction = new class AppAction {
-	async loadContent({type, query}){
-		let article = null;
-
-		//json の取得
+	// コンテンツのロードを行い、Storeに通知を行うメソッド
+	// isIncrementがtrueであれば追加読み込み
+	async loadContent({type, query, isIncrement = false}){
+		const article = await this.fetchContent({type, query});
+		if (!article) return false;
+		// RiotControl.trigger(Constant.setContent, (content) => article);
+		RiotControl.trigger(Constant.setContent, (content) => {
+			return (isIncrement) ? content.concat(article) : article;
+		});
+		return true;
+	}
+	// コンテンツのロードを行う
+	async fetchContent({type, query}){
+		//APIを叩いてjson取得してもらう。正常に帰ってこなかったらreturn
 		const json = await tumblrAPI.fetchAPI(Constant.getEndPoint({type, query}));
 		if (!json) return false;
 
@@ -26,6 +36,7 @@ const appAction = new class AppAction {
 		RiotControl.trigger(Constant.setBlogInfo, (oldInfo) => {
 			let isChanged = false;
 			let data = null;
+			// 取得してきたblogInfoをObjectに突っ込む
 			const fetchedBlogInfo = JSON.stringify(json.response.blog);
 			if (oldInfo !== fetchedBlogInfo) {
 				isChanged = true;
@@ -34,11 +45,11 @@ const appAction = new class AppAction {
 			return {isChanged, data};
 		});
 
-		article = this._loadArticle(json.response.posts);
-		if (article) RiotControl.trigger(Constant.setContent, (content) => article);
-		return true;
+		// 記事データの整形を行い、返ってきたデータがあればそれをreturn
+		const article = this._formatArticle(json.response.posts);
+		return article || false;
 	}
-	_loadArticle (posts_fetched) {
+	_formatArticle (posts_fetched) {
 		// postsがないとき(infoを取得したとき)
 		if (!posts_fetched) return null;
 		const posts_formatted = [];
@@ -80,6 +91,9 @@ const appAction = new class AppAction {
 	}
 	openModal (event) {
 		RiotControl.trigger(Constant.openModal, event);
+	}
+	callInfScr() {
+		RiotControl.trigger(Constant.callInfScr, null);
 	}
 }
 

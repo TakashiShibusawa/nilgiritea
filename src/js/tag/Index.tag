@@ -39,36 +39,63 @@ import util from '../niltea_util.js';
 			});
 		};
 
-
-		self.is_infiniteScrollActive = false;
+		// infscrの設定
+		self.is_infScrActive = false;
+		self.is_lastPageLoaded = false;
 		const scrollHandler = e => {
 			requestAnimationFrame(() => {
-				if (self.is_infiniteScrollActive) return;
+				if (self.is_infScrActive || self.is_lastPageLoaded) return;
 				const scrollTop = ~~(util.getScrollTop());
 				// ウィンドウ下部の座標
 				const winBtmPos = scrollTop + self.cords.winHeight;
 
+				// トリガ位置より下にスクロールした
 				if (winBtmPos >= self.cords.triggerPos) {
-					self.is_infiniteScrollActive = true;
-					console.log('トリガ位置より下にスクロールしたよ');
-					// call infiniteScroll
-
-					// for debug
-					setTimeout(() => {self.is_infiniteScrollActive = false;}, 1000)
+					// call infScr
+					Action.callInfScr();
 				}
 			});
 		};
 
+		// Subscribes callInfScr
+		RiotControl.on(Constant.callInfScr, () => {
+			// infScrが動いてたら処理せずreturn
+			if (self.is_infScrActive) return;
+			// infScrが動いてるフラグを立てる
+			self.is_infScrActive = true;
+			// 現在のページ数を取得
+			const currentPage = Store.current.page;
+			// 次ページ番号を計算
+			const nextPage = currentPage + 1;
+			// ページあたりの最大投稿数を聞いてくる
+			// 最終ページの判断、offset値の計算に使います
+			const limit = Constant.indexPostLimit;
+			// 最終ページ番号を計算
+			const maxPage = Math.ceil(Store.blogInfo.posts / limit);
+			// 次ページの取得
+			Action.loadContent({isIncrement: true, type: 'posts', query: {limit, offset: limit * currentPage}});
+
+			// 最終ページかどうか判断してページのインクリメント
+			if (nextPage <= maxPage) {
+				Action.setCurrent({current: 'index', page: nextPage});
+			}
+			// 最終ページを読み込んだときの処理
+			if (currentPage >= maxPage) {
+				self.is_lastPageLoaded = true;
+				// TODO:下のページネーションを消す処理の追加
+			}
+		});
 		// Subscribes Store.onChanged
 		RiotControl.on(Store.ActionTypes.changed, () => {
 			self.articleList = Store.content;
 			self.update();
-			self.is_infiniteScrollActive = false;
 		});
-		RiotControl.on(Constant.contentLoaded, () => {
-			console.log('hoge')
+		// after content loaded by loader
+		const contentLoadHandler = () => {
 			getElmSize();
-		});
+			self.is_infScrActive = false;
+		};
+		RiotControl.on(Constant.contentLoaded, contentLoadHandler);
 
 		self.on('updated', () => {
 			Action.setLoader();
@@ -81,6 +108,7 @@ import util from '../niltea_util.js';
 
 		self.on('unmount', () => {
 			RiotControl.off(Store.ActionTypes.changed);
+			RiotControl.off(Constant.contentLoaded, contentLoadHandler);
 			window.removeEventListener('scroll', scrollHandler);
 			window.removeEventListener('resize', getElmSize);
 		});
@@ -101,7 +129,6 @@ import util from '../niltea_util.js';
 	</article>
 	<script>
 		const self = this;
-		self.on('update', () => {console.log(opts.articlelist)});
 		self.formatDate = date => {
 			const _date = new Date(date);
 			return `${_date.getFullYear()} / ${_date.getMonth() + 1} / ${_date.getDate()}`;
