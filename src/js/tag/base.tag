@@ -29,14 +29,15 @@ import Constant from "../Constant/Constant";
 	// Indexのロード
 	route('/', () => {
 		riot.mount(self.refs.content, 'niltea-index');
-		Action.loadContent({type: 'posts', query: {limit}});
+		Action.loadContent({type: 'posts', query: {limit}, current: 'index', page: 1}).then(() => {
+		});
 		// document.title = `${Store.blogInfo.title}`;
 		Action.setCurrent({current: 'index', page: 1});
 	});
 	// index / pagenation
 	route('/index/*', (page) => {
 		riot.mount(self.refs.content, 'niltea-index');
-		Action.loadContent({type: 'posts', query: {limit, offset: limit * (page - 1)}});
+		Action.loadContent({type: 'posts', query: {limit, offset: limit * (page - 1), current: 'index', page}});
 		// document.title = `${Store.blogInfo.title}`;
 		Action.setCurrent({current: 'index', page: page});
 	});
@@ -45,8 +46,8 @@ import Constant from "../Constant/Constant";
 	route('/post/*', (id) => {
 		riot.mount(self.refs.content, 'niltea-post');
 		riot.mount(self.refs.modal, 'niltea-modal');
-		Action.loadContent({type: 'posts', query: {id}});
 		Action.setCurrent({current: 'posts', id});
+		Action.loadContent({type: 'posts', query: {id}, current: 'posts'});
 	});
 
 	// about

@@ -17,7 +17,7 @@ const tumblrAPI = new class TumblrAPI {
 const appAction = new class AppAction {
 	// コンテンツのロードを行い、Storeに通知を行うメソッド
 	// isIncrementがtrueであれば追加読み込み
-	async loadContent({type, query, isIncrement = false}){
+	async loadContent({type, query, isIncrement = false, current, page = null, id = null}){
 		const article = await this.fetchContent({type, query});
 		if (!article) return false;
 		// RiotControl.trigger(Constant.setContent, (content) => article);
