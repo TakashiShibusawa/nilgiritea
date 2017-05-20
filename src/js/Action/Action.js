@@ -20,11 +20,8 @@ const appAction = new class AppAction {
 	async loadContent({type, query, isIncrement = false, current, page = null, id = null}){
 		const article = await this.fetchContent({type, query});
 		if (!article) return false;
-		// RiotControl.trigger(Constant.setContent, (content) => article);
-		RiotControl.trigger(Constant.setContent, (content) => {
-			return (isIncrement) ? content.concat(article) : article;
-		});
-		return true;
+
+		RiotControl.trigger(Constant.setContent, (content) => (isIncrement) ? content.concat(article) : article );
 	}
 	// コンテンツのロードを行う
 	async fetchContent({type, query}){
