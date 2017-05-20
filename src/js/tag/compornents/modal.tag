@@ -1,3 +1,6 @@
+const debug = true;
+const log = (!debug) ? arg => null : (...arg) => console.log(...arg);
+
 import RiotControl from 'riotcontrol';
 
 import Action from '../../Action/Action';
@@ -6,20 +9,26 @@ import Constant from "../../Constant/Constant";
 <niltea-modal>
 	<div class="modal" ref='modal'>
 		<div class="modal_bg" ref='modalBg' onclick={this.hideModal}></div>
-		<figure class="content" ref='content'></figure>
+		<figure class="figure" ref='figure'></figure>
 	</div>
 	<script>
 		const self = this;
 
+		const showModal = href => {
+			self.refs.modal.classList.add('shown');
+		};
 		const openModal = event => {
 			event.preventDefault();
-			const el = (event.target.nodeName === 'IMG') ? event.target.parentNode : event.target;
-			const href = el.href;
+			// const el = (event.target.nodeName === 'IMG') ? event.target.parentNode : event.target;
+			// log(el)
+			const href = event.target.style.backgroundImage.match(/https?:\/+[\d\w\.\/]*/)[0];
+			log('openModal', href)
 
-			const fig = self.refs.content;
+			const fig = self.refs.figure;
 			fig.style.backgroundImage = `url('${href}')`;
-
+			showModal(href);
 		}
+
 		const hideModal = () => {
 			console.log('hide')
 		}
@@ -43,8 +52,12 @@ import Constant from "../../Constant/Constant";
 			position: fixed;
 			left: 0;
 			top: 0;
-			width: 50%;
-			height: 50%;
+			width: 100%;
+			height: 0;
+			&.shown {
+				display: block;
+				height: 100%;
+			}
 		}
 		.modal_bg {
 			position: absolute;
@@ -54,7 +67,7 @@ import Constant from "../../Constant/Constant";
 			height: 100%;
 			background-color: rgba(#000, 0.8);
 		}
-		.content {
+		.figure {
 			position: absolute;
 			left: 0;
 			right: 0;
