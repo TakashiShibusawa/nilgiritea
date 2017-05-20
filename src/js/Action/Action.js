@@ -1,6 +1,6 @@
 import RiotControl from "riotcontrol"
 import Constant from "../Constant/Constant";
-import "whatwg-fetch";
+import fetchJsonp from 'jsonp-promise';
 import util from '../niltea_util.js';
 
 const fetchParams = {mode: 'cors'};
@@ -8,9 +8,8 @@ const fetchParams = {mode: 'cors'};
 const tumblrAPI = new class TumblrAPI {
 	async fetchAPI (uri) {
 		if(typeof uri !== 'string') return false;
-		const res = await fetch(uri, fetchParams);
-		const json = await res.json();
-		return (res.status >= 200 && res.status < 300) ? json : false;
+		const res = await fetchJsonp(uri, {param: 'jsonp'}).promise;
+		return (res.meta.status >= 200 && res.meta.status < 300) ? res : false;
 	}
 };
 
