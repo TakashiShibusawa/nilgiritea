@@ -136,8 +136,6 @@ export default new class Util{
 	}
 
 	loader() {
-		console.log('loader is called 8)');
-
 		Action.contentLoaded();
 	}
 }

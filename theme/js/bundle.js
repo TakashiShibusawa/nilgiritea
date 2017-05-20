@@ -2973,7 +2973,6 @@ const appAction = new class AppAction {
 	async loadContent({ type, query, isIncrement = false, current, page = null, id = null, hasInfo }) {
 		const article = hasInfo ? null : await this.fetchContent({ type, query });
 		if (article) __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setContent, content => isIncrement ? content.concat(article) : article);
-		console.log(hasInfo);
 		this.setCurrent({ currentPage: current, page, id });
 	}
 	// コンテンツのロードを行う
@@ -3199,8 +3198,6 @@ const appAction = new class AppAction {
 	}
 
 	loader() {
-		console.log('loader is called 8)');
-
 		Action.contentLoaded();
 	}
 }());
