@@ -112,7 +112,6 @@ import Store from '../Store/Store';
 			self.isPhotoSet = (self.photos.length > 1);
 			if (self.isPhotoSet) self.photoset = setPhotoLayout();
 
-			document.title = `${self.title} | ${Store.blogInfo.title}`;
 			self.update();
 			afterUpdate();
 		});
