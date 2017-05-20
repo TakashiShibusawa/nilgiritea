@@ -125,22 +125,23 @@ import Store from '../Store/Store';
 			overflow: hidden;
 			text-align: center;
 		}
-		.photo_item {
-			display: block;
-			width: 100%;
-			/*kill inner space*/
+		/*photoset container*/
+		.photo_rowContainer {
+			height: 400px;
+			overflow: hidden;
 			line-height: 1;
 			font-size: 0;
 		}
-		/*photoset container*/
-		.photo_rowContainer {
-			overflow: hidden;
+		.photo_item {
+			display: block;
+			width: 100%;
+			height: 100%;
+			/*kill inner space*/
 			line-height: 1;
 			font-size: 0;
 		}
 		.photo_item-set {
 			display: inline-block;
-			height: 400px;
 			.layout_itemCount-2 & {
 				width: 50%;
 			}
@@ -150,7 +151,7 @@ import Store from '../Store/Store';
 		}
 		.photo_item_image {
 			width: 100%;
-			height: 800px;
+			height: 100%;
 			background: center center no-repeat;
 			background-size: cover;
 		}
