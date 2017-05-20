@@ -31,14 +31,11 @@ import Constant from "../Constant/Constant";
 		riot.mount(self.refs.content, 'niltea-index');
 		Action.loadContent({type: 'posts', query: {limit}, current: 'index', page: 1}).then(() => {
 		});
-		// document.title = `${Store.blogInfo.title}`;
 	});
 	// index / pagenation
 	route('/index/*', (page) => {
 		riot.mount(self.refs.content, 'niltea-index');
 		Action.loadContent({type: 'posts', query: {limit, offset: limit * (page - 1), current: 'index', page}});
-		// document.title = `${Store.blogInfo.title}`;
-		// Action.setCurrent({current: 'index', page: page});
 	});
 
 	// post
@@ -46,15 +43,13 @@ import Constant from "../Constant/Constant";
 		riot.mount(self.refs.content, 'niltea-post');
 		riot.mount(self.refs.modal, 'niltea-modal');
 		Action.loadContent({type: 'posts', query: {id}, current: 'posts'});
-		// Action.setCurrent({current: 'posts', id});
 	});
 
 	// about
 	route('/about', () => {
 		riot.mount(self.refs.content, 'niltea-about')
-		if (!Store.blogInfo) Action.loadContent({type: 'info'});
-		// document.title = `about | ${Store.blogInfo.title}`;
-		Action.setCurrent({current: 'about'});
+		const hasInfo = !!Store.blogInfo;
+		Action.loadContent({type: 'info', hasInfo, current: 'about'});
 	});
 
 	// default

@@ -17,12 +17,11 @@ const tumblrAPI = new class TumblrAPI {
 const appAction = new class AppAction {
 	// コンテンツのロードを行い、Storeに通知を行うメソッド
 	// isIncrementがtrueであれば追加読み込み
-	async loadContent({type, query, isIncrement = false, current, page = null, id = null}){
-		const article = await this.fetchContent({type, query});
-		if (!article) return false;
-
-		RiotControl.trigger(Constant.setContent, (content) => (isIncrement) ? content.concat(article) : article );
-		if (type !== 'info') this.setCurrent({current, page, id});
+	async loadContent({type, query, isIncrement = false, current, page = null, id = null, hasInfo}){
+		const article = (hasInfo) ? null : await this.fetchContent({type, query});
+		if (article) RiotControl.trigger(Constant.setContent, (content) => (isIncrement) ? content.concat(article) : article );
+		console.log(hasInfo)
+		this.setCurrent({currentPage : current, page, id});
 	}
 	// コンテンツのロードを行う
 	async fetchContent({type, query}){
@@ -75,7 +74,7 @@ const appAction = new class AppAction {
 		};
 	}
 	setCurrent(currentInfo) {
-		const {current: currentPage, id = null, page = null} = currentInfo;
+		const {currentPage, id = 'null', page = 'null'} = currentInfo;
 		RiotControl.trigger(Constant.setCurrent, (currentObj) => { return {currentPage, id, page} });
 
 		this.setPageTitle();

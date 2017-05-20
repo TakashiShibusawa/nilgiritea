@@ -2970,12 +2970,11 @@ const tumblrAPI = new class TumblrAPI {
 const appAction = new class AppAction {
 	// コンテンツのロードを行い、Storeに通知を行うメソッド
 	// isIncrementがtrueであれば追加読み込み
-	async loadContent({ type, query, isIncrement = false, current, page = null, id = null }) {
-		const article = await this.fetchContent({ type, query });
-		if (!article) return false;
-
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setContent, content => isIncrement ? content.concat(article) : article);
-		if (type !== 'info') this.setCurrent({ current, page, id });
+	async loadContent({ type, query, isIncrement = false, current, page = null, id = null, hasInfo }) {
+		const article = hasInfo ? null : await this.fetchContent({ type, query });
+		if (article) __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setContent, content => isIncrement ? content.concat(article) : article);
+		console.log(hasInfo);
+		this.setCurrent({ currentPage: current, page, id });
 	}
 	// コンテンツのロードを行う
 	async fetchContent({ type, query }) {
@@ -3028,7 +3027,7 @@ const appAction = new class AppAction {
 		};
 	}
 	setCurrent(currentInfo) {
-		const { current: currentPage, id = null, page = null } = currentInfo;
+		const { currentPage, id = 'null', page = 'null' } = currentInfo;
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setCurrent, currentObj => {
 			return { currentPage, id, page };
 		});
@@ -3333,9 +3332,8 @@ riot.tag2('niltea-base', '<section class="header" ref="header"></section> <secti
 
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/about', () => {
 		riot.mount(self.refs.content, 'niltea-about');
-		if (!__WEBPACK_IMPORTED_MODULE_4__Store_Store__["a" /* default */].blogInfo) __WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].loadContent({ type: 'info' });
-
-		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].setCurrent({ current: 'about' });
+		const hasInfo = !!__WEBPACK_IMPORTED_MODULE_4__Store_Store__["a" /* default */].blogInfo;
+		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].loadContent({ type: 'info', hasInfo, current: 'about' });
 	});
 
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('*', () => {
