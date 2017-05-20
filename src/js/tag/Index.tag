@@ -73,11 +73,11 @@ import util from '../niltea_util.js';
 			// 最終ページ番号を計算
 			const maxPage = Math.ceil(Store.blogInfo.posts / limit);
 			// 次ページの取得
-			Action.loadContent({isIncrement: true, type: 'posts', query: {limit, offset: limit * currentPage}});
+			Action.loadContent({isIncrement: true, type: 'posts', query: {limit, offset: limit * currentPage}, page: nextPage});
 
 			// 最終ページかどうか判断してページのインクリメント
 			if (nextPage <= maxPage) {
-				Action.setCurrent({current: 'index', page: nextPage});
+				// Action.setCurrent({current: 'index', page: nextPage});
 			}
 			// 最終ページを読み込んだときの処理
 			if (currentPage >= maxPage) {

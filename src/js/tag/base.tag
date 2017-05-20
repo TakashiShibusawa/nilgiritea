@@ -32,22 +32,21 @@ import Constant from "../Constant/Constant";
 		Action.loadContent({type: 'posts', query: {limit}, current: 'index', page: 1}).then(() => {
 		});
 		// document.title = `${Store.blogInfo.title}`;
-		Action.setCurrent({current: 'index', page: 1});
 	});
 	// index / pagenation
 	route('/index/*', (page) => {
 		riot.mount(self.refs.content, 'niltea-index');
 		Action.loadContent({type: 'posts', query: {limit, offset: limit * (page - 1), current: 'index', page}});
 		// document.title = `${Store.blogInfo.title}`;
-		Action.setCurrent({current: 'index', page: page});
+		// Action.setCurrent({current: 'index', page: page});
 	});
 
 	// post
 	route('/post/*', (id) => {
 		riot.mount(self.refs.content, 'niltea-post');
 		riot.mount(self.refs.modal, 'niltea-modal');
-		Action.setCurrent({current: 'posts', id});
 		Action.loadContent({type: 'posts', query: {id}, current: 'posts'});
+		// Action.setCurrent({current: 'posts', id});
 	});
 
 	// about

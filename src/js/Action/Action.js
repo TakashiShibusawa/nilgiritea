@@ -22,6 +22,7 @@ const appAction = new class AppAction {
 		if (!article) return false;
 
 		RiotControl.trigger(Constant.setContent, (content) => (isIncrement) ? content.concat(article) : article );
+		if (type !== 'info') this.setCurrent({current, page, id});
 	}
 	// コンテンツのロードを行う
 	async fetchContent({type, query}){
