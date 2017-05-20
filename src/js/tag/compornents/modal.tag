@@ -11,11 +11,13 @@ import util from '../../niltea_util.js';
 <niltea-modal>
 	<div class="modal" ref='modal'>
 		<div class="modal_bg" ref='modalBg' onclick={this.hideModal}></div>
-		<figure class="figure" ref='figure'></figure>
+		<img if={figure} src={figure} class="figure" ref='figure' onclick={this.hideModal} />
+		<nav class="close lsf" ref="close" onclick={this.hideModal}>close</nav>
 	</div>
 	<script>
 		const self = this;
 		const wrapper = document.getElementById('wrapper');
+		self.figure = null;
 
 		const showModal = href => {
 			self.refs.modal.classList.add('shown');
@@ -31,7 +33,8 @@ import util from '../../niltea_util.js';
 			const href = event.target.style.backgroundImage.match(/https?:\/+[\d\w\.\/]*/)[0];
 			log('openModal', href)
 			const fig = self.refs.figure;
-			fig.style.backgroundImage = `url('${href}')`;
+			self.figure = href;
+			self.update();
 			showModal(href);
 		}
 
@@ -59,16 +62,19 @@ import util from '../../niltea_util.js';
 	<style type="text/scss">
 		@import "../../../css/includes/mixin";
 		.modal {
-			display: none;
 			position: fixed;
 			z-index: 9000;
-			left: 0;
-			top: 0;
-			width: 100%;
-			height: 0;
+			left: 50%;
+			top: 50%;
+			width: 0;
+			height: 4px;
+			transition: 0.4s $easeOut 0.3s, height 0.3s $easeOut 0s, top 0.3s $easeOut 0s;
 			&.shown {
-				display: block;
+				width: 100%;
 				height: 100%;
+				left: 0%;
+				top: 0;
+				transition: 0.4s $easeOut, height 0.5s $easeOut 0.5s, top 0.5s $easeOut 0.5s;
 			}
 		}
 		.modal_bg {
@@ -86,10 +92,27 @@ import util from '../../niltea_util.js';
 			top: 0;
 			bottom: 0;
 			margin: auto;
-			width: 80%;
-			height: 90%;
-			background: center center no-repeat;
-			background-size: contain;
+			max-width: 95%;
+			max-height: 95%;
+			opacity: 0;
+		}
+		.shown .figure {
+			transition: 0s 0.5s;
+			opacity: 1;
+		}
+		.close {
+			position: absolute;
+			left: 20px;
+			top: 2.5%;
+			font-size: 3.0em;
+			color: #fff;
+			opacity: 0;
+			cursor: pointer;
+			line-height: 1;
+		}
+		.shown .close {
+			transition: 0.2s 1.1s;
+			opacity: 1;
 		}
 	</style>
 </niltea-modal>

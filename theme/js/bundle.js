@@ -3524,9 +3524,10 @@ const log = !debug ? arg => null : (...arg) => console.log(...arg);
 
 
 
-riot.tag2('niltea-modal', '<div class="modal" ref="modal"> <div class="modal_bg" ref="modalBg" onclick="{this.hideModal}"></div> <figure class="figure" ref="figure"></figure> </div>', 'niltea-modal .clearfix,[data-is="niltea-modal"] .clearfix{ zoom: 1; } niltea-modal .clearfix:after,[data-is="niltea-modal"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-modal .txtHide,[data-is="niltea-modal"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-modal .modal,[data-is="niltea-modal"] .modal{ display: none; position: fixed; z-index: 9000; left: 0; top: 0; width: 100%; height: 0; } niltea-modal .modal.shown,[data-is="niltea-modal"] .modal.shown{ display: block; height: 100%; } niltea-modal .modal_bg,[data-is="niltea-modal"] .modal_bg{ position: absolute; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); } niltea-modal .figure,[data-is="niltea-modal"] .figure{ position: absolute; left: 0; right: 0; top: 0; bottom: 0; margin: auto; width: 80%; height: 90%; background: center center no-repeat; background-size: contain; }', '', function (opts) {
+riot.tag2('niltea-modal', '<div class="modal" ref="modal"> <div class="modal_bg" ref="modalBg" onclick="{this.hideModal}"></div> <img if="{figure}" riot-src="{figure}" class="figure" ref="figure" onclick="{this.hideModal}"> <nav class="close lsf" ref="close" onclick="{this.hideModal}">close</nav> </div>', 'niltea-modal .clearfix,[data-is="niltea-modal"] .clearfix{ zoom: 1; } niltea-modal .clearfix:after,[data-is="niltea-modal"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-modal .txtHide,[data-is="niltea-modal"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-modal .modal,[data-is="niltea-modal"] .modal{ position: fixed; z-index: 9000; left: 50%; top: 50%; width: 0; height: 4px; transition: 0.4s cubic-bezier(0.075, 0.82, 0.165, 1) 0.3s, height 0.3s cubic-bezier(0.075, 0.82, 0.165, 1) 0s, top 0.3s cubic-bezier(0.075, 0.82, 0.165, 1) 0s; } niltea-modal .modal.shown,[data-is="niltea-modal"] .modal.shown{ width: 100%; height: 100%; left: 0%; top: 0; transition: 0.4s cubic-bezier(0.075, 0.82, 0.165, 1), height 0.5s cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s, top 0.5s cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s; } niltea-modal .modal_bg,[data-is="niltea-modal"] .modal_bg{ position: absolute; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); } niltea-modal .figure,[data-is="niltea-modal"] .figure{ position: absolute; left: 0; right: 0; top: 0; bottom: 0; margin: auto; max-width: 95%; max-height: 95%; opacity: 0; } niltea-modal .shown .figure,[data-is="niltea-modal"] .shown .figure{ transition: 0s 0.5s; opacity: 1; } niltea-modal .close,[data-is="niltea-modal"] .close{ position: absolute; left: 20px; top: 2.5%; font-size: 3.0em; color: #fff; opacity: 0; cursor: pointer; line-height: 1; } niltea-modal .shown .close,[data-is="niltea-modal"] .shown .close{ transition: 0.2s 1.1s; opacity: 1; }', '', function (opts) {
 	const self = this;
 	const wrapper = document.getElementById('wrapper');
+	self.figure = null;
 
 	const showModal = href => {
 		self.refs.modal.classList.add('shown');
@@ -3541,7 +3542,8 @@ riot.tag2('niltea-modal', '<div class="modal" ref="modal"> <div class="modal_bg"
 		const href = event.target.style.backgroundImage.match(/https?:\/+[\d\w\.\/]*/)[0];
 		log('openModal', href);
 		const fig = self.refs.figure;
-		fig.style.backgroundImage = `url('${href}')`;
+		self.figure = href;
+		self.update();
 		showModal(href);
 	};
 
