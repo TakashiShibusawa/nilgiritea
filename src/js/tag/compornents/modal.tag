@@ -6,6 +6,8 @@ import RiotControl from 'riotcontrol';
 import Action from '../../Action/Action';
 import Store from '../../Store/Store';
 import Constant from "../../Constant/Constant";
+
+import util from '../../niltea_util.js';
 <niltea-modal>
 	<div class="modal" ref='modal'>
 		<div class="modal_bg" ref='modalBg' onclick={this.hideModal}></div>
@@ -13,9 +15,14 @@ import Constant from "../../Constant/Constant";
 	</div>
 	<script>
 		const self = this;
+		const wrapper = document.getElementById('wrapper');
 
 		const showModal = href => {
 			self.refs.modal.classList.add('shown');
+			// 本体のロック
+			self.scrollY = util.getScrollTop();
+			wrapper.style.position = 'fixed';
+			wrapper.style.top = self.scrollY * -1 + 'px';
 		};
 		const openModal = event => {
 			event.preventDefault();
@@ -23,7 +30,6 @@ import Constant from "../../Constant/Constant";
 			// log(el)
 			const href = event.target.style.backgroundImage.match(/https?:\/+[\d\w\.\/]*/)[0];
 			log('openModal', href)
-
 			const fig = self.refs.figure;
 			fig.style.backgroundImage = `url('${href}')`;
 			showModal(href);
@@ -31,6 +37,11 @@ import Constant from "../../Constant/Constant";
 
 		const hideModal = () => {
 			console.log('hide')
+			self.refs.modal.classList.remove('shown');
+			// 本体のロック解除
+			wrapper.style.position = '';
+			wrapper.style.top = '';
+			util.setScrollTop(self.scrollY);
 		}
 		self.hideModal = hideModal;
 		RiotControl.on(Constant.openModal, openModal );
@@ -50,6 +61,7 @@ import Constant from "../../Constant/Constant";
 		.modal {
 			display: none;
 			position: fixed;
+			z-index: 9000;
 			left: 0;
 			top: 0;
 			width: 100%;

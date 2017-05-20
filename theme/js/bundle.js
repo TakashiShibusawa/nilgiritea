@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 13);
+/******/ 	return __webpack_require__(__webpack_require__.s = 15);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -2864,7 +2864,7 @@ if (true) module.exports = RiotControl;
 "use strict";
 /* WEBPACK VAR INJECTION */(function(riot) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Constant_Constant__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Constant_Constant__ = __webpack_require__(3);
 
 
 
@@ -2945,12 +2945,60 @@ __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.addStore(store);
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+const constant = new class Constant {
+	constructor() {
+		this.api = {
+			API_KEY: "api_key=Rak7GXrKPBB6uuTODOgQL3hPLpnTAf2b2IoUjAUoBd8yLoCthg",
+			APIRoot: "http://api.tumblr.com/v2/blog/nilgiritea.tumblr.com/"
+		};
+		// indexで取得する記事数
+		this.indexPostLimit = 5;
+		this.action = {
+			fetchArticle: "fetchArticle"
+		};
+		// action types
+		this.setBlogInfo = 'setBlogInfo';
+		this.setCurrent = 'setCurrent';
+		this.setContent = 'setContent';
+		this.addContent = 'addContent';
+		this.setPageTitle = 'setPageTitle';
+		this.showLoader = 'showLoader';
+		this.setLoader = 'setLoader';
+		this.contentLoaded = 'contentLoaded';
+		this.openModal = 'openModal';
+		this.callInfScr = 'callInfScr';
+	}
+
+	_getApiKey() {
+		return this.api.API_KEY;
+	}
+	_setQS(query) {
+		if (!query) return '';
+		let queryString = '';
+		Object.keys(query).forEach(key => query[key] ? queryString += `&${key}=${query[key]}` : queryString);
+		return queryString;
+	}
+	getEndPoint({ type = 'post', query }) {
+		const queryString = this._setQS(query);
+		const endPoint = this.api.APIRoot + type + '?' + this._getApiKey() + queryString;
+		return endPoint;
+	}
+
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = (constant);
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Constant_Constant__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_whatwg_fetch__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_whatwg_fetch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_whatwg_fetch__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__niltea_util_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Constant_Constant__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jsonp_promise__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jsonp_promise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jsonp_promise__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__niltea_util_js__ = __webpack_require__(5);
 
 
 
@@ -2961,9 +3009,8 @@ const fetchParams = { mode: 'cors' };
 const tumblrAPI = new class TumblrAPI {
 	async fetchAPI(uri) {
 		if (typeof uri !== 'string') return false;
-		const res = await fetch(uri, fetchParams);
-		const json = await res.json();
-		return res.status >= 200 && res.status < 300 ? json : false;
+		const res = await __WEBPACK_IMPORTED_MODULE_2_jsonp_promise___default()(uri, { param: 'jsonp' }).promise;
+		return res.meta.status >= 200 && res.meta.status < 300 ? res : false;
 	}
 }();
 
@@ -3057,7 +3104,7 @@ const appAction = new class AppAction {
 /* harmony default export */ __webpack_exports__["a"] = (appAction);
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3162,7 +3209,7 @@ const appAction = new class AppAction {
 	}
 	// ブラウザ間の差異を吸収しつつscroll位置をセットする
 	setScrollTop(top) {
-		const tgt = Util.browser.isWebKit ? document.body : document.documentElement;
+		const tgt = this.browser.isWebKit ? document.body : document.documentElement;
 		tgt.scrollTop = top;
 	}
 	getScrollTop() {
@@ -3203,54 +3250,6 @@ const appAction = new class AppAction {
 }());
 
 /***/ }),
-/* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-const constant = new class Constant {
-	constructor() {
-		this.api = {
-			API_KEY: "api_key=Rak7GXrKPBB6uuTODOgQL3hPLpnTAf2b2IoUjAUoBd8yLoCthg",
-			APIRoot: "http://api.tumblr.com/v2/blog/nilgiritea.tumblr.com/"
-		};
-		// indexで取得する記事数
-		this.indexPostLimit = 5;
-		this.action = {
-			fetchArticle: "fetchArticle"
-		};
-		// action types
-		this.setBlogInfo = 'setBlogInfo';
-		this.setCurrent = 'setCurrent';
-		this.setContent = 'setContent';
-		this.addContent = 'addContent';
-		this.setPageTitle = 'setPageTitle';
-		this.showLoader = 'showLoader';
-		this.setLoader = 'setLoader';
-		this.contentLoaded = 'contentLoaded';
-		this.openModal = 'openModal';
-		this.callInfScr = 'callInfScr';
-	}
-
-	_getApiKey() {
-		return this.api.API_KEY;
-	}
-	_setQS(query) {
-		if (!query) return '';
-		let queryString = '';
-		Object.keys(query).forEach(key => query[key] ? queryString += `&${key}=${query[key]}` : queryString);
-		return queryString;
-	}
-	getEndPoint({ type = 'post', query }) {
-		const queryString = this._setQS(query);
-		const endPoint = this.api.APIRoot + type + '?' + this._getApiKey() + queryString;
-		return endPoint;
-	}
-
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (constant);
-
-/***/ }),
 /* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3258,7 +3257,7 @@ const constant = new class Constant {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Store_Store__ = __webpack_require__(2);
 
 var riot = __webpack_require__(0);
@@ -3282,12 +3281,12 @@ riot.tag2('niltea-about', '<section id="about" class="post page"> <h2 class="pos
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riot__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_riot_route__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_riot_route__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_riotcontrol__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Action_Action__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Action_Action__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Store_Store__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Constant_Constant__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Constant_Constant__ = __webpack_require__(3);
 
 var riot = __webpack_require__(0);
 
@@ -3348,7 +3347,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Store_Store__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Constant_Constant__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Constant_Constant__ = __webpack_require__(3);
 
 var riot = __webpack_require__(0);
 
@@ -3456,13 +3455,49 @@ riot.tag2('niltea-header', '<header class="mainHeader"> <h1> <a href="/" class="
 
 /***/ }),
 /* 10 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Store_Store__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Constant_Constant__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__class_loader__ = __webpack_require__(16);
 
 var riot = __webpack_require__(0);
-riot.tag2('raw', '<span></span>', '', '', function (opts) {
-    this.root.innerHTML = opts.content;
-    this.on('update', () => this.root.innerHTML = opts.content);
+
+
+
+
+
+
+
+
+riot.tag2('niltea-loader', '<div class="loader_container" ref="loader"> <div class="loadingMsg"> <figure class="logo"></figure> <span class="progress">loading Contents...<span id="progressContainer">0%</span></span> </div> </div>', 'niltea-loader .clearfix,[data-is="niltea-loader"] .clearfix{ zoom: 1; } niltea-loader .clearfix:after,[data-is="niltea-loader"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-loader .txtHide,[data-is="niltea-loader"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-loader .loader_container,[data-is="niltea-loader"] .loader_container{ position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 9999; background-color: #fff; display: flex; align-items: center; justify-content: center; transition: 0s; } niltea-loader .loader_container .loadingMsg,[data-is="niltea-loader"] .loader_container .loadingMsg{ position: relative; } niltea-loader .loader_container .logo,[data-is="niltea-loader"] .loader_container .logo{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; margin: 0 auto 10px; background: url(/images/nilgiri.png) no-repeat; width: 108px; height: 34px; display: block; } niltea-loader .loader_container .progress,[data-is="niltea-loader"] .loader_container .progress{ color: #111; } niltea-loader .loader_container.disabled,[data-is="niltea-loader"] .loader_container.disabled{ transition: opacity 0.5s linear 0.2s, height 0s linear 0.5s; opacity: 0; height: 0; } niltea-loader .loader_container.disabled .logo,[data-is="niltea-loader"] .loader_container.disabled .logo{ opacity: 0; transition: opacity 0.3s linear 0.2s; } niltea-loader .loader_container.disabled .progress,[data-is="niltea-loader"] .loader_container.disabled .progress{ opacity: 0; transition: opacity 0.3s linear 0s; }', '', function (opts) {
+
+	const self = this;
+
+	const contentLoaded = () => {
+		setTimeout(() => {
+			self.refs.loader.classList.add('disabled');
+		}, 0);
+
+		__WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].contentLoaded();
+	};
+	const showLoader = () => {
+		setTimeout(() => {
+			self.refs.loader.classList.remove('disabled');
+		}, 0);
+	};
+	const activateLoader = () => {
+
+		__WEBPACK_IMPORTED_MODULE_4__class_loader__["a" /* default */].activateLoader(contentLoaded);
+	};
+
+	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].showLoader, showLoader);
+	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].setLoader, activateLoader);
 });
 
 /***/ }),
@@ -3473,10 +3508,87 @@ riot.tag2('raw', '<span></span>', '', '', function (opts) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Store_Store__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Constant_Constant__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__niltea_util_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Constant_Constant__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__niltea_util_js__ = __webpack_require__(5);
+
+var riot = __webpack_require__(0);
+const debug = true;
+const log = !debug ? arg => null : (...arg) => console.log(...arg);
+
+
+
+
+
+
+
+
+riot.tag2('niltea-modal', '<div class="modal" ref="modal"> <div class="modal_bg" ref="modalBg" onclick="{this.hideModal}"></div> <figure class="figure" ref="figure"></figure> </div>', 'niltea-modal .clearfix,[data-is="niltea-modal"] .clearfix{ zoom: 1; } niltea-modal .clearfix:after,[data-is="niltea-modal"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-modal .txtHide,[data-is="niltea-modal"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-modal .modal,[data-is="niltea-modal"] .modal{ display: none; position: fixed; z-index: 9000; left: 0; top: 0; width: 100%; height: 0; } niltea-modal .modal.shown,[data-is="niltea-modal"] .modal.shown{ display: block; height: 100%; } niltea-modal .modal_bg,[data-is="niltea-modal"] .modal_bg{ position: absolute; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); } niltea-modal .figure,[data-is="niltea-modal"] .figure{ position: absolute; left: 0; right: 0; top: 0; bottom: 0; margin: auto; width: 80%; height: 90%; background: center center no-repeat; background-size: contain; }', '', function (opts) {
+	const self = this;
+	const wrapper = document.getElementById('wrapper');
+
+	const showModal = href => {
+		self.refs.modal.classList.add('shown');
+
+		self.scrollY = __WEBPACK_IMPORTED_MODULE_4__niltea_util_js__["a" /* default */].getScrollTop();
+		wrapper.style.position = 'fixed';
+		wrapper.style.top = self.scrollY * -1 + 'px';
+	};
+	const openModal = event => {
+		event.preventDefault();
+
+		const href = event.target.style.backgroundImage.match(/https?:\/+[\d\w\.\/]*/)[0];
+		log('openModal', href);
+		const fig = self.refs.figure;
+		fig.style.backgroundImage = `url('${href}')`;
+		showModal(href);
+	};
+
+	const hideModal = () => {
+		console.log('hide');
+		self.refs.modal.classList.remove('shown');
+
+		wrapper.style.position = '';
+		wrapper.style.top = '';
+		__WEBPACK_IMPORTED_MODULE_4__niltea_util_js__["a" /* default */].setScrollTop(self.scrollY);
+	};
+	self.hideModal = hideModal;
+	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].openModal, openModal);
+
+	const unMountSelf = () => {
+		if (__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].current.currentPage === 'posts') return;
+		self.unmount(true);
+	};
+	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changedCurrent, unMountSelf);
+	self.on('unmount', () => {
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changedCurrent, unMountSelf);
+	});
+});
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var riot = __webpack_require__(0);
+riot.tag2('raw', '<span></span>', '', '', function (opts) {
+    this.root.innerHTML = opts.content;
+    this.on('update', () => this.root.innerHTML = opts.content);
+});
+
+/***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Store_Store__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Constant_Constant__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__niltea_util_js__ = __webpack_require__(5);
 
 var riot = __webpack_require__(0);
 
@@ -3592,14 +3704,14 @@ riot.tag2('niltea-index-list-lead', '<span class="line" each="{content in lines}
 });
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Store_Store__ = __webpack_require__(2);
 
 var riot = __webpack_require__(0);
@@ -3607,7 +3719,7 @@ var riot = __webpack_require__(0);
 
 
 
-riot.tag2('niltea-post', '<article class="post post-single"> <h2 class="post_title"><raw content="{title}"></raw></h2> <section class="photo" if="{photos}" ref="photo"> <div if="{!isPhotoSet}" class="photo_rowContainer layout_itemCount-1" ref="rowContainer"> <a class="photo_item photo_item-single" if="{!isPhotoSet}" each="{photos}" href="{original_size.url}" onclick="{this.openModal}"> <figure class="photo_item_image" riot-style="background-image: url({alt_sizes[0].url})"></figure> </a> </div> <div if="{isPhotoSet}" each="{row in photoset}" class="photo_rowContainer layout_itemCount-{row.length}" ref="rowContainer"> <a class="photo_item photo_item-set" each="{row}" href="{original_size.url}" onclick="{this.openModal}"> <figure class="photo_item_image" riot-style="background-image: url({alt_sizes[0].url})"></figure> </a> </div> </section> <section class="post_text" if="{caption}" onclick="{this.openModal}"><raw content="{caption}"></raw></section> <div class="post_meta"> <a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="reblog lsf" target="_blank">retweet</a> <a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="like lsf" target="_blank">{heart}</a> </div> </article>', 'niltea-post .photo,[data-is="niltea-post"] .photo{ max-width: 800px; margin: 0 auto; border-radius: 2px; overflow: hidden; text-align: center; } niltea-post .photo_item,[data-is="niltea-post"] .photo_item{ display: block; width: 100%; line-height: 1; font-size: 0; } niltea-post .photo_rowContainer,[data-is="niltea-post"] .photo_rowContainer{ overflow: hidden; line-height: 1; font-size: 0; } niltea-post .photo_item-set,[data-is="niltea-post"] .photo_item-set{ display: inline-block; height: 400px; } niltea-post .layout_itemCount-2 .photo_item-set,[data-is="niltea-post"] .layout_itemCount-2 .photo_item-set{ width: 50%; } niltea-post .layout_itemCount-3 .photo_item-set,[data-is="niltea-post"] .layout_itemCount-3 .photo_item-set{ width: 33%; } niltea-post .photo_item_image,[data-is="niltea-post"] .photo_item_image{ width: 100%; height: 800px; background: center center no-repeat; background-size: cover; } niltea-post .post_text,[data-is="niltea-post"] .post_text{ max-width: 800px; min-width: 25em; margin: 4vw auto 0; padding: 2em; box-sizing: border-box; border-radius: 2px; background-color: #3dffcf; font-size: 1.4em; line-height: 1.75em; letter-spacing: 0.1em; } niltea-post .post_meta,[data-is="niltea-post"] .post_meta{ max-width: 800px; min-width: 25em; margin: 2vw auto 0; font-size: 1.3em; } niltea-post .post_meta a,[data-is="niltea-post"] .post_meta a{ text-decoration: none; font-size: 2em; margin-right: 0.5em; } niltea-post .post_meta .reblog,[data-is="niltea-post"] .post_meta .reblog{ color: #222; } niltea-post .post_meta .like,[data-is="niltea-post"] .post_meta .like{ color: #c22; } @media screen and (max-width: 37.5em) { niltea-post .post_title,[data-is="niltea-post"] .post_title{ font-size: 2.2em; } niltea-post .post_text,[data-is="niltea-post"] .post_text{ font-size: 1.4em; } }', '', function (opts) {
+riot.tag2('niltea-post', '<article class="post post-single"> <h2 class="post_title"><raw content="{title}"></raw></h2> <section class="photo" if="{photos}" ref="photo"> <div if="{!isPhotoSet}" class="photo_rowContainer layout_itemCount-1" ref="rowContainer"> <a class="photo_item photo_item-single" if="{!isPhotoSet}" each="{photos}" href="{original_size.url}" onclick="{openModal}"> <figure class="photo_item_image" riot-style="background-image: url({alt_sizes[0].url})"></figure> </a> </div> <div if="{isPhotoSet}" each="{row in photoset}" class="photo_rowContainer layout_itemCount-{row.length}" ref="rowContainer"> <a class="photo_item photo_item-set" each="{row}" href="{original_size.url}" onclick="{openModal}"> <figure class="photo_item_image" riot-style="background-image: url({alt_sizes[0].url})"></figure> </a> </div> </section> <section class="post_text" if="{caption}"><raw content="{caption}"></raw></section> <div class="post_meta"> <a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="reblog lsf" target="_blank">retweet</a> <a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="like lsf" target="_blank">{heart}</a> </div> </article>', 'niltea-post .photo,[data-is="niltea-post"] .photo{ max-width: 800px; margin: 0 auto; border-radius: 2px; overflow: hidden; text-align: center; } niltea-post .photo_item,[data-is="niltea-post"] .photo_item{ display: block; width: 100%; line-height: 1; font-size: 0; } niltea-post .photo_rowContainer,[data-is="niltea-post"] .photo_rowContainer{ overflow: hidden; line-height: 1; font-size: 0; } niltea-post .photo_item-set,[data-is="niltea-post"] .photo_item-set{ display: inline-block; height: 400px; } niltea-post .layout_itemCount-2 .photo_item-set,[data-is="niltea-post"] .layout_itemCount-2 .photo_item-set{ width: 50%; } niltea-post .layout_itemCount-3 .photo_item-set,[data-is="niltea-post"] .layout_itemCount-3 .photo_item-set{ width: 33%; } niltea-post .photo_item_image,[data-is="niltea-post"] .photo_item_image{ width: 100%; height: 800px; background: center center no-repeat; background-size: cover; } niltea-post .post_text,[data-is="niltea-post"] .post_text{ max-width: 800px; min-width: 25em; margin: 4vw auto 0; padding: 2em; box-sizing: border-box; border-radius: 2px; background-color: #3dffcf; font-size: 1.4em; line-height: 1.75em; letter-spacing: 0.1em; } niltea-post .post_meta,[data-is="niltea-post"] .post_meta{ max-width: 800px; min-width: 25em; margin: 2vw auto 0; font-size: 1.3em; } niltea-post .post_meta a,[data-is="niltea-post"] .post_meta a{ text-decoration: none; font-size: 2em; margin-right: 0.5em; } niltea-post .post_meta .reblog,[data-is="niltea-post"] .post_meta .reblog{ color: #222; } niltea-post .post_meta .like,[data-is="niltea-post"] .post_meta .like{ color: #c22; } @media screen and (max-width: 37.5em) { niltea-post .post_title,[data-is="niltea-post"] .post_title{ font-size: 2.2em; } niltea-post .post_text,[data-is="niltea-post"] .post_text{ font-size: 1.4em; } }', '', function (opts) {
 	const self = this;
 	const contentKeys = ['id', 'caption', 'title', 'date', 'type', 'url', 'photos', 'photoset_layout', 'reblog_key'];
 	self.isPhotoSet = false;
@@ -3677,32 +3789,226 @@ riot.tag2('niltea-post', '<article class="post post-single"> <h2 class="post_tit
 });
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(riot) {Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__niltea_util_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__niltea_util_js__ = __webpack_require__(5);
 // import utility
 
 
 // riot and tags
 __webpack_require__(0);
 __webpack_require__(7);
-__webpack_require__(11);
-__webpack_require__(12);
+__webpack_require__(13);
+__webpack_require__(14);
 __webpack_require__(6);
 __webpack_require__(9);
 __webpack_require__(8);
+__webpack_require__(12);
 __webpack_require__(10);
-__webpack_require__(17);
-__webpack_require__(19);
+__webpack_require__(11);
 
 riot.mount('#wrapper', 'niltea-base');
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 14 */
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+const debug = false;
+const backgroundImageClassname = 'loader_bgi';
+
+const log = !debug ? arg => null : (...arg) => console.log(...arg);
+/* harmony default export */ __webpack_exports__["a"] = (new class Loader {
+	constructor() {
+		document.addEventListener('DOMContentLoaded', () => {
+			log('Loader constructor called');
+		});
+	}
+	activateLoader(onComplete, onEach, progressContainer) {
+		log('Loader activateLoader called');
+		// ロード済みの画像数
+		this.receivedCount = 0;
+		// 画像を探してくる
+		this.images = this.findImages();
+		this.expectedCount = this.images.length;
+		// 完了時の動作が定義されていればそれを使う
+		this.onComplete = typeof onComplete === 'function' ? onComplete : this.contentLoaded;
+		// 画像読み込みごとの動作が定義されていればそれを使う。
+		// なければ定義する
+		if (typeof onEach !== 'function') {
+			this.progressContainer = progressContainer ? progressContainer : document.getElementById('progressContainer');
+			onEach = !this.progressContainer ? null : receivedCount => {
+				const progress = Math.round(receivedCount / this.expectedCount * 100) + '%';
+				this.progressContainer.textContent = progress;
+			};
+		}
+		this.onEach = onEach;
+
+		log('images', this.images);
+		log('onComplete', this.onComplete);
+		log('onEach', this.onEach);
+		this.setWatcher();
+	}
+	findImages() {
+		log('Loader findImages called');
+		const images = [];
+		// img要素を探してくる
+		const targets_img = [].slice.call(document.getElementsByTagName('img'));
+		targets_img.forEach(el => {
+			let _src = el.getAttribute('src');
+			// srcが空なら中断
+			if (!_src) return;
+			images.push(_src);
+		});
+
+		const targets_bgi = [].slice.call(document.getElementsByClassName(backgroundImageClassname));
+		const bgi = "background-image";
+		targets_bgi.forEach(el => {
+			// elementが空なら中断
+			if (!el) return;
+			// 背景画像を取得し、取得できなければ中断
+			let _src = el.style[bgi] || getComputedStyle(el, "")[bgi];
+			if (!_src || _src == 'none') return;
+
+			// 画像をpush
+			images.push(_src.replace(/^url\(|\"|\)$/g, ''));
+		});
+		return images;
+	}
+	setWatcher() {
+		log('Loader setWatcher called');
+		// if images is empty, go to loaded Function
+		if (!this.images || this.images.length <= 0) {
+			this.onComplete();
+			return;
+		}
+
+		//画像の数だけ_loadListenerが呼ばれたらcallbackが呼ばれる
+		// const _loadListener(expectedCount = , setting.onEach, setting.onComplete);
+		this.images.forEach(url => {
+			const img = new Image();
+			document.body.appendChild(img);
+			img.width = img.height = 1;
+			img.onload = this._loadListener.bind(this);
+			img.src = url;
+		});
+	}
+	_loadListener(e) {
+		// remove temporary image
+		const tgt = e.target;
+		if (tgt) tgt.parentNode.removeChild(tgt);
+		this.receivedCount += 1;
+		if (this.onEach) this.onEach(this.receivedCount);
+		if (this.receivedCount >= this.expectedCount) {
+			this.onComplete();
+		}
+	}
+	contentLoaded() {
+		log('Loader contentLoaded called');
+	}
+}());
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports) {
+
+/**
+ * MIT license
+ */
+
+// Callback index.
+var count = 0;
+
+/**
+ * JSONP handler
+ *
+ * Options:
+ * - prefix {String} callback prefix (defaults to `__jp`)
+ * - param {String} qs parameter (defaults to `callback`)
+ * - timeout {Number} how long after the request until a timeout error
+ *   is emitted (defaults to `15000`)
+ *
+ * @param {String} url
+ * @param {Object} options optional options
+ * @return {Object} Returns a response promise and a cancel handler.
+ */
+var jsonp = function(url, options) {
+    options = options || {};
+
+    var prefix = options.prefix || '__jp';
+    var param = options.param || 'callback';
+    var timeout = options.timeout ? options.timeout : 15000;
+    var target = document.getElementsByTagName('script')[0] || document.head;
+    var script;
+    var timer;
+    var cleanup;
+    var cancel;
+    var promise;
+    var noop = function() {};
+
+    // Generate a unique id for the request.
+    var id = prefix + (count++);
+
+    cleanup = function() {
+        // Remove the script tag.
+        if (script && script.parentNode) {
+            script.parentNode.removeChild(script);
+        }
+
+        window[id] = noop;
+
+        if (timer) {
+            clearTimeout(timer);
+        }
+    };
+
+    promise = new Promise(function(resolve, reject) {
+        if (timeout) {
+            timer = setTimeout(function() {
+                cleanup();
+                reject(new Error('Timeout'));
+            }, timeout);
+        }
+
+        window[id] = function(data) {
+            cleanup();
+            resolve(data);
+        };
+
+        // Add querystring component
+        url += (~url.indexOf('?') ? '&' : '?') + param + '=' + encodeURIComponent(id);
+        url = url.replace('?&', '?');
+
+        // Create script.
+        script = document.createElement('script');
+        script.src = url;
+        target.parentNode.insertBefore(script, target);
+
+        cancel = function() {
+            if (window[id]) {
+                cleanup();
+                reject(new Error('Canceled'));
+            }
+        };
+
+    });
+
+    return {
+        promise: promise,
+        cancel: cancel
+    };
+};
+
+module.exports = jsonp;
+
+
+
+/***/ }),
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 ;(function(window, undefined) {var observable = function(el) {
@@ -3840,11 +4146,11 @@ riot.mount('#wrapper', 'niltea-base');
 })(typeof window != 'undefined' ? window : undefined);
 
 /***/ }),
-/* 15 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot_observable__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot_observable__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot_observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riot_observable__);
 
 
@@ -4194,664 +4500,6 @@ route.parser();
 
 /* harmony default export */ __webpack_exports__["a"] = (route);
 
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports) {
-
-(function(self) {
-  'use strict';
-
-  if (self.fetch) {
-    return
-  }
-
-  var support = {
-    searchParams: 'URLSearchParams' in self,
-    iterable: 'Symbol' in self && 'iterator' in Symbol,
-    blob: 'FileReader' in self && 'Blob' in self && (function() {
-      try {
-        new Blob()
-        return true
-      } catch(e) {
-        return false
-      }
-    })(),
-    formData: 'FormData' in self,
-    arrayBuffer: 'ArrayBuffer' in self
-  }
-
-  if (support.arrayBuffer) {
-    var viewClasses = [
-      '[object Int8Array]',
-      '[object Uint8Array]',
-      '[object Uint8ClampedArray]',
-      '[object Int16Array]',
-      '[object Uint16Array]',
-      '[object Int32Array]',
-      '[object Uint32Array]',
-      '[object Float32Array]',
-      '[object Float64Array]'
-    ]
-
-    var isDataView = function(obj) {
-      return obj && DataView.prototype.isPrototypeOf(obj)
-    }
-
-    var isArrayBufferView = ArrayBuffer.isView || function(obj) {
-      return obj && viewClasses.indexOf(Object.prototype.toString.call(obj)) > -1
-    }
-  }
-
-  function normalizeName(name) {
-    if (typeof name !== 'string') {
-      name = String(name)
-    }
-    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
-      throw new TypeError('Invalid character in header field name')
-    }
-    return name.toLowerCase()
-  }
-
-  function normalizeValue(value) {
-    if (typeof value !== 'string') {
-      value = String(value)
-    }
-    return value
-  }
-
-  // Build a destructive iterator for the value list
-  function iteratorFor(items) {
-    var iterator = {
-      next: function() {
-        var value = items.shift()
-        return {done: value === undefined, value: value}
-      }
-    }
-
-    if (support.iterable) {
-      iterator[Symbol.iterator] = function() {
-        return iterator
-      }
-    }
-
-    return iterator
-  }
-
-  function Headers(headers) {
-    this.map = {}
-
-    if (headers instanceof Headers) {
-      headers.forEach(function(value, name) {
-        this.append(name, value)
-      }, this)
-    } else if (Array.isArray(headers)) {
-      headers.forEach(function(header) {
-        this.append(header[0], header[1])
-      }, this)
-    } else if (headers) {
-      Object.getOwnPropertyNames(headers).forEach(function(name) {
-        this.append(name, headers[name])
-      }, this)
-    }
-  }
-
-  Headers.prototype.append = function(name, value) {
-    name = normalizeName(name)
-    value = normalizeValue(value)
-    var oldValue = this.map[name]
-    this.map[name] = oldValue ? oldValue+','+value : value
-  }
-
-  Headers.prototype['delete'] = function(name) {
-    delete this.map[normalizeName(name)]
-  }
-
-  Headers.prototype.get = function(name) {
-    name = normalizeName(name)
-    return this.has(name) ? this.map[name] : null
-  }
-
-  Headers.prototype.has = function(name) {
-    return this.map.hasOwnProperty(normalizeName(name))
-  }
-
-  Headers.prototype.set = function(name, value) {
-    this.map[normalizeName(name)] = normalizeValue(value)
-  }
-
-  Headers.prototype.forEach = function(callback, thisArg) {
-    for (var name in this.map) {
-      if (this.map.hasOwnProperty(name)) {
-        callback.call(thisArg, this.map[name], name, this)
-      }
-    }
-  }
-
-  Headers.prototype.keys = function() {
-    var items = []
-    this.forEach(function(value, name) { items.push(name) })
-    return iteratorFor(items)
-  }
-
-  Headers.prototype.values = function() {
-    var items = []
-    this.forEach(function(value) { items.push(value) })
-    return iteratorFor(items)
-  }
-
-  Headers.prototype.entries = function() {
-    var items = []
-    this.forEach(function(value, name) { items.push([name, value]) })
-    return iteratorFor(items)
-  }
-
-  if (support.iterable) {
-    Headers.prototype[Symbol.iterator] = Headers.prototype.entries
-  }
-
-  function consumed(body) {
-    if (body.bodyUsed) {
-      return Promise.reject(new TypeError('Already read'))
-    }
-    body.bodyUsed = true
-  }
-
-  function fileReaderReady(reader) {
-    return new Promise(function(resolve, reject) {
-      reader.onload = function() {
-        resolve(reader.result)
-      }
-      reader.onerror = function() {
-        reject(reader.error)
-      }
-    })
-  }
-
-  function readBlobAsArrayBuffer(blob) {
-    var reader = new FileReader()
-    var promise = fileReaderReady(reader)
-    reader.readAsArrayBuffer(blob)
-    return promise
-  }
-
-  function readBlobAsText(blob) {
-    var reader = new FileReader()
-    var promise = fileReaderReady(reader)
-    reader.readAsText(blob)
-    return promise
-  }
-
-  function readArrayBufferAsText(buf) {
-    var view = new Uint8Array(buf)
-    var chars = new Array(view.length)
-
-    for (var i = 0; i < view.length; i++) {
-      chars[i] = String.fromCharCode(view[i])
-    }
-    return chars.join('')
-  }
-
-  function bufferClone(buf) {
-    if (buf.slice) {
-      return buf.slice(0)
-    } else {
-      var view = new Uint8Array(buf.byteLength)
-      view.set(new Uint8Array(buf))
-      return view.buffer
-    }
-  }
-
-  function Body() {
-    this.bodyUsed = false
-
-    this._initBody = function(body) {
-      this._bodyInit = body
-      if (!body) {
-        this._bodyText = ''
-      } else if (typeof body === 'string') {
-        this._bodyText = body
-      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
-        this._bodyBlob = body
-      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
-        this._bodyFormData = body
-      } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
-        this._bodyText = body.toString()
-      } else if (support.arrayBuffer && support.blob && isDataView(body)) {
-        this._bodyArrayBuffer = bufferClone(body.buffer)
-        // IE 10-11 can't handle a DataView body.
-        this._bodyInit = new Blob([this._bodyArrayBuffer])
-      } else if (support.arrayBuffer && (ArrayBuffer.prototype.isPrototypeOf(body) || isArrayBufferView(body))) {
-        this._bodyArrayBuffer = bufferClone(body)
-      } else {
-        throw new Error('unsupported BodyInit type')
-      }
-
-      if (!this.headers.get('content-type')) {
-        if (typeof body === 'string') {
-          this.headers.set('content-type', 'text/plain;charset=UTF-8')
-        } else if (this._bodyBlob && this._bodyBlob.type) {
-          this.headers.set('content-type', this._bodyBlob.type)
-        } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
-          this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8')
-        }
-      }
-    }
-
-    if (support.blob) {
-      this.blob = function() {
-        var rejected = consumed(this)
-        if (rejected) {
-          return rejected
-        }
-
-        if (this._bodyBlob) {
-          return Promise.resolve(this._bodyBlob)
-        } else if (this._bodyArrayBuffer) {
-          return Promise.resolve(new Blob([this._bodyArrayBuffer]))
-        } else if (this._bodyFormData) {
-          throw new Error('could not read FormData body as blob')
-        } else {
-          return Promise.resolve(new Blob([this._bodyText]))
-        }
-      }
-
-      this.arrayBuffer = function() {
-        if (this._bodyArrayBuffer) {
-          return consumed(this) || Promise.resolve(this._bodyArrayBuffer)
-        } else {
-          return this.blob().then(readBlobAsArrayBuffer)
-        }
-      }
-    }
-
-    this.text = function() {
-      var rejected = consumed(this)
-      if (rejected) {
-        return rejected
-      }
-
-      if (this._bodyBlob) {
-        return readBlobAsText(this._bodyBlob)
-      } else if (this._bodyArrayBuffer) {
-        return Promise.resolve(readArrayBufferAsText(this._bodyArrayBuffer))
-      } else if (this._bodyFormData) {
-        throw new Error('could not read FormData body as text')
-      } else {
-        return Promise.resolve(this._bodyText)
-      }
-    }
-
-    if (support.formData) {
-      this.formData = function() {
-        return this.text().then(decode)
-      }
-    }
-
-    this.json = function() {
-      return this.text().then(JSON.parse)
-    }
-
-    return this
-  }
-
-  // HTTP methods whose capitalization should be normalized
-  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
-
-  function normalizeMethod(method) {
-    var upcased = method.toUpperCase()
-    return (methods.indexOf(upcased) > -1) ? upcased : method
-  }
-
-  function Request(input, options) {
-    options = options || {}
-    var body = options.body
-
-    if (input instanceof Request) {
-      if (input.bodyUsed) {
-        throw new TypeError('Already read')
-      }
-      this.url = input.url
-      this.credentials = input.credentials
-      if (!options.headers) {
-        this.headers = new Headers(input.headers)
-      }
-      this.method = input.method
-      this.mode = input.mode
-      if (!body && input._bodyInit != null) {
-        body = input._bodyInit
-        input.bodyUsed = true
-      }
-    } else {
-      this.url = String(input)
-    }
-
-    this.credentials = options.credentials || this.credentials || 'omit'
-    if (options.headers || !this.headers) {
-      this.headers = new Headers(options.headers)
-    }
-    this.method = normalizeMethod(options.method || this.method || 'GET')
-    this.mode = options.mode || this.mode || null
-    this.referrer = null
-
-    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
-      throw new TypeError('Body not allowed for GET or HEAD requests')
-    }
-    this._initBody(body)
-  }
-
-  Request.prototype.clone = function() {
-    return new Request(this, { body: this._bodyInit })
-  }
-
-  function decode(body) {
-    var form = new FormData()
-    body.trim().split('&').forEach(function(bytes) {
-      if (bytes) {
-        var split = bytes.split('=')
-        var name = split.shift().replace(/\+/g, ' ')
-        var value = split.join('=').replace(/\+/g, ' ')
-        form.append(decodeURIComponent(name), decodeURIComponent(value))
-      }
-    })
-    return form
-  }
-
-  function parseHeaders(rawHeaders) {
-    var headers = new Headers()
-    rawHeaders.split(/\r?\n/).forEach(function(line) {
-      var parts = line.split(':')
-      var key = parts.shift().trim()
-      if (key) {
-        var value = parts.join(':').trim()
-        headers.append(key, value)
-      }
-    })
-    return headers
-  }
-
-  Body.call(Request.prototype)
-
-  function Response(bodyInit, options) {
-    if (!options) {
-      options = {}
-    }
-
-    this.type = 'default'
-    this.status = 'status' in options ? options.status : 200
-    this.ok = this.status >= 200 && this.status < 300
-    this.statusText = 'statusText' in options ? options.statusText : 'OK'
-    this.headers = new Headers(options.headers)
-    this.url = options.url || ''
-    this._initBody(bodyInit)
-  }
-
-  Body.call(Response.prototype)
-
-  Response.prototype.clone = function() {
-    return new Response(this._bodyInit, {
-      status: this.status,
-      statusText: this.statusText,
-      headers: new Headers(this.headers),
-      url: this.url
-    })
-  }
-
-  Response.error = function() {
-    var response = new Response(null, {status: 0, statusText: ''})
-    response.type = 'error'
-    return response
-  }
-
-  var redirectStatuses = [301, 302, 303, 307, 308]
-
-  Response.redirect = function(url, status) {
-    if (redirectStatuses.indexOf(status) === -1) {
-      throw new RangeError('Invalid status code')
-    }
-
-    return new Response(null, {status: status, headers: {location: url}})
-  }
-
-  self.Headers = Headers
-  self.Request = Request
-  self.Response = Response
-
-  self.fetch = function(input, init) {
-    return new Promise(function(resolve, reject) {
-      var request = new Request(input, init)
-      var xhr = new XMLHttpRequest()
-
-      xhr.onload = function() {
-        var options = {
-          status: xhr.status,
-          statusText: xhr.statusText,
-          headers: parseHeaders(xhr.getAllResponseHeaders() || '')
-        }
-        options.url = 'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL')
-        var body = 'response' in xhr ? xhr.response : xhr.responseText
-        resolve(new Response(body, options))
-      }
-
-      xhr.onerror = function() {
-        reject(new TypeError('Network request failed'))
-      }
-
-      xhr.ontimeout = function() {
-        reject(new TypeError('Network request failed'))
-      }
-
-      xhr.open(request.method, request.url, true)
-
-      if (request.credentials === 'include') {
-        xhr.withCredentials = true
-      }
-
-      if ('responseType' in xhr && support.blob) {
-        xhr.responseType = 'blob'
-      }
-
-      request.headers.forEach(function(value, name) {
-        xhr.setRequestHeader(name, value)
-      })
-
-      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
-    })
-  }
-  self.fetch.polyfill = true
-})(typeof self !== 'undefined' ? self : this);
-
-
-/***/ }),
-/* 17 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Store_Store__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Constant_Constant__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__class_loader__ = __webpack_require__(18);
-
-var riot = __webpack_require__(0);
-
-
-
-
-
-
-
-
-riot.tag2('niltea-loader', '<div class="loader_container" ref="loader"> <div class="loadingMsg"> <figure class="logo"></figure> <span class="progress">loading Contents...<span id="progressContainer">0%</span></span> </div> </div>', 'niltea-loader .clearfix,[data-is="niltea-loader"] .clearfix{ zoom: 1; } niltea-loader .clearfix:after,[data-is="niltea-loader"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-loader .txtHide,[data-is="niltea-loader"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-loader .loader_container,[data-is="niltea-loader"] .loader_container{ position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 9999; background-color: #fff; display: flex; align-items: center; justify-content: center; transition: 0s; } niltea-loader .loader_container .loadingMsg,[data-is="niltea-loader"] .loader_container .loadingMsg{ position: relative; } niltea-loader .loader_container .logo,[data-is="niltea-loader"] .loader_container .logo{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; margin: 0 auto 10px; background: url(/images/nilgiri.png) no-repeat; width: 108px; height: 34px; display: block; } niltea-loader .loader_container .progress,[data-is="niltea-loader"] .loader_container .progress{ color: #111; } niltea-loader .loader_container.disabled,[data-is="niltea-loader"] .loader_container.disabled{ transition: opacity 0.5s linear 0.2s, height 0s linear 0.5s; opacity: 0; height: 0; } niltea-loader .loader_container.disabled .logo,[data-is="niltea-loader"] .loader_container.disabled .logo{ opacity: 0; transition: opacity 0.3s linear 0.2s; } niltea-loader .loader_container.disabled .progress,[data-is="niltea-loader"] .loader_container.disabled .progress{ opacity: 0; transition: opacity 0.3s linear 0s; }', '', function (opts) {
-
-	const self = this;
-
-	const contentLoaded = () => {
-		setTimeout(() => {
-			self.refs.loader.classList.add('disabled');
-		}, 0);
-
-		__WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].contentLoaded();
-	};
-	const showLoader = () => {
-		setTimeout(() => {
-			self.refs.loader.classList.remove('disabled');
-		}, 0);
-	};
-	const activateLoader = () => {
-
-		__WEBPACK_IMPORTED_MODULE_4__class_loader__["a" /* default */].activateLoader(contentLoaded);
-	};
-
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].showLoader, showLoader);
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].setLoader, activateLoader);
-});
-
-/***/ }),
-/* 18 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-const debug = false;
-const backgroundImageClassname = 'loader_bgi';
-
-const log = !debug ? arg => null : (...arg) => console.log(...arg);
-/* harmony default export */ __webpack_exports__["a"] = (new class Loader {
-	constructor() {
-		document.addEventListener('DOMContentLoaded', () => {
-			log('Loader constructor called');
-		});
-	}
-	activateLoader(onComplete, onEach, progressContainer) {
-		log('Loader activateLoader called');
-		// ロード済みの画像数
-		this.receivedCount = 0;
-		// 画像を探してくる
-		this.images = this.findImages();
-		this.expectedCount = this.images.length;
-		// 完了時の動作が定義されていればそれを使う
-		this.onComplete = typeof onComplete === 'function' ? onComplete : this.contentLoaded;
-		// 画像読み込みごとの動作が定義されていればそれを使う。
-		// なければ定義する
-		if (typeof onEach !== 'function') {
-			this.progressContainer = progressContainer ? progressContainer : document.getElementById('progressContainer');
-			onEach = !this.progressContainer ? null : receivedCount => {
-				const progress = Math.round(receivedCount / this.expectedCount * 100) + '%';
-				this.progressContainer.textContent = progress;
-			};
-		}
-		this.onEach = onEach;
-
-		log('images', this.images);
-		log('onComplete', this.onComplete);
-		log('onEach', this.onEach);
-		this.setWatcher();
-	}
-	findImages() {
-		log('Loader findImages called');
-		const images = [];
-		// img要素を探してくる
-		const targets_img = [].slice.call(document.getElementsByTagName('img'));
-		targets_img.forEach(el => {
-			let _src = el.getAttribute('src');
-			// srcが空なら中断
-			if (!_src) return;
-			images.push(_src);
-		});
-
-		const targets_bgi = [].slice.call(document.getElementsByClassName(backgroundImageClassname));
-		const bgi = "background-image";
-		targets_bgi.forEach(el => {
-			// elementが空なら中断
-			if (!el) return;
-			// 背景画像を取得し、取得できなければ中断
-			let _src = el.style[bgi] || getComputedStyle(el, "")[bgi];
-			if (!_src || _src == 'none') return;
-
-			// 画像をpush
-			images.push(_src.replace(/^url\(|\"|\)$/g, ''));
-		});
-		return images;
-	}
-	setWatcher() {
-		log('Loader setWatcher called');
-		// if images is empty, go to loaded Function
-		if (!this.images || this.images.length <= 0) {
-			this.onComplete();
-			return;
-		}
-
-		//画像の数だけ_loadListenerが呼ばれたらcallbackが呼ばれる
-		// const _loadListener(expectedCount = , setting.onEach, setting.onComplete);
-		this.images.forEach(url => {
-			const img = new Image();
-			document.body.appendChild(img);
-			img.width = img.height = 1;
-			img.onload = this._loadListener.bind(this);
-			img.src = url;
-		});
-	}
-	_loadListener(e) {
-		// remove temporary image
-		const tgt = e.target;
-		if (tgt) tgt.parentNode.removeChild(tgt);
-		this.receivedCount += 1;
-		if (this.onEach) this.onEach(this.receivedCount);
-		if (this.receivedCount >= this.expectedCount) {
-			this.onComplete();
-		}
-	}
-	contentLoaded() {
-		log('Loader contentLoaded called');
-	}
-}());
-
-/***/ }),
-/* 19 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Store_Store__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Constant_Constant__ = __webpack_require__(5);
-
-var riot = __webpack_require__(0);
-
-
-
-
-
-riot.tag2('niltea-modal', '<div class="modal" ref="modal"> <div class="modal_bg" ref="modalBg" onclick="{this.hideModal}"></div> <figure class="content" ref="content"></figure> </div>', 'niltea-modal .clearfix,[data-is="niltea-modal"] .clearfix{ zoom: 1; } niltea-modal .clearfix:after,[data-is="niltea-modal"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-modal .txtHide,[data-is="niltea-modal"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-modal .modal,[data-is="niltea-modal"] .modal{ display: none; position: fixed; left: 0; top: 0; width: 50%; height: 50%; } niltea-modal .modal_bg,[data-is="niltea-modal"] .modal_bg{ position: absolute; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); } niltea-modal .content,[data-is="niltea-modal"] .content{ position: absolute; left: 0; right: 0; top: 0; bottom: 0; margin: auto; width: 80%; height: 90%; background: center center no-repeat; background-size: contain; }', '', function (opts) {
-	const self = this;
-
-	const openModal = event => {
-		event.preventDefault();
-		const el = event.target.nodeName === 'IMG' ? event.target.parentNode : event.target;
-		const href = el.href;
-
-		const fig = self.refs.content;
-		fig.style.backgroundImage = `url('${href}')`;
-	};
-	const hideModal = () => {
-		console.log('hide');
-	};
-	self.hideModal = hideModal;
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].openModal, openModal);
-
-	const unMountSelf = () => {
-		if (__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].current.currentPage === 'posts') return;
-		self.unmount(true);
-	};
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changedCurrent, unMountSelf);
-	self.on('unmount', () => {
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changedCurrent, unMountSelf);
-	});
-});
 
 /***/ })
 /******/ ]);
