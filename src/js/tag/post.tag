@@ -82,14 +82,14 @@ import Store from '../Store/Store';
 			if (!self.isPhotoSet) return;
 
 			// photosetの画像全て読み込み完了後にレイアウトをセットする
-			const photoCount = self.refs.photoItem.length;
-			let loadedCount = 0;
-			self.refs.photoItem.forEach(photo => {
-				photo.addEventListener('load', () => {
-					loadedCount += 1;
-					if (loadedCount >= photoCount) layoutPhotoset();
-				})
-			})
+			// const photoCount = self.refs.photoItem.length;
+			// let loadedCount = 0;
+			// self.refs.photoItem.forEach(photo => {
+			// 	photo.addEventListener('load', () => {
+			// 		loadedCount += 1;
+			// 		if (loadedCount >= photoCount) layoutPhotoset();
+			// 	})
+			// })
 		}
 
 		self.on('updated', Action.setLoader );
