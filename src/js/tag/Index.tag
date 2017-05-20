@@ -121,8 +121,7 @@ import util from '../niltea_util.js';
 			<div class="post_item_info">
 				<h3 class='post_item_title'><raw content={item.title} /></h3>
 				<section class="post_item_meta">
-					<span class="post_item_date">{this.formatDate(item.date)}</span>
-					<span class="post_item_notes">{item.note_count} notes</span>
+					<span class="post_item_date">{this.formatDate(item.date)}</span><br><span class="post_item_notes">{item.note_count} notes</span>
 				</section>
 			</div>
 		</a>
@@ -145,11 +144,11 @@ import util from '../niltea_util.js';
 			&:first-child { margin-top: 0; }
 		}
 		.post_item_link {
-			background-color: rgba(#fff, 0.6);
+			background-color: rgba(#fff, 0.4);
 			transition: background-color 0.2s;
 			&:hover {
 				transition: background-color 0.4s;
-				background-color: rgba(#fff, 0);
+				background-color: rgba(#fff, 0.1);
 			}
 			display: block;
 			width: 100%;
@@ -163,25 +162,41 @@ import util from '../niltea_util.js';
 			width: 100%;
 			height: 100%;
 			box-sizing: border-box;
-			border: 5px solid #000;
+			border: 4px solid #000;
 			border-radius: 2px;
 			display: flex;
+			align-items: flex-start;
 			flex-direction: column;
-			justify-content: flex-end;
-			padding: 15px;
+			justify-content: space-between;
+			padding: 10px;
+		}
+		.post_item_title {
+			margin-left: -30px;
+			padding: 3px 8px 0;
+			font-size: 2.2em;
+			line-height: 1.5;
+			background-color: #fff;
+			display: inline-block;
+		}
+		.post_item_meta {
+			align-self: flex-end;
+			text-align: right;
 		}
 		.post_item_date,
 		.post_item_notes {
-			display: block;
-		}
-		.post_item_title {
-			font-size: 2.6em;
+			display: inline-block;
 		}
 		.post_item_date {
+			margin-top: 5px;
+			padding: 2px 8px;
 			font-size: 1.6em;
+			background-color: #fff;
 		}
 		.post_item_notes {
+			margin-top: 5px;
+			padding: 2px 8px;
 			font-size: 1.0em;
+			background-color: #fff;
 		}
 
 	</style>
