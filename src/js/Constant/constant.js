@@ -14,6 +14,7 @@ const constant = new class Constant{
 		this.setCurrent    = 'setCurrent';
 		this.setContent    = 'setContent';
 		this.addContent    = 'addContent';
+		this.setPageTitle  = 'setPageTitle';
 		this.showLoader    = 'showLoader';
 		this.setLoader     = 'setLoader';
 		this.contentLoaded = 'contentLoaded';
