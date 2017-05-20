@@ -2898,6 +2898,7 @@ const store = new class ContentStore {
 		this.on(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setBlogInfo, this._setBlogInfo.bind(this));
 		this.on(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setCurrent, this._setCurrent.bind(this));
 		this.on(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setContent, this._setContent.bind(this));
+		this.on(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setPageTitle, this._setPageTitle.bind(this));
 	}
 
 	_setBlogInfo(action) {
@@ -2918,16 +2919,21 @@ const store = new class ContentStore {
 		this._content = contentAction(this._content);
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changed);
 	}
-	_setpageTitle(pageTitleAction) {
-		this._pageTitle = pageTitleAction(this._pageTitle);
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changed);
+	_setPageTitle(pageTitleAction) {
+		// ページ名の抽出
+		const pageType = this._current.currentPage;
+		const pageName = pageType !== 'posts' ? pageType : this._content[0].title;
+		const titleBody = pageName === 'index' ? '' : `${pageName} | `;
+		this._pageTitle = pageTitleAction(titleBody, this._blogInfo.title);
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changedPageTitle);
 	}
 }();
 
 store.ActionTypes = {
 	changedBlogInfo: "changedBlogInfo",
 	changed: "content_store_changed",
-	changedCurrent: "changedCurrent"
+	changedCurrent: "changedCurrent",
+	changedPageTitle: "changedPageTitle"
 };
 __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.addStore(store);
 
@@ -2964,14 +2970,12 @@ const tumblrAPI = new class TumblrAPI {
 const appAction = new class AppAction {
 	// コンテンツのロードを行い、Storeに通知を行うメソッド
 	// isIncrementがtrueであれば追加読み込み
-	async loadContent({ type, query, isIncrement = false }) {
+	async loadContent({ type, query, isIncrement = false, current, page = null, id = null }) {
 		const article = await this.fetchContent({ type, query });
 		if (!article) return false;
-		// RiotControl.trigger(Constant.setContent, (content) => article);
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setContent, content => {
-			return isIncrement ? content.concat(article) : article;
-		});
-		return true;
+
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setContent, content => isIncrement ? content.concat(article) : article);
+		if (type !== 'info') this.setCurrent({ current, page, id });
 	}
 	// コンテンツのロードを行う
 	async fetchContent({ type, query }) {
@@ -3028,6 +3032,11 @@ const appAction = new class AppAction {
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setCurrent, currentObj => {
 			return { currentPage, id, page };
 		});
+
+		this.setPageTitle();
+	}
+	setPageTitle() {
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setPageTitle, (title_body, blogTitle) => document.title = title_body + blogTitle);
 	}
 	showLoader() {
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].showLoader, null);
@@ -3218,6 +3227,7 @@ const constant = new class Constant {
 		this.setCurrent = 'setCurrent';
 		this.setContent = 'setContent';
 		this.addContent = 'addContent';
+		this.setPageTitle = 'setPageTitle';
 		this.showLoader = 'showLoader';
 		this.setLoader = 'setLoader';
 		this.contentLoaded = 'contentLoaded';
@@ -3307,23 +3317,18 @@ riot.tag2('niltea-base', '<section class="header" ref="header"></section> <secti
 
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/', () => {
 		riot.mount(self.refs.content, 'niltea-index');
-		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].loadContent({ type: 'posts', query: { limit } });
-
-		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].setCurrent({ current: 'index', page: 1 });
+		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].loadContent({ type: 'posts', query: { limit }, current: 'index', page: 1 }).then(() => {});
 	});
 
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/index/*', page => {
 		riot.mount(self.refs.content, 'niltea-index');
-		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].loadContent({ type: 'posts', query: { limit, offset: limit * (page - 1) } });
-
-		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].setCurrent({ current: 'index', page: page });
+		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].loadContent({ type: 'posts', query: { limit, offset: limit * (page - 1), current: 'index', page } });
 	});
 
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/post/*', id => {
 		riot.mount(self.refs.content, 'niltea-post');
 		riot.mount(self.refs.modal, 'niltea-modal');
-		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].loadContent({ type: 'posts', query: { id } });
-		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].setCurrent({ current: 'posts', id });
+		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].loadContent({ type: 'posts', query: { id }, current: 'posts' });
 	});
 
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/about', () => {
@@ -3533,11 +3538,9 @@ riot.tag2('niltea-index', '<section id="article_list" class="post" ref="articleL
 
 		const maxPage = Math.ceil(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].blogInfo.posts / limit);
 
-		__WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].loadContent({ isIncrement: true, type: 'posts', query: { limit, offset: limit * currentPage } });
+		__WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].loadContent({ isIncrement: true, type: 'posts', query: { limit, offset: limit * currentPage }, page: nextPage });
 
-		if (nextPage <= maxPage) {
-			__WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].setCurrent({ current: 'index', page: nextPage });
-		}
+		if (nextPage <= maxPage) {}
 
 		if (currentPage >= maxPage) {
 			self.is_lastPageLoaded = true;
@@ -3643,15 +3646,6 @@ riot.tag2('niltea-post', '<article class="post post-single"> <h2 class="post_tit
 	};
 	const afterUpdate = () => {
 		if (!self.isPhotoSet) return;
-
-		const photoCount = self.refs.photoItem.length;
-		let loadedCount = 0;
-		self.refs.photoItem.forEach(photo => {
-			photo.addEventListener('load', () => {
-				loadedCount += 1;
-				if (loadedCount >= photoCount) layoutPhotoset();
-			});
-		});
 	};
 
 	self.on('updated', __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].setLoader);
@@ -3675,7 +3669,6 @@ riot.tag2('niltea-post', '<article class="post post-single"> <h2 class="post_tit
 		self.isPhotoSet = self.photos.length > 1;
 		if (self.isPhotoSet) self.photoset = setPhotoLayout();
 
-		document.title = `${self.title} | ${__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].blogInfo.title}`;
 		self.update();
 		afterUpdate();
 	});
