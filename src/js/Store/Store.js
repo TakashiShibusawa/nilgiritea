@@ -16,9 +16,10 @@ const store = new class ContentStore{
 		this._content = '';
 		this._current = '';
 		this._pageTitle = '';
-		this.on(Constant.setBlogInfo, this._setBlogInfo.bind(this));
-		this.on(Constant.setCurrent,  this._setCurrent.bind(this));
-		this.on(Constant.setContent,  this._setContent.bind(this));
+		this.on(Constant.setBlogInfo,  this._setBlogInfo.bind(this));
+		this.on(Constant.setCurrent,   this._setCurrent.bind(this));
+		this.on(Constant.setContent,   this._setContent.bind(this));
+		this.on(Constant.setPageTitle, this._setPageTitle.bind(this))
 	}
 
 	_setBlogInfo(action){
@@ -39,9 +40,13 @@ const store = new class ContentStore{
 		this._content = contentAction(this._content);
 		RiotControl.trigger(this.ActionTypes.changed);
 	}
-	_setpageTitle(pageTitleAction){
-		this._pageTitle = pageTitleAction(this._pageTitle);
-		RiotControl.trigger(this.ActionTypes.changed);
+	_setPageTitle(pageTitleAction){
+		// ページ名の抽出
+		const pageType = this._current.currentPage;
+		const pageName = (pageType !== 'posts') ? pageType : this._content[0].title;
+		const titleBody = (pageName === 'index') ? '' : `${pageName} | `;
+		this._pageTitle = pageTitleAction(titleBody, this._blogInfo.title);
+		RiotControl.trigger(this.ActionTypes.changedPageTitle);
 	}
 }();
 
@@ -49,6 +54,7 @@ store.ActionTypes = {
 	changedBlogInfo: "changedBlogInfo",
 	changed: "content_store_changed",
 	changedCurrent: "changedCurrent",
+	changedPageTitle: "changedPageTitle",
 };
 RiotControl.addStore(store);
 

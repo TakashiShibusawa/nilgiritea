@@ -80,6 +80,9 @@ const appAction = new class AppAction {
 		const {current: currentPage, id = null, page = null} = currentInfo;
 		RiotControl.trigger(Constant.setCurrent, (currentObj) => { return {currentPage, id, page} });
 	}
+	setPageTitle () {
+		RiotControl.trigger(Constant.setPageTitle, (title_body, blogTitle) => document.title = title_body + blogTitle);
+	}
 	showLoader () {
 		RiotControl.trigger(Constant.showLoader, null);
 	}
