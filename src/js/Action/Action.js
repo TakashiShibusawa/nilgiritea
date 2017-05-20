@@ -76,6 +76,8 @@ const appAction = new class AppAction {
 	setCurrent(currentInfo) {
 		const {current: currentPage, id = null, page = null} = currentInfo;
 		RiotControl.trigger(Constant.setCurrent, (currentObj) => { return {currentPage, id, page} });
+
+		this.setPageTitle();
 	}
 	setPageTitle () {
 		RiotControl.trigger(Constant.setPageTitle, (title_body, blogTitle) => document.title = title_body + blogTitle);
