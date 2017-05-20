@@ -9,18 +9,18 @@ import Store from '../Store/Store';
 		<section class="photo" if={photos} ref='photo'>
 			<!-- single -->
 			<div if={!isPhotoSet} class="photo_rowContainer layout_itemCount-1" ref='rowContainer'>
-				<a class="photo_item photo_item-single" if={!isPhotoSet} each={photos} href='{original_size.url}' onclick={this.openModal}>
+				<a class="photo_item photo_item-single" if={!isPhotoSet} each={photos} href='{original_size.url}' onclick={openModal}>
 					<figure class="photo_item_image" style="background-image: url({alt_sizes[0].url})"></figure>
 				</a>
 			</div>
 			<!-- set -->
 			<div if={isPhotoSet} each={row in photoset} class="photo_rowContainer layout_itemCount-{row.length}" ref='rowContainer'>
-				<a class="photo_item photo_item-set" each={row} href='{original_size.url}' onclick={this.openModal}>
+				<a class="photo_item photo_item-set" each={row} href='{original_size.url}' onclick={openModal}>
 					<figure class="photo_item_image" style="background-image: url({alt_sizes[0].url})"></figure>
 				</a>
 			</div>
 		</section>
-		<section class='post_text' if={caption} onclick={this.openModal}><raw content='{caption}' /></section>
+		<section class='post_text' if={caption}><raw content='{caption}' /></section>
 		<div class="post_meta">
 			<a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="reblog lsf" target='_blank'>retweet</a>
 			<a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="like lsf" target='_blank'>{heart}</a>
