@@ -40,13 +40,17 @@ import Store from '../Store/Store';
 			'photoset_layout',
 			'reblog_key',
 		];
-		self.isPhotoSet = false;
+
 		self.title = '';
 		self.heart = 'heartempty';
 		// open Modal
 		self.openModal = Action.openModal;
 
+		// photoset関係
+		self.isPhotoSet = false;
+		self.photoset = null;
 		self.layout = [];
+
 		const setPhotosetSize = () => {
 			if (!self.isPhotoSet) return;
 			console.log('setPhotosetSize is under construction but called.');
