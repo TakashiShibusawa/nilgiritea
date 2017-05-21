@@ -1,4 +1,4 @@
-import riot from 'riot';
+import 'riot';
 import route from 'riot-route';
 import RiotControl from 'riotcontrol';
 
@@ -21,7 +21,6 @@ import Constant from "../Constant/Constant";
 		riot.mount(self.refs.footer, 'niltea-footer');
 		riot.mount(self.refs.loader, 'niltea-loader');
 	});
-
 
 	// routing
 	route.base('/');

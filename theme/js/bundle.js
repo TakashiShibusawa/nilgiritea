@@ -2859,94 +2859,23 @@ if (true) module.exports = RiotControl;
 
 /***/ }),
 /* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(riot) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Constant_Constant__ = __webpack_require__(3);
 
 
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
 
-const store = new class ContentStore {
-	get blogInfo() {
-		return this._blogInfo;
-	}
-	get current() {
-		return this._current;
-	}
-	get content() {
-		return this._content;
-	}
-	get baseURL() {
-		return 'http://nilgiri-tea.net/';
-	}
-	get title() {
-		return 'Nilgiri Tea';
-	}
-	get twitterID() {
-		return 'niltea';
-	}
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	constructor() {
-		riot.observable(this);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-		this._blogInfo = null;
-		this._content = '';
-		this._current = '';
-		this._pageTitle = '';
-		this.on(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setBlogInfo, this._setBlogInfo.bind(this));
-		this.on(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setCurrent, this._setCurrent.bind(this));
-		this.on(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setContent, this._setContent.bind(this));
-		this.on(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setPageTitle, this._setPageTitle.bind(this));
-	}
+var constant = new (function () {
+	function Constant() {
+		_classCallCheck(this, Constant);
 
-	_setBlogInfo(action) {
-		const blogInfo = action(JSON.stringify(this._blogInfo));
-		// もしinfoが変わっていればisChangedが立つのでデータを差し替えてtrigger
-		if (!blogInfo.isChanged) return;
-		this._blogInfo = blogInfo.data;
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changedBlogInfo);
-	}
-	_setCurrent(action) {
-		// Actionから渡されたcurrent操作関数がactionへ代入される
-		// それを用いてcurrentの内容を変更する
-		this._current = action(this._current);
-		// Storeの内容が変わったよー、というのをControlへ通知する（そして関係する動作を叩いてもらう
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changedCurrent);
-	}
-	_setContent(contentAction) {
-		this._content = contentAction(this._content);
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changed);
-	}
-	_setPageTitle(pageTitleAction) {
-		// ページ名の抽出
-		const pageType = this._current.currentPage;
-		const pageName = pageType !== 'posts' ? pageType : this._content[0].title;
-		const titleBody = pageName === 'index' ? '' : `${pageName} | `;
-		this._pageTitle = pageTitleAction(titleBody, this._blogInfo.title);
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(this.ActionTypes.changedPageTitle);
-	}
-}();
-
-store.ActionTypes = {
-	changedBlogInfo: "changedBlogInfo",
-	changed: "content_store_changed",
-	changedCurrent: "changedCurrent",
-	changedPageTitle: "changedPageTitle"
-};
-__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.addStore(store);
-
-/* harmony default export */ __webpack_exports__["a"] = (store);
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-const constant = new class Constant {
-	constructor() {
 		this.api = {
 			API_KEY: "api_key=Rak7GXrKPBB6uuTODOgQL3hPLpnTAf2b2IoUjAUoBd8yLoCthg",
 			APIRoot: "http://api.tumblr.com/v2/blog/nilgiritea.tumblr.com/"
@@ -2971,400 +2900,675 @@ const constant = new class Constant {
 		this.onScroll = 'onScroll';
 	}
 
-	_getApiKey() {
-		return this.api.API_KEY;
-	}
-	_setQS(query) {
-		if (!query) return '';
-		let queryString = '';
-		Object.keys(query).forEach(key => query[key] ? queryString += `&${key}=${query[key]}` : queryString);
-		return queryString;
-	}
-	getEndPoint({ type = 'post', query }) {
-		const queryString = this._setQS(query);
-		const endPoint = this.api.APIRoot + type + '?' + this._getApiKey() + queryString;
-		return endPoint;
+	_createClass(Constant, [{
+		key: "_getApiKey",
+		value: function _getApiKey() {
+			return this.api.API_KEY;
+		}
+	}, {
+		key: "_setQS",
+		value: function _setQS(query) {
+			if (!query) return '';
+			var queryString = '';
+			Object.keys(query).forEach(function (key) {
+				return query[key] ? queryString += "&" + key + "=" + query[key] : queryString;
+			});
+			return queryString;
+		}
+	}, {
+		key: "getEndPoint",
+		value: function getEndPoint(_ref) {
+			var _ref$type = _ref.type,
+			    type = _ref$type === undefined ? 'post' : _ref$type,
+			    query = _ref.query;
+
+			var queryString = this._setQS(query);
+			var endPoint = this.api.APIRoot + type + '?' + this._getApiKey() + queryString;
+			return endPoint;
+		}
+	}]);
+
+	return Constant;
+}())();
+
+exports.default = constant;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(riot) {
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _riotcontrol = __webpack_require__(1);
+
+var _riotcontrol2 = _interopRequireDefault(_riotcontrol);
+
+var _Constant = __webpack_require__(2);
+
+var _Constant2 = _interopRequireDefault(_Constant);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var store = new (function () {
+	_createClass(ContentStore, [{
+		key: "blogInfo",
+		get: function get() {
+			return this._blogInfo;
+		}
+	}, {
+		key: "current",
+		get: function get() {
+			return this._current;
+		}
+	}, {
+		key: "content",
+		get: function get() {
+			return this._content;
+		}
+	}, {
+		key: "baseURL",
+		get: function get() {
+			return 'http://nilgiri-tea.net/';
+		}
+	}, {
+		key: "title",
+		get: function get() {
+			return 'Nilgiri Tea';
+		}
+	}, {
+		key: "twitterID",
+		get: function get() {
+			return 'niltea';
+		}
+	}]);
+
+	function ContentStore() {
+		_classCallCheck(this, ContentStore);
+
+		riot.observable(this);
+
+		this._blogInfo = null;
+		this._content = '';
+		this._current = '';
+		this._pageTitle = '';
+		this.on(_Constant2.default.setBlogInfo, this._setBlogInfo.bind(this));
+		this.on(_Constant2.default.setCurrent, this._setCurrent.bind(this));
+		this.on(_Constant2.default.setContent, this._setContent.bind(this));
+		this.on(_Constant2.default.setPageTitle, this._setPageTitle.bind(this));
 	}
 
-}();
+	_createClass(ContentStore, [{
+		key: "_setBlogInfo",
+		value: function _setBlogInfo(action) {
+			var blogInfo = action(JSON.stringify(this._blogInfo));
+			// もしinfoが変わっていればisChangedが立つのでデータを差し替えてtrigger
+			if (!blogInfo.isChanged) return;
+			this._blogInfo = blogInfo.data;
+			_riotcontrol2.default.trigger(this.ActionTypes.changedBlogInfo);
+		}
+	}, {
+		key: "_setCurrent",
+		value: function _setCurrent(action) {
+			// Actionから渡されたcurrent操作関数がactionへ代入される
+			// それを用いてcurrentの内容を変更する
+			this._current = action(this._current);
+			// Storeの内容が変わったよー、というのをControlへ通知する（そして関係する動作を叩いてもらう
+			_riotcontrol2.default.trigger(this.ActionTypes.changedCurrent);
+		}
+	}, {
+		key: "_setContent",
+		value: function _setContent(contentAction) {
+			this._content = contentAction(this._content);
+			_riotcontrol2.default.trigger(this.ActionTypes.changed);
+		}
+	}, {
+		key: "_setPageTitle",
+		value: function _setPageTitle(pageTitleAction) {
+			// ページ名の抽出
+			var pageType = this._current.currentPage;
+			var pageName = pageType !== 'posts' ? pageType : this._content[0].title;
+			var titleBody = pageName === 'index' ? '' : pageName + " | ";
+			this._pageTitle = pageTitleAction(titleBody, this._blogInfo.title);
+			_riotcontrol2.default.trigger(this.ActionTypes.changedPageTitle);
+		}
+	}]);
 
-/* harmony default export */ __webpack_exports__["a"] = (constant);
+	return ContentStore;
+}())();
+
+store.ActionTypes = {
+	changedBlogInfo: "changedBlogInfo",
+	changed: "content_store_changed",
+	changedCurrent: "changedCurrent",
+	changedPageTitle: "changedPageTitle"
+};
+_riotcontrol2.default.addStore(store);
+
+exports.default = store;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
 /* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Constant_Constant__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jsonp_promise__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jsonp_promise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jsonp_promise__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__niltea_util_js__ = __webpack_require__(5);
 
 
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _riotcontrol = __webpack_require__(1);
 
-const fetchParams = { mode: 'cors' };
+var _riotcontrol2 = _interopRequireDefault(_riotcontrol);
 
-const tumblrAPI = new class TumblrAPI {
-	async fetchAPI(uri) {
-		if (typeof uri !== 'string') return false;
-		const res = await __WEBPACK_IMPORTED_MODULE_2_jsonp_promise___default()(uri, { param: 'jsonp' }).promise;
-		return res.meta.status >= 200 && res.meta.status < 300 ? res : false;
-	}
-}();
+var _Constant = __webpack_require__(2);
 
-const appAction = new class AppAction {
-	// コンテンツのロードを行い、Storeに通知を行うメソッド
-	// isIncrementがtrueであれば追加読み込み
-	async loadContent({ type, query, isIncrement = false, current, page = null, id = null, hasInfo }) {
-		const article = hasInfo ? null : await this.fetchContent({ type, query });
-		if (article) __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setContent, content => isIncrement ? content.concat(article) : article);
-		this.setCurrent({ currentPage: current, page, id });
-	}
-	// コンテンツのロードを行う
-	async fetchContent({ type, query }) {
-		//APIを叩いてjson取得してもらう。正常に帰ってこなかったらreturn
-		const json = await tumblrAPI.fetchAPI(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].getEndPoint({ type, query }));
-		if (!json) return false;
+var _Constant2 = _interopRequireDefault(_Constant);
 
-		// 正常取得時の動作
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setBlogInfo, oldInfo => {
-			let isChanged = false;
-			let data = null;
-			// 取得してきたblogInfoをObjectに突っ込む
-			const fetchedBlogInfo = JSON.stringify(json.response.blog);
-			if (oldInfo !== fetchedBlogInfo) {
-				isChanged = true;
-				data = json.response.blog;
-			}
-			return { isChanged, data };
-		});
+var _jsonpPromise = __webpack_require__(17);
 
-		// 記事データの整形を行い、返ってきたデータがあればそれをreturn
-		const article = this._formatArticle(json.response.posts);
-		return article || false;
-	}
-	_formatArticle(posts_fetched) {
-		// postsがないとき(infoを取得したとき)
-		if (!posts_fetched) return null;
-		const posts_formatted = [];
-		posts_fetched.forEach(article => {
-			const articleData = this._getArticleData(article);
-			posts_formatted.push(articleData);
-		});
-		return posts_formatted;
-	}
-	_getArticleData(post) {
-		const title = post.caption.match(/<h2>.+<\/h2>/);
-		const title_stripped = title ? title[0].replace(/<\/?h2>/g, '') : 'no title';
-		return {
-			id: post.id,
-			caption: post.caption,
-			title: title_stripped,
-			slug: post.slug,
-			date: post.timestamp * 1000,
-			type: post.type,
-			url: post.short_url,
-			photos: post.photos,
-			photoset_layout: post.photoset_layout,
-			reblog_key: post.reblog_key,
-			note_count: post.note_count
-		};
-	}
-	setCurrent(currentInfo) {
-		const { currentPage, id = 'null', page = 'null' } = currentInfo;
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setCurrent, currentObj => {
-			return { currentPage, id, page };
-		});
+var _jsonpPromise2 = _interopRequireDefault(_jsonpPromise);
 
-		this.setPageTitle();
+var _niltea_util = __webpack_require__(5);
+
+var _niltea_util2 = _interopRequireDefault(_niltea_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var fetchParams = { mode: 'cors' };
+
+var tumblrAPI = new (function () {
+	function TumblrAPI() {
+		_classCallCheck(this, TumblrAPI);
 	}
-	setPageTitle() {
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setPageTitle, (title_body, blogTitle) => document.title = title_body + blogTitle);
+
+	_createClass(TumblrAPI, [{
+		key: "fetchAPI",
+		value: async function fetchAPI(uri) {
+			if (typeof uri !== 'string') return false;
+			var res = await (0, _jsonpPromise2.default)(uri, { param: 'jsonp' }).promise;
+			return res.meta.status >= 200 && res.meta.status < 300 ? res : false;
+		}
+	}]);
+
+	return TumblrAPI;
+}())();
+
+var appAction = new (function () {
+	function AppAction() {
+		_classCallCheck(this, AppAction);
 	}
-	showLoader() {
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].showLoader, null);
-	}
-	setLoader() {
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].setLoader, null);
-	}
-	contentLoaded() {
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].contentLoaded, null);
-	}
-	openModal(event) {
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].openModal, event);
-	}
-	callInfScr() {
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].callInfScr, null);
-	}
-	onScroll() {
-		requestAnimationFrame(() => {
-			const scrollTop = ~~__WEBPACK_IMPORTED_MODULE_3__niltea_util_js__["a" /* default */].getScrollTop();
-			__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].onScroll, scrollTop);
-		});
-	}
-}();
+
+	_createClass(AppAction, [{
+		key: "loadContent",
+
+		// コンテンツのロードを行い、Storeに通知を行うメソッド
+		// isIncrementがtrueであれば追加読み込み
+		value: async function loadContent(_ref) {
+			var type = _ref.type,
+			    query = _ref.query,
+			    _ref$isIncrement = _ref.isIncrement,
+			    isIncrement = _ref$isIncrement === undefined ? false : _ref$isIncrement,
+			    current = _ref.current,
+			    _ref$page = _ref.page,
+			    page = _ref$page === undefined ? null : _ref$page,
+			    _ref$id = _ref.id,
+			    id = _ref$id === undefined ? null : _ref$id,
+			    hasInfo = _ref.hasInfo;
+
+			var article = hasInfo ? null : await this.fetchContent({ type: type, query: query });
+			if (article) _riotcontrol2.default.trigger(_Constant2.default.setContent, function (content) {
+				return isIncrement ? content.concat(article) : article;
+			});
+			this.setCurrent({ currentPage: current, page: page, id: id });
+		}
+		// コンテンツのロードを行う
+
+	}, {
+		key: "fetchContent",
+		value: async function fetchContent(_ref2) {
+			var type = _ref2.type,
+			    query = _ref2.query;
+
+			//APIを叩いてjson取得してもらう。正常に帰ってこなかったらreturn
+			var json = await tumblrAPI.fetchAPI(_Constant2.default.getEndPoint({ type: type, query: query }));
+			if (!json) return false;
+
+			// 正常取得時の動作
+			_riotcontrol2.default.trigger(_Constant2.default.setBlogInfo, function (oldInfo) {
+				var isChanged = false;
+				var data = null;
+				// 取得してきたblogInfoをObjectに突っ込む
+				var fetchedBlogInfo = JSON.stringify(json.response.blog);
+				if (oldInfo !== fetchedBlogInfo) {
+					isChanged = true;
+					data = json.response.blog;
+				}
+				return { isChanged: isChanged, data: data };
+			});
+
+			// 記事データの整形を行い、返ってきたデータがあればそれをreturn
+			var article = this._formatArticle(json.response.posts);
+			return article || false;
+		}
+	}, {
+		key: "_formatArticle",
+		value: function _formatArticle(posts_fetched) {
+			var _this = this;
+
+			// postsがないとき(infoを取得したとき)
+			if (!posts_fetched) return null;
+			var posts_formatted = [];
+			posts_fetched.forEach(function (article) {
+				var articleData = _this._getArticleData(article);
+				posts_formatted.push(articleData);
+			});
+			return posts_formatted;
+		}
+	}, {
+		key: "_getArticleData",
+		value: function _getArticleData(post) {
+			var title = post.caption.match(/<h2>.+<\/h2>/);
+			var title_stripped = title ? title[0].replace(/<\/?h2>/g, '') : 'no title';
+			return {
+				id: post.id,
+				caption: post.caption,
+				title: title_stripped,
+				slug: post.slug,
+				date: post.timestamp * 1000,
+				type: post.type,
+				url: post.short_url,
+				photos: post.photos,
+				photoset_layout: post.photoset_layout,
+				reblog_key: post.reblog_key,
+				note_count: post.note_count
+			};
+		}
+	}, {
+		key: "setCurrent",
+		value: function setCurrent(currentInfo) {
+			var currentPage = currentInfo.currentPage,
+			    _currentInfo$id = currentInfo.id,
+			    id = _currentInfo$id === undefined ? 'null' : _currentInfo$id,
+			    _currentInfo$page = currentInfo.page,
+			    page = _currentInfo$page === undefined ? 'null' : _currentInfo$page;
+
+			_riotcontrol2.default.trigger(_Constant2.default.setCurrent, function (currentObj) {
+				return { currentPage: currentPage, id: id, page: page };
+			});
+
+			this.setPageTitle();
+		}
+	}, {
+		key: "setPageTitle",
+		value: function setPageTitle() {
+			_riotcontrol2.default.trigger(_Constant2.default.setPageTitle, function (title_body, blogTitle) {
+				return document.title = title_body + blogTitle;
+			});
+		}
+	}, {
+		key: "showLoader",
+		value: function showLoader() {
+			_riotcontrol2.default.trigger(_Constant2.default.showLoader, null);
+		}
+	}, {
+		key: "setLoader",
+		value: function setLoader() {
+			_riotcontrol2.default.trigger(_Constant2.default.setLoader, null);
+		}
+	}, {
+		key: "contentLoaded",
+		value: function contentLoaded() {
+			_riotcontrol2.default.trigger(_Constant2.default.contentLoaded, null);
+		}
+	}, {
+		key: "openModal",
+		value: function openModal(event) {
+			_riotcontrol2.default.trigger(_Constant2.default.openModal, event);
+		}
+	}, {
+		key: "callInfScr",
+		value: function callInfScr() {
+			_riotcontrol2.default.trigger(_Constant2.default.callInfScr, null);
+		}
+	}, {
+		key: "onScroll",
+		value: function onScroll() {
+			requestAnimationFrame(function () {
+				var scrollTop = ~~_niltea_util2.default.getScrollTop();
+				_riotcontrol2.default.trigger(_Constant2.default.onScroll, scrollTop);
+			});
+		}
+	}]);
+
+	return AppAction;
+}())();
 
 // export default AppAction
-/* harmony default export */ __webpack_exports__["a"] = (appAction);
+exports.default = appAction;
 
 /***/ }),
 /* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony default export */ __webpack_exports__["a"] = (new class Util {
-	constructor() {
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+exports.default = new (function () {
+	function Util() {
+		_classCallCheck(this, Util);
+
 		this.browser = this.browser();
 		document.body.classList.add(this.browser.isPC ? 'pc' : 'sp');
 	}
-	browser() {
-		const _this = this;
-		const ua = navigator.userAgent.toLowerCase();
-		const getVer = (ua, sarchStr, endstr) => {
-			// 開始位置を検出
-			let start = ua.indexOf(sarchStr);
-			if (start < 0) return undefined;
 
-			// 開始位置を検索文字数ぶんシフト
-			// バージョン文字数区切りのスペースの位置を探る（開始文字分減じて文字数とする）
-			start += sarchStr.length;
-			let end = ua.indexOf(endstr, start);
-			end -= start;
+	_createClass(Util, [{
+		key: 'browser',
+		value: function browser() {
+			var _this = this;
+			var ua = navigator.userAgent.toLowerCase();
+			var getVer = function getVer(ua, sarchStr, endstr) {
+				// 開始位置を検出
+				var start = ua.indexOf(sarchStr);
+				if (start < 0) return undefined;
 
-			// バージョン文字を取り出しreturn
-			return ua.substr(start, end).replace('_', '.');
-		};
+				// 開始位置を検索文字数ぶんシフト
+				// バージョン文字数区切りのスペースの位置を探る（開始文字分減じて文字数とする）
+				start += sarchStr.length;
+				var end = ua.indexOf(endstr, start);
+				end -= start;
 
-		// 返すオブジェクトを仮生成
-		let browser = {
-			isPC: true,
-			isSP: false,
-			isIE: false,
-			isWebKit: false,
-			isiOS: false,
-			isAndroid: false,
-			browserVer: null,
-			OSVer: null
-		};
-		// IE
-		if (ua.match(/msie|trident/)) {
-			browser.isIE = true;
-			browser.OSVer = 'windows ' + getVer(ua, 'windows ', ';');
-			browser.browserVer = getVer(ua, 'msie ', ';');
-			if (browser.browserVer === undefined) {
-				browser.browserVer = parseFloat(getVer(ua, 'trident/', ';'), 10) + 4;
+				// バージョン文字を取り出しreturn
+				return ua.substr(start, end).replace('_', '.');
+			};
+
+			// 返すオブジェクトを仮生成
+			var browser = {
+				isPC: true,
+				isSP: false,
+				isIE: false,
+				isWebKit: false,
+				isiOS: false,
+				isAndroid: false,
+				browserVer: null,
+				OSVer: null
+			};
+			// IE
+			if (ua.match(/msie|trident/)) {
+				browser.isIE = true;
+				browser.OSVer = 'windows ' + getVer(ua, 'windows ', ';');
+				browser.browserVer = getVer(ua, 'msie ', ';');
+				if (browser.browserVer === undefined) {
+					browser.browserVer = parseFloat(getVer(ua, 'trident/', ';'), 10) + 4;
+				}
 			}
-		}
-		//WebKit
-		if (ua.match(/webkit/)) {
-			browser.isWebKit = true;
-		}
-		// iOS系
-		if (ua.match(/iphone|ipad/)) {
-			browser.isPC = false;
-			browser.isSP = true;
-			browser.isiOS = true;
-			browser.OSVer = getVer(ua, 'iphone os ', ' ');
-		}
-		// Android
-		if (ua.match(/android/)) {
-			browser.isPC = false;
-			browser.isSP = true;
-			browser.isAndroid = true;
-
-			browser.OSVer = getVer(ua, 'android ', ';');
-		}
-		window.clickEv = browser.isPC ? 'click' : 'touchend';
-		window.scrollEv = 'onwheel' in document ? 'wheel' : 'onmousewheel' in document ? 'mousewheel' : 'DOMMouseScroll';
-		// 仮オブジェクト返す
-		return browser;
-	}
-
-	/**
- * function addChild
- * @param {Object} param 生成する子要素の設定
- * param.parent {string} 生成した要素を挿入する親要素
- * param.after {boolean} 親要素の最後に追加するか
- * param.element {string ? div} 生成する要素のタグ名
- * param.id {string} 生成する要素に付けるID
- * param.class {string} 生成する要素に付けるclass
- */
-	addChild(param) {
-		var el = param.element ? param.element : 'div';
-		var newEl = param.HTMLelement || document.createElement(el);
-		var where;
-		if (param.id) newEl.setAttribute('id', param.id);
-		if (param.class) newEl.setAttribute('class', param.class);
-		if (param.attr) {
-			for (var key in param.attr) {
-				newEl.setAttribute(key, param.attr[key]);
+			//WebKit
+			if (ua.match(/webkit/)) {
+				browser.isWebKit = true;
 			}
-		}
-		// parentの指定が無いときは要素を返す
-		if (!param.parent) {
-			return newEl;
-		}
-		if (param.parent.firstChild) {
-			where = param.after ? null : param.parent.firstChild;
-		} else {
-			where = null;
-		}
-		return param.parent.insertBefore(newEl, where);
-	}
-	// ブラウザ間の差異を吸収しつつscroll位置をセットする
-	setScrollTop(top) {
-		const tgt = this.browser.isWebKit ? document.body : document.documentElement;
-		tgt.scrollTop = top;
-	}
-	getScrollTop() {
-		const d = window.document;
-		const b = d.body;
-		return window.pageYOffset ? window.pageYOffset : (d.documentElement || b.parentNode || b).scrollTop;
-	}
+			// iOS系
+			if (ua.match(/iphone|ipad/)) {
+				browser.isPC = false;
+				browser.isSP = true;
+				browser.isiOS = true;
+				browser.OSVer = getVer(ua, 'iphone os ', ' ');
+			}
+			// Android
+			if (ua.match(/android/)) {
+				browser.isPC = false;
+				browser.isSP = true;
+				browser.isAndroid = true;
 
-	// XSS対策：textをサニタイズする関数
-	sanitizer(string) {
-		if (typeof string !== 'string') {
+				browser.OSVer = getVer(ua, 'android ', ';');
+			}
+			window.clickEv = browser.isPC ? 'click' : 'touchend';
+			window.scrollEv = 'onwheel' in document ? 'wheel' : 'onmousewheel' in document ? 'mousewheel' : 'DOMMouseScroll';
+			// 仮オブジェクト返す
+			return browser;
+		}
+
+		/**
+  * function addChild
+  * @param {Object} param 生成する子要素の設定
+  * param.parent {string} 生成した要素を挿入する親要素
+  * param.after {boolean} 親要素の最後に追加するか
+  * param.element {string ? div} 生成する要素のタグ名
+  * param.id {string} 生成する要素に付けるID
+  * param.class {string} 生成する要素に付けるclass
+  */
+
+	}, {
+		key: 'addChild',
+		value: function addChild(param) {
+			var el = param.element ? param.element : 'div';
+			var newEl = param.HTMLelement || document.createElement(el);
+			var where;
+			if (param.id) newEl.setAttribute('id', param.id);
+			if (param.class) newEl.setAttribute('class', param.class);
+			if (param.attr) {
+				for (var key in param.attr) {
+					newEl.setAttribute(key, param.attr[key]);
+				}
+			}
+			// parentの指定が無いときは要素を返す
+			if (!param.parent) {
+				return newEl;
+			}
+			if (param.parent.firstChild) {
+				where = param.after ? null : param.parent.firstChild;
+			} else {
+				where = null;
+			}
+			return param.parent.insertBefore(newEl, where);
+		}
+	}, {
+		key: 'setScrollTop',
+
+		// ブラウザ間の差異を吸収しつつscroll位置をセットする
+		value: function setScrollTop(top) {
+			var tgt = this.browser.isWebKit ? document.body : document.documentElement;
+			tgt.scrollTop = top;
+		}
+	}, {
+		key: 'getScrollTop',
+		value: function getScrollTop() {
+			var d = window.document;
+			var b = d.body;
+			return window.pageYOffset ? window.pageYOffset : (d.documentElement || b.parentNode || b).scrollTop;
+		}
+	}, {
+		key: 'sanitizer',
+
+
+		// XSS対策：textをサニタイズする関数
+		value: function sanitizer(string) {
+			if (typeof string !== 'string') {
+				return string;
+			}
+			string = string.replace(/<img ([a-z=\-0-9 "]+)src="([a-z0-9:/.\-_]+).*/g, '{!img:$2:!img}');
+			string = string.replace(/[&'`"<>/]/g, function (match) {
+				return {
+					'&': '&amp;',
+					"'": '&#x27;',
+					'`': '&#x60;',
+					'<': '&lt;',
+					'"': '&quot;',
+					'>': '&gt;',
+					'/': '&#x2F;'
+				}[match];
+			});
+			string = string.replace(/&lt;strong&gt;/g, '<strong>');
+			string = string.replace(/&lt;&#x2F;strong&gt;/g, '</strong>');
+			string = string.replace(/&lt;p&gt;/g, '<p>');
+			string = string.replace(/&lt;&#x2F;p&gt;/g, '</p>');
+			string = string.replace(/&lt;br &#x2F;&gt;/g, '<br />');
+			string = string.replace(/{!img:(([a-z0-9:/.\-_]|&#x2F;)+):!img}/g, '<img src="$1">');
 			return string;
 		}
-		string = string.replace(/<img ([a-z=\-0-9 "]+)src="([a-z0-9:/.\-_]+).*/g, '{!img:$2:!img}');
-		string = string.replace(/[&'`"<>/]/g, match => {
-			return {
-				'&': '&amp;',
-				"'": '&#x27;',
-				'`': '&#x60;',
-				'<': '&lt;',
-				'"': '&quot;',
-				'>': '&gt;',
-				'/': '&#x2F;'
-			}[match];
-		});
-		string = string.replace(/&lt;strong&gt;/g, '<strong>');
-		string = string.replace(/&lt;&#x2F;strong&gt;/g, '</strong>');
-		string = string.replace(/&lt;p&gt;/g, '<p>');
-		string = string.replace(/&lt;&#x2F;p&gt;/g, '</p>');
-		string = string.replace(/&lt;br &#x2F;&gt;/g, '<br />');
-		string = string.replace(/{!img:(([a-z0-9:/.\-_]|&#x2F;)+):!img}/g, '<img src="$1">');
-		return string;
-	}
+	}, {
+		key: 'loader',
+		value: function loader() {
+			Action.contentLoaded();
+		}
+	}]);
 
-	loader() {
-		Action.contentLoaded();
-	}
-}());
+	return Util;
+}())();
 
 /***/ }),
 /* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Store_Store__ = __webpack_require__(2);
+
+
+var _riotcontrol = __webpack_require__(1);
+
+var _riotcontrol2 = _interopRequireDefault(_riotcontrol);
+
+var _Action = __webpack_require__(4);
+
+var _Action2 = _interopRequireDefault(_Action);
+
+var _Store = __webpack_require__(3);
+
+var _Store2 = _interopRequireDefault(_Store);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var riot = __webpack_require__(0);
 
 
-
-
-
 riot.tag2('niltea-about', '<section id="about" class="post page"> <h2 class="post_title">about page</h2> </section>', '', '', function (opts) {
-  const self = this;
-  self.on('updated', __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].setLoader);
-  self.on('mount', __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].setLoader);
-  self.on('before-mount', __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].showLoader);
+  var self = this;
+  self.on('updated', _Action2.default.setLoader);
+  self.on('mount', _Action2.default.setLoader);
+  self.on('before-mount', _Action2.default.showLoader);
 });
 
 /***/ }),
 /* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riot__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_riot_route__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_riotcontrol__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Action_Action__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Store_Store__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Constant_Constant__ = __webpack_require__(3);
+
+
+__webpack_require__(0);
+
+var _riotRoute = __webpack_require__(19);
+
+var _riotRoute2 = _interopRequireDefault(_riotRoute);
+
+var _riotcontrol = __webpack_require__(1);
+
+var _riotcontrol2 = _interopRequireDefault(_riotcontrol);
+
+var _Action = __webpack_require__(4);
+
+var _Action2 = _interopRequireDefault(_Action);
+
+var _Store = __webpack_require__(3);
+
+var _Store2 = _interopRequireDefault(_Store);
+
+var _Constant = __webpack_require__(2);
+
+var _Constant2 = _interopRequireDefault(_Constant);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var riot = __webpack_require__(0);
 
 
-
-
-
-
-
-
 riot.tag2('niltea-base', '<section class="header" ref="header"></section> <section class="content" ref="content"></section> <section class="footer" ref="footer"></section> <section class="nilteamodal" ref="nilteamodal"></section> <section class="loader" ref="loader"></section>', '', '', function (opts) {
-	const self = this;
-	window.addEventListener('scroll', __WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].onScroll);
+	var self = this;
+	window.addEventListener('scroll', _Action2.default.onScroll);
 
-	self.on('mount', () => {
+	self.on('mount', function () {
 		riot.mount(self.refs.header, 'niltea-header');
 		riot.mount(self.refs.footer, 'niltea-footer');
 		riot.mount(self.refs.loader, 'niltea-loader');
 	});
 
-	__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */].base('/');
+	_riotRoute2.default.base('/');
 
-	const limit = __WEBPACK_IMPORTED_MODULE_5__Constant_Constant__["a" /* default */].indexPostLimit;
+	var limit = _Constant2.default.indexPostLimit;
 
-	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/', () => {
+	(0, _riotRoute2.default)('/', function () {
 		riot.mount(self.refs.content, 'niltea-index');
-		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].loadContent({ type: 'posts', query: { limit }, current: 'index', page: 1 }).then(() => {});
+		_Action2.default.loadContent({ type: 'posts', query: { limit: limit }, current: 'index', page: 1 }).then(function () {});
 	});
 
-	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/index/*', page => {
+	(0, _riotRoute2.default)('/index/*', function (page) {
 		riot.mount(self.refs.content, 'niltea-index');
-		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].loadContent({ type: 'posts', query: { limit, offset: limit * (page - 1) }, current: 'index', page });
+		_Action2.default.loadContent({ type: 'posts', query: { limit: limit, offset: limit * (page - 1) }, current: 'index', page: page });
 	});
 
-	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/post/*', id => {
+	(0, _riotRoute2.default)('/post/*', function (id) {
 		riot.mount(self.refs.content, 'niltea-post');
 		riot.mount(self.refs.nilteamodal, 'niltea-modal');
-		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].loadContent({ type: 'posts', query: { id }, current: 'posts' });
+		_Action2.default.loadContent({ type: 'posts', query: { id: id }, current: 'posts' });
 	});
 
-	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/about', () => {
+	(0, _riotRoute2.default)('/about', function () {
 		riot.mount(self.refs.content, 'niltea-about');
-		const hasInfo = !!__WEBPACK_IMPORTED_MODULE_4__Store_Store__["a" /* default */].blogInfo;
-		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].loadContent({ type: 'info', hasInfo, current: 'about' });
+		var hasInfo = !!_Store2.default.blogInfo;
+		_Action2.default.loadContent({ type: 'info', hasInfo: hasInfo, current: 'about' });
 	});
 
-	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('*', () => {
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/');
+	(0, _riotRoute2.default)('*', function () {
+		(0, _riotRoute2.default)('/');
 	});
-	__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */].start(true);
+	_riotRoute2.default.start(true);
 });
 
 /***/ }),
 /* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Store_Store__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Constant_Constant__ = __webpack_require__(3);
+
+
+var _riotcontrol = __webpack_require__(1);
+
+var _riotcontrol2 = _interopRequireDefault(_riotcontrol);
+
+var _Store = __webpack_require__(3);
+
+var _Store2 = _interopRequireDefault(_Store);
+
+var _Constant = __webpack_require__(2);
+
+var _Constant2 = _interopRequireDefault(_Constant);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var riot = __webpack_require__(0);
 
-
-
-
 riot.tag2('niltea-footer', '<footer class="footer"> <nav class="navigation" if="{pagingEnabled}"> <a if="{hasPrev}" href="{prevPage}" class="prev">&lt; PREV</a> <a each="{page in prevPagenations}" href="{page.href}" class="num">{page.num}</a> <span class="current">{page}</span> <a each="{page in nextPagenations}" href="{page.href}" class="num">{page.num}</a> <a if="{hasNext}" href="{nextPage}" class="next">NEXT &gt;</a> </nav> <div class="copyright"> <a class="nilgiriLogo txtHide" href="/">Designed by Nilgiri Tea</a> </div> </footer>', '', '', function (opts) {
-	const self = this;
+	var self = this;
 	self.pagingEnabled = false;
 	self.hasPrev = false;
 	self.hasNext = false;
@@ -3372,10 +3576,10 @@ riot.tag2('niltea-footer', '<footer class="footer"> <nav class="navigation" if="
 	self.nextPage = null;
 	self.maxPage = null;
 
-	const modPagenation = () => {
-		const pagenations = 2;
+	var modPagenation = function modPagenation() {
+		var pagenations = 2;
 
-		if (__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].current.currentPage !== 'index') {
+		if (_Store2.default.current.currentPage !== 'index') {
 			self.pagingEnabled = false;
 			self.update();
 			return;
@@ -3383,20 +3587,20 @@ riot.tag2('niltea-footer', '<footer class="footer"> <nav class="navigation" if="
 		if (!self.maxPage) return;
 
 		self.pagingEnabled = true;
-		self.page = parseInt(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].current.page, 10);
+		self.page = parseInt(_Store2.default.current.page, 10);
 
 		if (self.page >= 2) {
 			self.hasPrev = true;
 			self.prevPage = self.page === 2 ? '/' : '/index/' + (self.page - 1);
-			self.prevPagenations = (() => {
-				const pagenation = [{ href: '/', num: 1 }];
+			self.prevPagenations = function () {
+				var pagenation = [{ href: '/', num: 1 }];
 				if (self.page === 2) return pagenation;
-				for (let i = self.page - pagenations, l = self.page - 1; i <= l; i += 1) {
+				for (var i = self.page - pagenations, l = self.page - 1; i <= l; i += 1) {
 					if (i === 1) continue;
 					pagenation.push({ href: '/index/' + i, num: i });
 				}
 				return pagenation;
-			})();
+			}();
 		} else {
 			self.hasPrev = false;
 			self.prevPagenations = null;
@@ -3405,16 +3609,16 @@ riot.tag2('niltea-footer', '<footer class="footer"> <nav class="navigation" if="
 		if (self.page < self.maxPage) {
 			self.hasNext = true;
 			self.nextPage = '/index/' + (self.page + 1);
-			self.nextPagenations = (() => {
-				const pagenation = [{ href: '/index/' + self.maxPage, num: self.maxPage }];
+			self.nextPagenations = function () {
+				var pagenation = [{ href: '/index/' + self.maxPage, num: self.maxPage }];
 
 				if (self.page === self.maxPage - 1) return pagenation;
-				for (let i = self.page + pagenations, l = self.page + 1; i >= l; i -= 1) {
+				for (var i = self.page + pagenations, l = self.page + 1; i >= l; i -= 1) {
 					if (i === self.maxPage) continue;
 					pagenation.unshift({ href: '/index/' + i, num: i });
 				}
 				return pagenation;
-			})();
+			}();
 		} else {
 			self.hasNext = false;
 			self.nextPagenations = null;
@@ -3422,43 +3626,51 @@ riot.tag2('niltea-footer', '<footer class="footer"> <nav class="navigation" if="
 		self.update();
 	};
 
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changedBlogInfo, () => {
-		self.maxPage = Math.ceil(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].blogInfo.posts / __WEBPACK_IMPORTED_MODULE_2__Constant_Constant__["a" /* default */].indexPostLimit);
+	_riotcontrol2.default.on(_Store2.default.ActionTypes.changedBlogInfo, function () {
+		self.maxPage = Math.ceil(_Store2.default.blogInfo.posts / _Constant2.default.indexPostLimit);
 		modPagenation();
 	});
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changedCurrent, modPagenation);
+	_riotcontrol2.default.on(_Store2.default.ActionTypes.changedCurrent, modPagenation);
 });
 
 /***/ }),
 /* 9 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Store_Store__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Constant_Constant__ = __webpack_require__(3);
+
+
+var _riotcontrol = __webpack_require__(1);
+
+var _riotcontrol2 = _interopRequireDefault(_riotcontrol);
+
+var _Store = __webpack_require__(3);
+
+var _Store2 = _interopRequireDefault(_Store);
+
+var _Constant = __webpack_require__(2);
+
+var _Constant2 = _interopRequireDefault(_Constant);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var riot = __webpack_require__(0);
 
-
-
 riot.tag2('niltea-header', '<header class="mainHeader"> <h1> <a href="/" class="home"> <span class="mainTitle">{title}</span> <span class="siteDescription"><raw content="{description}"></raw></span> </a> </h1> <nav class="hamburger lsf" ref="hamburger" onclick="{hamburger}">menu</nav> <nav class="gnav clearfix" id="gnav" ref="gnav"> <ul> <li class="gnav_item about" title="about"><a href="/about">about</a></li> <li class="gnav_item pixiv" title="Pixiv"><a href="https://pixiv.me/kicky" target="_blank">pixiv</a></li> <li class="gnav_item twitter lsf" title="Twitter"><a href="https://twitter.com/niltea" target="_blank">twitter</a></li> <li class="gnav_item github lsf" title="GitHub"><a href="https://github.com/niltea" target="_blank">github</a></li> </ul> </nav> </header>', '', '', function (opts) {
-	const self = this;
+	var self = this;
 	self.title = '';
 	self.description = '';
 
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changedBlogInfo, () => {
-		const blogInfo = __WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].blogInfo;
+	_riotcontrol2.default.on(_Store2.default.ActionTypes.changedBlogInfo, function () {
+		var blogInfo = _Store2.default.blogInfo;
 		self.title = blogInfo.title;
 		self.description = blogInfo.description;
 		self.update();
 	});
 
-	let isGnavShown = false;
-	const gnavDisp = opt => {
-		const shown = 'narrow_shown';
+	var isGnavShown = false;
+	var gnavDisp = function gnavDisp(opt) {
+		var shown = 'narrow_shown';
 		if (opt.constructor !== Boolean) {
 
 			opt = isGnavShown === true ? false : true;
@@ -3476,115 +3688,144 @@ riot.tag2('niltea-header', '<header class="mainHeader"> <h1> <a href="/" class="
 		self.update();
 	};
 
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changedCurrent, () => gnavDisp(false));
-	self.hamburger = () => gnavDisp('toggle');
+	_riotcontrol2.default.on(_Store2.default.ActionTypes.changedCurrent, function () {
+		return gnavDisp(false);
+	});
+	self.hamburger = function () {
+		return gnavDisp('toggle');
+	};
 
-	let prevTop = 0;
-	const scrollHandler = scrollTop => {
+	var prevTop = 0;
+	var scrollHandler = function scrollHandler(scrollTop) {
 		if (!isGnavShown) {
 			prevTop = scrollTop;
 			return;
 		}
-		const scrollDiff = Math.abs(scrollTop - prevTop);
+		var scrollDiff = Math.abs(scrollTop - prevTop);
 		if (scrollDiff >= 6) gnavDisp(false);
 		prevTop = scrollTop;
 	};
-	self.on('mount', () => {
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_2__Constant_Constant__["a" /* default */].onScroll, scrollHandler);
+	self.on('mount', function () {
+		_riotcontrol2.default.on(_Constant2.default.onScroll, scrollHandler);
 	});
-	self.on('unmount', () => {
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_2__Constant_Constant__["a" /* default */].onScroll, scrollHandler);
+	self.on('unmount', function () {
+		_riotcontrol2.default.off(_Constant2.default.onScroll, scrollHandler);
 	});
 });
 
 /***/ }),
 /* 10 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Store_Store__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Constant_Constant__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__class_loader__ = __webpack_require__(16);
+
+
+var _riotcontrol = __webpack_require__(1);
+
+var _riotcontrol2 = _interopRequireDefault(_riotcontrol);
+
+var _Action = __webpack_require__(4);
+
+var _Action2 = _interopRequireDefault(_Action);
+
+var _Store = __webpack_require__(3);
+
+var _Store2 = _interopRequireDefault(_Store);
+
+var _Constant = __webpack_require__(2);
+
+var _Constant2 = _interopRequireDefault(_Constant);
+
+var _class_loader = __webpack_require__(16);
+
+var _class_loader2 = _interopRequireDefault(_class_loader);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var riot = __webpack_require__(0);
-
-
-
-
-
-
 
 
 riot.tag2('niltea-loader', '<div class="loader_container" ref="loader"> <div class="loadingMsg"> <figure class="logo"></figure> <span class="progress">loading Contents...<span id="progressContainer">0%</span></span> </div> </div>', '', '', function (opts) {
 
-	const self = this;
+	var self = this;
 
-	const contentLoaded = () => {
-		setTimeout(() => {
+	var contentLoaded = function contentLoaded() {
+		setTimeout(function () {
 			self.refs.loader.classList.add('disabled');
 		}, 0);
 
-		__WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].contentLoaded();
+		_Action2.default.contentLoaded();
 	};
-	const showLoader = () => {
-		setTimeout(() => {
+	var showLoader = function showLoader() {
+		setTimeout(function () {
 			self.refs.loader.classList.remove('disabled');
 		}, 0);
 	};
-	const activateLoader = () => {
+	var activateLoader = function activateLoader() {
 
-		__WEBPACK_IMPORTED_MODULE_4__class_loader__["a" /* default */].activateLoader(contentLoaded);
+		_class_loader2.default.activateLoader(contentLoaded);
 	};
 
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].showLoader, showLoader);
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].setLoader, activateLoader);
+	_riotcontrol2.default.on(_Constant2.default.showLoader, showLoader);
+	_riotcontrol2.default.on(_Constant2.default.setLoader, activateLoader);
 });
 
 /***/ }),
 /* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Store_Store__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Constant_Constant__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__niltea_util_js__ = __webpack_require__(5);
+
+
+var _riotcontrol = __webpack_require__(1);
+
+var _riotcontrol2 = _interopRequireDefault(_riotcontrol);
+
+var _Action = __webpack_require__(4);
+
+var _Action2 = _interopRequireDefault(_Action);
+
+var _Store = __webpack_require__(3);
+
+var _Store2 = _interopRequireDefault(_Store);
+
+var _Constant = __webpack_require__(2);
+
+var _Constant2 = _interopRequireDefault(_Constant);
+
+var _niltea_util = __webpack_require__(5);
+
+var _niltea_util2 = _interopRequireDefault(_niltea_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var riot = __webpack_require__(0);
-const debug = true;
-const log = !debug ? arg => null : (...arg) => console.log(...arg);
+var debug = true;
+var log = !debug ? function (arg) {
+	return null;
+} : function () {
+	var _console;
 
-
-
-
-
-
-
+	return (_console = console).log.apply(_console, arguments);
+};
 
 riot.tag2('niltea-modal', '<div class="modal" ref="modal"> <div class="modal_bg" ref="modalBg" onclick="{this.hideModal}"></div> <img if="{figure}" riot-src="{figure}" class="figure" ref="figure" onclick="{this.hideModal}"> <nav class="close lsf" ref="close" onclick="{this.hideModal}">close</nav> </div>', '', '', function (opts) {
-	const self = this;
-	const wrapper = document.getElementById('wrapper');
+	var self = this;
+	var wrapper = document.getElementById('wrapper');
 	self.figure = null;
 
-	const showModal = target => {
+	var showModal = function showModal(target) {
 		self.refs.modal.classList.add('shown');
 
-		self.scrollY = __WEBPACK_IMPORTED_MODULE_4__niltea_util_js__["a" /* default */].getScrollTop();
+		self.scrollY = _niltea_util2.default.getScrollTop();
 		wrapper.style.position = 'fixed';
 		wrapper.style.top = self.scrollY * -1 + 'px';
 	};
-	const openModal = event => {
+	var openModal = function openModal(event) {
 		log('openModal is called.');
 		event.preventDefault();
 
-		const target = event.target.style.backgroundImage.match(/https?:\/+[\d\w\.\/]*/)[0];
+		var target = event.target.style.backgroundImage.match(/https?:\/+[\d\w\.\/]*/)[0];
 		log('openModal: target acquired', target);
 
 		self.figure = target;
@@ -3593,25 +3834,25 @@ riot.tag2('niltea-modal', '<div class="modal" ref="modal"> <div class="modal_bg"
 		showModal(target);
 	};
 
-	const hideModal = () => {
+	var hideModal = function hideModal() {
 		log('hideModal is called.');
 		self.refs.modal.classList.remove('shown');
 
 		wrapper.style.position = '';
 		wrapper.style.top = '';
-		__WEBPACK_IMPORTED_MODULE_4__niltea_util_js__["a" /* default */].setScrollTop(self.scrollY);
+		_niltea_util2.default.setScrollTop(self.scrollY);
 	};
 	self.hideModal = hideModal;
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].openModal, openModal);
+	_riotcontrol2.default.on(_Constant2.default.openModal, openModal);
 
-	const unMountSelf = () => {
-		if (__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].current.currentPage === 'posts') return;
+	var unMountSelf = function unMountSelf() {
+		if (_Store2.default.current.currentPage === 'posts') return;
 		self.unmount(true);
 	};
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changedCurrent, unMountSelf);
-	self.on('unmount', () => {
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changedCurrent, unMountSelf);
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].openModal, openModal);
+	_riotcontrol2.default.on(_Store2.default.ActionTypes.changedCurrent, unMountSelf);
+	self.on('unmount', function () {
+		_riotcontrol2.default.off(_Store2.default.ActionTypes.changedCurrent, unMountSelf);
+		_riotcontrol2.default.off(_Constant2.default.openModal, openModal);
 	});
 });
 
@@ -3619,52 +3860,68 @@ riot.tag2('niltea-modal', '<div class="modal" ref="modal"> <div class="modal_bg"
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
 
 var riot = __webpack_require__(0);
 riot.tag2('raw', '<span></span>', '', '', function (opts) {
+    var _this = this;
+
     this.root.innerHTML = opts.content;
-    this.on('update', () => this.root.innerHTML = opts.content);
+    this.on('update', function () {
+        return _this.root.innerHTML = opts.content;
+    });
 });
 
 /***/ }),
 /* 13 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Store_Store__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Constant_Constant__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__niltea_util_js__ = __webpack_require__(5);
+
+
+var _riotcontrol = __webpack_require__(1);
+
+var _riotcontrol2 = _interopRequireDefault(_riotcontrol);
+
+var _Action = __webpack_require__(4);
+
+var _Action2 = _interopRequireDefault(_Action);
+
+var _Store = __webpack_require__(3);
+
+var _Store2 = _interopRequireDefault(_Store);
+
+var _Constant = __webpack_require__(2);
+
+var _Constant2 = _interopRequireDefault(_Constant);
+
+var _niltea_util = __webpack_require__(5);
+
+var _niltea_util2 = _interopRequireDefault(_niltea_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var riot = __webpack_require__(0);
 
-
-
-
-
-
-
 riot.tag2('niltea-index', '<section id="article_list" class="post index" ref="articleList"> <niltea-list-item articlelist="{articleList}"></niltea-list-item> </section>', '', '', function (opts) {
-	const self = this;
+	var self = this;
 	self.articleList = {};
 	self.cords = {};
 
-	const getElmSize = e => {
-		requestAnimationFrame(() => {
-			const scrollTop = ~~__WEBPACK_IMPORTED_MODULE_4__niltea_util_js__["a" /* default */].getScrollTop();
-			const winHeight = ~~window.innerHeight;
+	var getElmSize = function getElmSize(e) {
+		requestAnimationFrame(function () {
+			var scrollTop = ~~_niltea_util2.default.getScrollTop();
+			var winHeight = ~~window.innerHeight;
 
-			const postRect = self.refs.articleList.getBoundingClientRect();
-			const postTop = postRect.top;
-			const postHeight = postRect.height;
-			const postPB = parseInt(getComputedStyle(self.refs.articleList).paddingBottom, 10);
-			const postBtm = ~~(postTop + postHeight - postPB + scrollTop);
+			var postRect = self.refs.articleList.getBoundingClientRect();
+			var postTop = postRect.top;
+			var postHeight = postRect.height;
+			var postPB = parseInt(getComputedStyle(self.refs.articleList).paddingBottom, 10);
+			var postBtm = ~~(postTop + postHeight - postPB + scrollTop);
 
-			const firstArticle = self.refs.articleList.getElementsByClassName('post_item')[0];
-			const articleHeight = firstArticle.getBoundingClientRect().height;
+			var firstArticle = self.refs.articleList.getElementsByClassName('post_item')[0];
+			var articleHeight = firstArticle.getBoundingClientRect().height;
 
 			self.cords.triggerPos = postBtm - articleHeight;
 			self.cords.winHeight = winHeight;
@@ -3672,125 +3929,132 @@ riot.tag2('niltea-index', '<section id="article_list" class="post index" ref="ar
 	};
 
 	self.is_infScrActive = false;
-	const scrollHandler = scrollTop => {
+	var scrollHandler = function scrollHandler(scrollTop) {
 		if (self.is_infScrActive) return;
 
-		const winBtmPos = scrollTop + self.cords.winHeight;
+		var winBtmPos = scrollTop + self.cords.winHeight;
 
 		if (winBtmPos >= self.cords.triggerPos) {
 
-			__WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].callInfScr();
+			_Action2.default.callInfScr();
 		}
 	};
 
-	const fetchAddContnt = () => {
+	var fetchAddContnt = function fetchAddContnt() {
 
 		if (self.is_infScrActive) return;
 
 		self.is_infScrActive = true;
 
-		const currentPage = __WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].current.page;
+		var currentPage = _Store2.default.current.page;
 
-		const nextPage = currentPage + 1;
+		var nextPage = currentPage + 1;
 
-		const limit = __WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].indexPostLimit;
+		var limit = _Constant2.default.indexPostLimit;
 
-		const maxPage = Math.ceil(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].blogInfo.posts / limit);
+		var maxPage = Math.ceil(_Store2.default.blogInfo.posts / limit);
 
-		__WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].loadContent({ isIncrement: true, type: 'posts', query: { limit, offset: limit * currentPage }, page: nextPage });
+		_Action2.default.loadContent({ isIncrement: true, type: 'posts', query: { limit: limit, offset: limit * currentPage }, page: nextPage });
 
 		if (nextPage <= maxPage) {}
 
 		if (currentPage >= maxPage) {
-			__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].onScroll, scrollHandler);
+			_riotcontrol2.default.off(_Constant2.default.onScroll, scrollHandler);
 		}
 	};
 
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].callInfScr, fetchAddContnt);
+	_riotcontrol2.default.on(_Constant2.default.callInfScr, fetchAddContnt);
 
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changed, () => {
-		self.articleList = __WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].content;
+	_riotcontrol2.default.on(_Store2.default.ActionTypes.changed, function () {
+		self.articleList = _Store2.default.content;
 		self.update();
 	});
 
-	const contentLoadHandler = () => {
+	var contentLoadHandler = function contentLoadHandler() {
 		getElmSize();
 		self.is_infScrActive = false;
 	};
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].contentLoaded, contentLoadHandler);
+	_riotcontrol2.default.on(_Constant2.default.contentLoaded, contentLoadHandler);
 
-	self.on('updated', () => {
-		__WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].setLoader();
+	self.on('updated', function () {
+		_Action2.default.setLoader();
 	});
-	self.on('before-mount', __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].showLoader);
-	self.on('mount', () => {
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].onScroll, scrollHandler);
+	self.on('before-mount', _Action2.default.showLoader);
+	self.on('mount', function () {
+		_riotcontrol2.default.on(_Constant2.default.onScroll, scrollHandler);
 		window.addEventListener('resize', getElmSize);
 	});
 
-	self.on('unmount', () => {
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changed);
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].contentLoaded, contentLoadHandler);
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].callInfScr, fetchAddContnt);
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].onScroll, scrollHandler);
+	self.on('unmount', function () {
+		_riotcontrol2.default.off(_Store2.default.ActionTypes.changed);
+		_riotcontrol2.default.off(_Constant2.default.contentLoaded, contentLoadHandler);
+		_riotcontrol2.default.off(_Constant2.default.callInfScr, fetchAddContnt);
+		_riotcontrol2.default.off(_Constant2.default.onScroll, scrollHandler);
 		window.removeEventListener('resize', getElmSize);
 	});
 });
 
 riot.tag2('niltea-list-item', '<article each="{item in opts.articlelist}" riot-style="background-image: url({item.photos ? item.photos[0].original_size.url : null});" class="post_item loader_bgi"> <a class="post_item_link" href="/post/{item.id}"> <div class="post_item_info"> <h3 class="post_item_title"><raw content="{item.title}"></raw></h3> <section class="post_item_meta"> <span class="post_item_date">{this.formatDate(item.date)}</span><br><span class="post_item_notes">{item.note_count} notes</span> </section> </div> </a> <div class="post_item_action"> <a href="http://tumblr.com/reblog/{item.id}/{item.reblog_key}/" class="like lsf" target="_blank">heart</a> <a href="http://tumblr.com/reblog/{item.id}/{item.reblog_key}/" class="reblog lsf" target="_blank">retweet</a> </div> </article>', '', '', function (opts) {
-	const self = this;
-	self.formatDate = date => {
-		const _date = new Date(date);
-		return `${_date.getFullYear()} / ${_date.getMonth() + 1} / ${_date.getDate()}`;
+	var self = this;
+	self.formatDate = function (date) {
+		var _date = new Date(date);
+		return _date.getFullYear() + ' / ' + (_date.getMonth() + 1) + ' / ' + _date.getDate();
 	};
 });
 
 riot.tag2('niltea-index-list-lead', '<span class="line" each="{content in lines}">{content}</span>', '', '', function (opts) {
-	let content = opts.content;
+	var content = opts.content;
 	content = content.replace('</p>', '').replace('<p>', '');
 	this.lines = content.split('<br />');
 });
 
 /***/ }),
 /* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riotcontrol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riotcontrol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Store_Store__ = __webpack_require__(2);
+
+
+var _riotcontrol = __webpack_require__(1);
+
+var _riotcontrol2 = _interopRequireDefault(_riotcontrol);
+
+var _Action = __webpack_require__(4);
+
+var _Action2 = _interopRequireDefault(_Action);
+
+var _Store = __webpack_require__(3);
+
+var _Store2 = _interopRequireDefault(_Store);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var riot = __webpack_require__(0);
 
-
-
-
 riot.tag2('niltea-post', '<article class="post post-single"> <h2 class="post_title"><raw content="{title}"></raw></h2> <section class="photo" if="{photos}" ref="photo"> <div if="{!isPhotoSet}" class="photo_rowContainer layout_itemCount-1" ref="rowContainer"> <a class="photo_item photo_item-single" if="{!isPhotoSet}" each="{photos}" href="{original_size.url}" onclick="{openModal}"> <figure class="photo_item_image" riot-style="background-image: url({alt_sizes[0].url})" ref="photoItem"></figure> </a> </div> <div if="{isPhotoSet}" each="{row in photoset}" class="photo_rowContainer layout_itemCount-{row.length}" ref="rowContainer"> <a class="photo_item photo_item-set" each="{row}" href="{original_size.url}" onclick="{openModal}"> <figure class="photo_item_image" riot-style="background-image: url({alt_sizes[0].url})" ref="photoItem"></figure> </a> </div> </section> <section class="post_text" if="{caption}"><raw content="{caption}"></raw></section> <div class="post_meta"> <a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="reblog lsf" target="_blank">retweet</a> <a href="http://tumblr.com/reblog/{id}/{reblog_key}/" class="like lsf" target="_blank">{heart}</a> </div> </article>', '', '', function (opts) {
-	const self = this;
-	const contentKeys = ['id', 'caption', 'title', 'date', 'type', 'url', 'photos', 'photoset_layout', 'reblog_key'];
+	var self = this;
+	var contentKeys = ['id', 'caption', 'title', 'date', 'type', 'url', 'photos', 'photoset_layout', 'reblog_key'];
 
 	self.title = '';
 	self.heart = 'heartempty';
 
-	self.openModal = __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].openModal;
+	self.openModal = _Action2.default.openModal;
 
 	self.isPhotoSet = false;
 	self.photoset = null;
 	self.layout = [];
-	let isLayoutBinded = false;
+	var isLayoutBinded = false;
 
-	const bindPhotoset = () => {
+	var bindPhotoset = function bindPhotoset() {
 
-		const rowContainer = self.isPhotoSet ? self.refs.rowContainer : [self.refs.rowContainer];
+		var rowContainer = self.isPhotoSet ? self.refs.rowContainer : [self.refs.rowContainer];
 
-		rowContainer.forEach((row, rowIndex) => {
+		rowContainer.forEach(function (row, rowIndex) {
 
-			const photos = [].slice.call(row.getElementsByTagName('figure'));
-			photos.forEach((photo, photoIndex) => {
+			var photos = [].slice.call(row.getElementsByTagName('figure'));
+			photos.forEach(function (photo, photoIndex) {
 
-				const photo_in_arr = self.photoset[rowIndex][photoIndex];
+				var photo_in_arr = self.photoset[rowIndex][photoIndex];
 
 				photo_in_arr.element = photo;
 			});
@@ -3799,27 +4063,27 @@ riot.tag2('niltea-post', '<article class="post post-single"> <h2 class="post_tit
 		isLayoutBinded = true;
 	};
 
-	const setPhotoSize = () => {
+	var setPhotoSize = function setPhotoSize() {
 		if (!self.photos) return;
 
-		const rowContainer = self.isPhotoSet ? self.refs.rowContainer : [self.refs.rowContainer];
+		var rowContainer = self.isPhotoSet ? self.refs.rowContainer : [self.refs.rowContainer];
 
-		const rowWidth = rowContainer[0].getBoundingClientRect().width;
+		var rowWidth = rowContainer[0].getBoundingClientRect().width;
 
 		if (!isLayoutBinded) bindPhotoset();
 
-		self.photoset.forEach((row, rowIndex) => {
+		self.photoset.forEach(function (row, rowIndex) {
 
-			const fitWidth = ~~(rowWidth / row.length);
-			let lowest = null;
+			var fitWidth = ~~(rowWidth / row.length);
+			var lowest = null;
 
-			row.forEach(photo => {
-				const width = photo.original_size.width;
-				const height = photo.original_size.height;
+			row.forEach(function (photo) {
+				var width = photo.original_size.width;
+				var height = photo.original_size.height;
 
-				const imgMag = fitWidth / width;
+				var imgMag = fitWidth / width;
 
-				const fitHeight = ~~(height * imgMag);
+				var fitHeight = ~~(height * imgMag);
 
 				if (lowest === null || lowest > fitHeight) lowest = fitHeight;
 			});
@@ -3827,17 +4091,17 @@ riot.tag2('niltea-post', '<article class="post post-single"> <h2 class="post_tit
 		});
 	};
 
-	const getPhotoLayout = () => {
+	var getPhotoLayout = function getPhotoLayout() {
 
 		if (!self.photoset_layout) self.photoset_layout = '1';
 		self.layout = self.photoset_layout.split('');
-		const photoset = [];
-		let photoIndex = 0;
+		var photoset = [];
+		var photoIndex = 0;
 
-		self.layout.forEach((itemPerRow, row) => {
-			const photosInRow = [];
-			for (let i = parseInt(itemPerRow, 10); i > 0; i -= 1) {
-				const photo = self.photos[photoIndex];
+		self.layout.forEach(function (itemPerRow, row) {
+			var photosInRow = [];
+			for (var i = parseInt(itemPerRow, 10); i > 0; i -= 1) {
+				var photo = self.photos[photoIndex];
 				photosInRow.push(photo);
 				photoIndex += 1;
 			}
@@ -3846,24 +4110,24 @@ riot.tag2('niltea-post', '<article class="post post-single"> <h2 class="post_tit
 		return photoset;
 	};
 
-	const afterUpdate = () => {
+	var afterUpdate = function afterUpdate() {
 		setPhotoSize();
 	};
 
-	self.on('updated', __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].setLoader);
-	self.on('before-mount', __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].showLoader);
-	self.on('mount', () => {
+	self.on('updated', _Action2.default.setLoader);
+	self.on('before-mount', _Action2.default.showLoader);
+	self.on('mount', function () {
 		window.addEventListener('resize', setPhotoSize);
 	});
 
-	self.on('unmount', () => {
-		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changed);
+	self.on('unmount', function () {
+		_riotcontrol2.default.off(_Store2.default.ActionTypes.changed);
 		window.removeEventListener('resize', setPhotoSize);
 	});
 
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changed, () => {
-		const content = __WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].content[0];
-		contentKeys.forEach(key => {
+	_riotcontrol2.default.on(_Store2.default.ActionTypes.changed, function () {
+		var content = _Store2.default.content[0];
+		contentKeys.forEach(function (key) {
 			self[key] = content[key];
 		});
 		self.caption = self.caption.replace(/<h2>.+<\/h2>/, '');
@@ -3878,16 +4142,20 @@ riot.tag2('niltea-post', '<article class="post post-single"> <h2 class="post_tit
 
 /***/ }),
 /* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(riot) {Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__niltea_util_js__ = __webpack_require__(5);
-// import utility
+/* WEBPACK VAR INJECTION */(function(riot) {
 
+var _niltea_util = __webpack_require__(5);
+
+var _niltea_util2 = _interopRequireDefault(_niltea_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // riot and tags
-__webpack_require__(0);
+__webpack_require__(0); // import utility
+
 __webpack_require__(7);
 __webpack_require__(13);
 __webpack_require__(14);
@@ -3899,106 +4167,142 @@ __webpack_require__(10);
 __webpack_require__(11);
 
 riot.mount('#wrapper', 'niltea-base');
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
 /* 16 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-const debug = false;
-const backgroundImageClassname = 'loader_bgi';
 
-const log = !debug ? arg => null : (...arg) => console.log(...arg);
-/* harmony default export */ __webpack_exports__["a"] = (new class Loader {
-	constructor() {
-		document.addEventListener('DOMContentLoaded', () => {
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var debug = false;
+var backgroundImageClassname = 'loader_bgi';
+
+var log = !debug ? function (arg) {
+	return null;
+} : function () {
+	var _console;
+
+	return (_console = console).log.apply(_console, arguments);
+};
+exports.default = new (function () {
+	function Loader() {
+		_classCallCheck(this, Loader);
+
+		document.addEventListener('DOMContentLoaded', function () {
 			log('Loader constructor called');
 		});
 	}
-	activateLoader(onComplete, onEach, progressContainer) {
-		log('Loader activateLoader called');
-		// ロード済みの画像数
-		this.receivedCount = 0;
-		// 画像を探してくる
-		this.images = this.findImages();
-		this.expectedCount = this.images.length;
-		// 完了時の動作が定義されていればそれを使う
-		this.onComplete = typeof onComplete === 'function' ? onComplete : this.contentLoaded;
-		// 画像読み込みごとの動作が定義されていればそれを使う。
-		// なければ定義する
-		if (typeof onEach !== 'function') {
-			this.progressContainer = progressContainer ? progressContainer : document.getElementById('progressContainer');
-			onEach = !this.progressContainer ? null : receivedCount => {
-				const progress = Math.round(receivedCount / this.expectedCount * 100) + '%';
-				this.progressContainer.textContent = progress;
-			};
+
+	_createClass(Loader, [{
+		key: 'activateLoader',
+		value: function activateLoader(onComplete, onEach, progressContainer) {
+			var _this = this;
+
+			log('Loader activateLoader called');
+			// ロード済みの画像数
+			this.receivedCount = 0;
+			// 画像を探してくる
+			this.images = this.findImages();
+			this.expectedCount = this.images.length;
+			// 完了時の動作が定義されていればそれを使う
+			this.onComplete = typeof onComplete === 'function' ? onComplete : this.contentLoaded;
+			// 画像読み込みごとの動作が定義されていればそれを使う。
+			// なければ定義する
+			if (typeof onEach !== 'function') {
+				this.progressContainer = progressContainer ? progressContainer : document.getElementById('progressContainer');
+				onEach = !this.progressContainer ? null : function (receivedCount) {
+					var progress = Math.round(receivedCount / _this.expectedCount * 100) + '%';
+					_this.progressContainer.textContent = progress;
+				};
+			}
+			this.onEach = onEach;
+
+			log('images', this.images);
+			log('onComplete', this.onComplete);
+			log('onEach', this.onEach);
+			this.setWatcher();
 		}
-		this.onEach = onEach;
+	}, {
+		key: 'findImages',
+		value: function findImages() {
+			log('Loader findImages called');
+			var images = [];
+			// img要素を探してくる
+			var targets_img = [].slice.call(document.getElementsByTagName('img'));
+			targets_img.forEach(function (el) {
+				var _src = el.getAttribute('src');
+				// srcが空なら中断
+				if (!_src) return;
+				images.push(_src);
+			});
 
-		log('images', this.images);
-		log('onComplete', this.onComplete);
-		log('onEach', this.onEach);
-		this.setWatcher();
-	}
-	findImages() {
-		log('Loader findImages called');
-		const images = [];
-		// img要素を探してくる
-		const targets_img = [].slice.call(document.getElementsByTagName('img'));
-		targets_img.forEach(el => {
-			let _src = el.getAttribute('src');
-			// srcが空なら中断
-			if (!_src) return;
-			images.push(_src);
-		});
+			var targets_bgi = [].slice.call(document.getElementsByClassName(backgroundImageClassname));
+			var bgi = "background-image";
+			targets_bgi.forEach(function (el) {
+				// elementが空なら中断
+				if (!el) return;
+				// 背景画像を取得し、取得できなければ中断
+				var _src = el.style[bgi] || getComputedStyle(el, "")[bgi];
+				if (!_src || _src == 'none') return;
 
-		const targets_bgi = [].slice.call(document.getElementsByClassName(backgroundImageClassname));
-		const bgi = "background-image";
-		targets_bgi.forEach(el => {
-			// elementが空なら中断
-			if (!el) return;
-			// 背景画像を取得し、取得できなければ中断
-			let _src = el.style[bgi] || getComputedStyle(el, "")[bgi];
-			if (!_src || _src == 'none') return;
-
-			// 画像をpush
-			images.push(_src.replace(/^url\(|\"|\)$/g, ''));
-		});
-		return images;
-	}
-	setWatcher() {
-		log('Loader setWatcher called');
-		// if images is empty, go to loaded Function
-		if (!this.images || this.images.length <= 0) {
-			this.onComplete();
-			return;
+				// 画像をpush
+				images.push(_src.replace(/^url\(|\"|\)$/g, ''));
+			});
+			return images;
 		}
+	}, {
+		key: 'setWatcher',
+		value: function setWatcher() {
+			var _this2 = this;
 
-		//画像の数だけ_loadListenerが呼ばれたらcallbackが呼ばれる
-		// const _loadListener(expectedCount = , setting.onEach, setting.onComplete);
-		this.images.forEach(url => {
-			const img = new Image();
-			document.body.appendChild(img);
-			img.width = img.height = 1;
-			img.onload = this._loadListener.bind(this);
-			img.src = url;
-		});
-	}
-	_loadListener(e) {
-		// remove temporary image
-		const tgt = e.target;
-		if (tgt) tgt.parentNode.removeChild(tgt);
-		this.receivedCount += 1;
-		if (this.onEach) this.onEach(this.receivedCount);
-		if (this.receivedCount >= this.expectedCount) {
-			this.onComplete();
+			log('Loader setWatcher called');
+			// if images is empty, go to loaded Function
+			if (!this.images || this.images.length <= 0) {
+				this.onComplete();
+				return;
+			}
+
+			//画像の数だけ_loadListenerが呼ばれたらcallbackが呼ばれる
+			// const _loadListener(expectedCount = , setting.onEach, setting.onComplete);
+			this.images.forEach(function (url) {
+				var img = new Image();
+				document.body.appendChild(img);
+				img.width = img.height = 1;
+				img.onload = _this2._loadListener.bind(_this2);
+				img.src = url;
+			});
 		}
-	}
-	contentLoaded() {
-		log('Loader contentLoaded called');
-	}
-}());
+	}, {
+		key: '_loadListener',
+		value: function _loadListener(e) {
+			// remove temporary image
+			var tgt = e.target;
+			if (tgt) tgt.parentNode.removeChild(tgt);
+			this.receivedCount += 1;
+			if (this.onEach) this.onEach(this.receivedCount);
+			if (this.receivedCount >= this.expectedCount) {
+				this.onComplete();
+			}
+		}
+	}, {
+		key: 'contentLoaded',
+		value: function contentLoaded() {
+			log('Loader contentLoaded called');
+		}
+	}]);
+
+	return Loader;
+}())();
 
 /***/ }),
 /* 17 */
@@ -4238,6 +4542,7 @@ module.exports = jsonp;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot_observable__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_riot_observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_riot_observable__);
 
@@ -4586,7 +4891,7 @@ route.start = function (autoExec) {
 route.base();
 route.parser();
 
-/* harmony default export */ __webpack_exports__["a"] = (route);
+/* harmony default export */ __webpack_exports__["default"] = (route);
 
 
 /***/ })
