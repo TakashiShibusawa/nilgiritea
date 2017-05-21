@@ -124,6 +124,10 @@ import util from '../niltea_util.js';
 				</section>
 			</div>
 		</a>
+		<div class="post_item_action">
+			<a href="http://tumblr.com/reblog/{item.id}/{item.reblog_key}/" class="like lsf" target='_blank'>heart</a>
+			<a href="http://tumblr.com/reblog/{item.id}/{item.reblog_key}/" class="reblog lsf" target='_blank'>retweet</a>
+		</div>
 	</article>
 	<script>
 		const self = this;

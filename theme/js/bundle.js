@@ -3737,7 +3737,7 @@ riot.tag2('niltea-index', '<section id="article_list" class="post index" ref="ar
 	});
 });
 
-riot.tag2('niltea-list-item', '<article each="{item in opts.articlelist}" riot-style="background-image: url({item.photos ? item.photos[0].original_size.url : null});" class="post_item loader_bgi"> <a class="post_item_link" href="/post/{item.id}"> <div class="post_item_info"> <h3 class="post_item_title"><raw content="{item.title}"></raw></h3> <section class="post_item_meta"> <span class="post_item_date">{this.formatDate(item.date)}</span><br><span class="post_item_notes">{item.note_count} notes</span> </section> </div> </a> </article>', '', '', function (opts) {
+riot.tag2('niltea-list-item', '<article each="{item in opts.articlelist}" riot-style="background-image: url({item.photos ? item.photos[0].original_size.url : null});" class="post_item loader_bgi"> <a class="post_item_link" href="/post/{item.id}"> <div class="post_item_info"> <h3 class="post_item_title"><raw content="{item.title}"></raw></h3> <section class="post_item_meta"> <span class="post_item_date">{this.formatDate(item.date)}</span><br><span class="post_item_notes">{item.note_count} notes</span> </section> </div> </a> <div class="post_item_action"> <a href="http://tumblr.com/reblog/{item.id}/{item.reblog_key}/" class="like lsf" target="_blank">heart</a> <a href="http://tumblr.com/reblog/{item.id}/{item.reblog_key}/" class="reblog lsf" target="_blank">retweet</a> </div> </article>', '', '', function (opts) {
 	const self = this;
 	self.formatDate = date => {
 		const _date = new Date(date);

@@ -298,6 +298,7 @@ footer
 index
 =====================*/
 .post_item {
+  position: relative;
   will-change: filter;
   width: 100%;
   height: 350px;
@@ -360,6 +361,19 @@ index
   padding: 2px 8px;
   font-size: 1.0em;
   background-color: #fff; }
+
+.post_item_action {
+  position: absolute;
+  left: 40px;
+  bottom: 31px; }
+  .post_item_action a {
+    text-decoration: none;
+    font-size: 2em;
+    margin-right: 0.5em; }
+  .post_item_action .reblog {
+    color: #222; }
+  .post_item_action .like {
+    color: #c22; }
 
 /*=====================
 post
