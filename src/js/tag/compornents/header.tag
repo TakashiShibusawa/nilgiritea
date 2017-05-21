@@ -1,5 +1,6 @@
 import RiotControl from 'riotcontrol';
 import Store from '../../Store/Store';
+import Constant from "../../Constant/Constant";
 <niltea-header>
 	<header class="mainHeader">
 		<h1>
@@ -29,6 +30,7 @@ import Store from '../../Store/Store';
 			self.description = blogInfo.description;
 			self.update();
 		});
+
 		RiotControl.on(Store.ActionTypes.changedCurrent, () => {
 			self.refs.gnav.classList.remove('narrow_shown');
 			self.update();
@@ -36,6 +38,19 @@ import Store from '../../Store/Store';
 		self.hamburger = () => {
 			self.refs.gnav.classList.toggle('narrow_shown');
 		}
+
+		let prevTop = 0;
+		const scrollHandler = scrollTop => {
+			const scrollDiff = Math.abs(scrollTop - prevTop);
+			if (scrollDiff >= 6) self.refs.gnav.classList.remove('narrow_shown');
+			prevTop = scrollTop;
+		};
+		self.on('mount', () => {
+			RiotControl.on(Constant.onScroll, scrollHandler);
+		})
+		self.on('unmount', () => {
+			RiotControl.off(Constant.onScroll, scrollHandler);
+		})
 	</script>
 	<style type="text/scss">
 		@import "../../../css/includes/mixin";
