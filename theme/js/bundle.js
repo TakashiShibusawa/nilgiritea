@@ -2967,6 +2967,8 @@ const constant = new class Constant {
 		this.contentLoaded = 'contentLoaded';
 		this.openModal = 'openModal';
 		this.callInfScr = 'callInfScr';
+		// events
+		this.onScroll = 'onScroll';
 	}
 
 	_getApiKey() {
@@ -3097,6 +3099,9 @@ const appAction = new class AppAction {
 	}
 	callInfScr() {
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].callInfScr, null);
+	}
+	onScroll() {
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.trigger(__WEBPACK_IMPORTED_MODULE_1__Constant_Constant__["a" /* default */].onScroll, null);
 	}
 }();
 
@@ -3299,6 +3304,7 @@ var riot = __webpack_require__(0);
 
 riot.tag2('niltea-base', '<section class="header" ref="header"></section> <section class="content" ref="content"></section> <section class="footer" ref="footer"></section> <section class="modal" ref="modal"></section> <section class="loader" ref="loader"></section>', '', '', function (opts) {
 	const self = this;
+	window.addEventListener('scroll', __WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].onScroll);
 
 	self.on('mount', () => {
 		riot.mount(self.refs.header, 'niltea-header');
@@ -3684,7 +3690,7 @@ riot.tag2('niltea-index', '<section id="article_list" class="post" ref="articleL
 	});
 	self.on('before-mount', __WEBPACK_IMPORTED_MODULE_1__Action_Action__["a" /* default */].showLoader);
 	self.on('mount', () => {
-		window.addEventListener('scroll', scrollHandler);
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].onScroll, scrollHandler);
 		window.addEventListener('resize', getElmSize);
 	});
 
@@ -3692,7 +3698,7 @@ riot.tag2('niltea-index', '<section id="article_list" class="post" ref="articleL
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changed);
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].contentLoaded, contentLoadHandler);
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].callInfScr, fetchAddContnt);
-		window.removeEventListener('scroll', scrollHandler);
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].onScroll, scrollHandler);
 		window.removeEventListener('resize', getElmSize);
 	});
 });

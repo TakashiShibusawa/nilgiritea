@@ -104,7 +104,7 @@ import util from '../niltea_util.js';
 		});
 		self.on('before-mount', Action.showLoader );
 		self.on('mount', () => {
-			window.addEventListener('scroll', scrollHandler);
+			RiotControl.on(Constant.onScroll, scrollHandler);
 			window.addEventListener('resize', getElmSize);
 		});
 
@@ -112,7 +112,7 @@ import util from '../niltea_util.js';
 			RiotControl.off(Store.ActionTypes.changed);
 			RiotControl.off(Constant.contentLoaded, contentLoadHandler);
 			RiotControl.off(Constant.callInfScr, fetchAddContnt);
-			window.removeEventListener('scroll', scrollHandler);
+			RiotControl.off(Constant.onScroll, scrollHandler);
 			window.removeEventListener('resize', getElmSize);
 		});
 	</script>

@@ -95,6 +95,9 @@ const appAction = new class AppAction {
 	callInfScr() {
 		RiotControl.trigger(Constant.callInfScr, null);
 	}
+	onScroll() {
+		RiotControl.trigger(Constant.onScroll, null);
+	}
 }
 
 // export default AppAction

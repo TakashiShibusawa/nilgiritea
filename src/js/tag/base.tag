@@ -14,6 +14,7 @@ import Constant from "../Constant/Constant";
 	<section class='loader' ref='loader'></section>
 	<script>
 		const self = this;
+	window.addEventListener('scroll', Action.onScroll);
 
 	self.on('mount', () => {
 		riot.mount(self.refs.header, 'niltea-header');

@@ -20,6 +20,8 @@ const constant = new class Constant{
 		this.contentLoaded = 'contentLoaded';
 		this.openModal     = 'openModal';
 		this.callInfScr    = 'callInfScr';
+		// events
+		this.onScroll      = 'onScroll';
 	}
 
 	_getApiKey(){
