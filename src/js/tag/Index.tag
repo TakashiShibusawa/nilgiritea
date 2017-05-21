@@ -57,8 +57,8 @@ import util from '../niltea_util.js';
 			});
 		};
 
-		// Subscribes callInfScr
-		RiotControl.on(Constant.callInfScr, () => {
+		// 追加コンテンツを読み込む動作
+		const fetchAddContnt = () => {
 			// infScrが動いてたら処理せずreturn
 			if (self.is_infScrActive) return;
 			// infScrが動いてるフラグを立てる
@@ -84,7 +84,9 @@ import util from '../niltea_util.js';
 				self.is_lastPageLoaded = true;
 				// TODO:下のページネーションを消す処理の追加
 			}
-		});
+		};
+		// Subscribes callInfScr
+		RiotControl.on(Constant.callInfScr, fetchAddContnt);
 		// Subscribes Store.onChanged
 		RiotControl.on(Store.ActionTypes.changed, () => {
 			self.articleList = Store.content;
@@ -109,6 +111,7 @@ import util from '../niltea_util.js';
 		self.on('unmount', () => {
 			RiotControl.off(Store.ActionTypes.changed);
 			RiotControl.off(Constant.contentLoaded, contentLoadHandler);
+			RiotControl.off(Constant.callInfScr, fetchAddContnt);
 			window.removeEventListener('scroll', scrollHandler);
 			window.removeEventListener('resize', getElmSize);
 		});
