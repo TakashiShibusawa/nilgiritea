@@ -99,7 +99,7 @@ export default new class Util{
 	};
 	// ブラウザ間の差異を吸収しつつscroll位置をセットする
 	setScrollTop (top) {
-		const tgt = (Util.browser.isWebKit) ? document.body : document.documentElement;
+		const tgt = (this.browser.isWebKit) ? document.body : document.documentElement;
 		tgt.scrollTop = top;
 	};
 	getScrollTop () {

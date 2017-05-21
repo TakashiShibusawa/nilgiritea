@@ -1,27 +1,50 @@
+const debug = true;
+const log = (!debug) ? arg => null : (...arg) => console.log(...arg);
+
 import RiotControl from 'riotcontrol';
 
 import Action from '../../Action/Action';
 import Store from '../../Store/Store';
 import Constant from "../../Constant/Constant";
+
+import util from '../../niltea_util.js';
 <niltea-modal>
 	<div class="modal" ref='modal'>
 		<div class="modal_bg" ref='modalBg' onclick={this.hideModal}></div>
-		<figure class="content" ref='content'></figure>
+		<img if={figure} src={figure} class="figure" ref='figure' onclick={this.hideModal} />
+		<nav class="close lsf" ref="close" onclick={this.hideModal}>close</nav>
 	</div>
 	<script>
 		const self = this;
+		const wrapper = document.getElementById('wrapper');
+		self.figure = null;
 
+		const showModal = href => {
+			self.refs.modal.classList.add('shown');
+			// 本体のロック
+			self.scrollY = util.getScrollTop();
+			wrapper.style.position = 'fixed';
+			wrapper.style.top = self.scrollY * -1 + 'px';
+		};
 		const openModal = event => {
 			event.preventDefault();
-			const el = (event.target.nodeName === 'IMG') ? event.target.parentNode : event.target;
-			const href = el.href;
-
-			const fig = self.refs.content;
-			fig.style.backgroundImage = `url('${href}')`;
-
+			// const el = (event.target.nodeName === 'IMG') ? event.target.parentNode : event.target;
+			// log(el)
+			const href = event.target.style.backgroundImage.match(/https?:\/+[\d\w\.\/]*/)[0];
+			log('openModal', href)
+			const fig = self.refs.figure;
+			self.figure = href;
+			self.update();
+			showModal(href);
 		}
+
 		const hideModal = () => {
 			console.log('hide')
+			self.refs.modal.classList.remove('shown');
+			// 本体のロック解除
+			wrapper.style.position = '';
+			wrapper.style.top = '';
+			util.setScrollTop(self.scrollY);
 		}
 		self.hideModal = hideModal;
 		RiotControl.on(Constant.openModal, openModal );
@@ -39,12 +62,20 @@ import Constant from "../../Constant/Constant";
 	<style type="text/scss">
 		@import "../../../css/includes/mixin";
 		.modal {
-			display: none;
 			position: fixed;
-			left: 0;
-			top: 0;
-			width: 50%;
-			height: 50%;
+			z-index: 9000;
+			left: 50%;
+			top: 50%;
+			width: 0;
+			height: 4px;
+			transition: 0.4s $easeOut 0.3s, height 0.3s $easeOut 0s, top 0.3s $easeOut 0s;
+			&.shown {
+				width: 100%;
+				height: 100%;
+				left: 0%;
+				top: 0;
+				transition: 0.4s $easeOut, height 0.5s $easeOut 0.5s, top 0.5s $easeOut 0.5s;
+			}
 		}
 		.modal_bg {
 			position: absolute;
@@ -54,17 +85,34 @@ import Constant from "../../Constant/Constant";
 			height: 100%;
 			background-color: rgba(#000, 0.8);
 		}
-		.content {
+		.figure {
 			position: absolute;
 			left: 0;
 			right: 0;
 			top: 0;
 			bottom: 0;
 			margin: auto;
-			width: 80%;
-			height: 90%;
-			background: center center no-repeat;
-			background-size: contain;
+			max-width: 95%;
+			max-height: 95%;
+			opacity: 0;
+		}
+		.shown .figure {
+			transition: 0s 0.5s;
+			opacity: 1;
+		}
+		.close {
+			position: absolute;
+			left: 20px;
+			top: 2.5%;
+			font-size: 3.0em;
+			color: #fff;
+			opacity: 0;
+			cursor: pointer;
+			line-height: 1;
+		}
+		.shown .close {
+			transition: 0.2s 1.1s;
+			opacity: 1;
 		}
 	</style>
 </niltea-modal>

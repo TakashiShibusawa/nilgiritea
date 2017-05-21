@@ -3209,7 +3209,7 @@ const appAction = new class AppAction {
 	}
 	// ブラウザ間の差異を吸収しつつscroll位置をセットする
 	setScrollTop(top) {
-		const tgt = Util.browser.isWebKit ? document.body : document.documentElement;
+		const tgt = this.browser.isWebKit ? document.body : document.documentElement;
 		tgt.scrollTop = top;
 	}
 	getScrollTop() {
@@ -3317,7 +3317,7 @@ riot.tag2('niltea-base', '<section class="header" ref="header"></section> <secti
 
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/index/*', page => {
 		riot.mount(self.refs.content, 'niltea-index');
-		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].loadContent({ type: 'posts', query: { limit, offset: limit * (page - 1), current: 'index', page } });
+		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].loadContent({ type: 'posts', query: { limit, offset: limit * (page - 1) }, current: 'index', page });
 	});
 
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/post/*', id => {
@@ -3511,26 +3511,49 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Action_Action__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Store_Store__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Constant_Constant__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__niltea_util_js__ = __webpack_require__(5);
 
 var riot = __webpack_require__(0);
+const debug = true;
+const log = !debug ? arg => null : (...arg) => console.log(...arg);
 
 
 
 
 
-riot.tag2('niltea-modal', '<div class="modal" ref="modal"> <div class="modal_bg" ref="modalBg" onclick="{this.hideModal}"></div> <figure class="content" ref="content"></figure> </div>', 'niltea-modal .clearfix,[data-is="niltea-modal"] .clearfix{ zoom: 1; } niltea-modal .clearfix:after,[data-is="niltea-modal"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-modal .txtHide,[data-is="niltea-modal"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-modal .modal,[data-is="niltea-modal"] .modal{ display: none; position: fixed; left: 0; top: 0; width: 50%; height: 50%; } niltea-modal .modal_bg,[data-is="niltea-modal"] .modal_bg{ position: absolute; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); } niltea-modal .content,[data-is="niltea-modal"] .content{ position: absolute; left: 0; right: 0; top: 0; bottom: 0; margin: auto; width: 80%; height: 90%; background: center center no-repeat; background-size: contain; }', '', function (opts) {
+
+
+
+riot.tag2('niltea-modal', '<div class="modal" ref="modal"> <div class="modal_bg" ref="modalBg" onclick="{this.hideModal}"></div> <img if="{figure}" riot-src="{figure}" class="figure" ref="figure" onclick="{this.hideModal}"> <nav class="close lsf" ref="close" onclick="{this.hideModal}">close</nav> </div>', 'niltea-modal .clearfix,[data-is="niltea-modal"] .clearfix{ zoom: 1; } niltea-modal .clearfix:after,[data-is="niltea-modal"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-modal .txtHide,[data-is="niltea-modal"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-modal .modal,[data-is="niltea-modal"] .modal{ position: fixed; z-index: 9000; left: 50%; top: 50%; width: 0; height: 4px; transition: 0.4s cubic-bezier(0.075, 0.82, 0.165, 1) 0.3s, height 0.3s cubic-bezier(0.075, 0.82, 0.165, 1) 0s, top 0.3s cubic-bezier(0.075, 0.82, 0.165, 1) 0s; } niltea-modal .modal.shown,[data-is="niltea-modal"] .modal.shown{ width: 100%; height: 100%; left: 0%; top: 0; transition: 0.4s cubic-bezier(0.075, 0.82, 0.165, 1), height 0.5s cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s, top 0.5s cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s; } niltea-modal .modal_bg,[data-is="niltea-modal"] .modal_bg{ position: absolute; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); } niltea-modal .figure,[data-is="niltea-modal"] .figure{ position: absolute; left: 0; right: 0; top: 0; bottom: 0; margin: auto; max-width: 95%; max-height: 95%; opacity: 0; } niltea-modal .shown .figure,[data-is="niltea-modal"] .shown .figure{ transition: 0s 0.5s; opacity: 1; } niltea-modal .close,[data-is="niltea-modal"] .close{ position: absolute; left: 20px; top: 2.5%; font-size: 3.0em; color: #fff; opacity: 0; cursor: pointer; line-height: 1; } niltea-modal .shown .close,[data-is="niltea-modal"] .shown .close{ transition: 0.2s 1.1s; opacity: 1; }', '', function (opts) {
 	const self = this;
+	const wrapper = document.getElementById('wrapper');
+	self.figure = null;
 
+	const showModal = href => {
+		self.refs.modal.classList.add('shown');
+
+		self.scrollY = __WEBPACK_IMPORTED_MODULE_4__niltea_util_js__["a" /* default */].getScrollTop();
+		wrapper.style.position = 'fixed';
+		wrapper.style.top = self.scrollY * -1 + 'px';
+	};
 	const openModal = event => {
 		event.preventDefault();
-		const el = event.target.nodeName === 'IMG' ? event.target.parentNode : event.target;
-		const href = el.href;
 
-		const fig = self.refs.content;
-		fig.style.backgroundImage = `url('${href}')`;
+		const href = event.target.style.backgroundImage.match(/https?:\/+[\d\w\.\/]*/)[0];
+		log('openModal', href);
+		const fig = self.refs.figure;
+		self.figure = href;
+		self.update();
+		showModal(href);
 	};
+
 	const hideModal = () => {
 		console.log('hide');
+		self.refs.modal.classList.remove('shown');
+
+		wrapper.style.position = '';
+		wrapper.style.top = '';
+		__WEBPACK_IMPORTED_MODULE_4__niltea_util_js__["a" /* default */].setScrollTop(self.scrollY);
 	};
 	self.hideModal = hideModal;
 	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].openModal, openModal);
@@ -3617,7 +3640,7 @@ riot.tag2('niltea-index', '<section id="article_list" class="post" ref="articleL
 		});
 	};
 
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].callInfScr, () => {
+	const fetchAddContnt = () => {
 
 		if (self.is_infScrActive) return;
 
@@ -3638,7 +3661,9 @@ riot.tag2('niltea-index', '<section id="article_list" class="post" ref="articleL
 		if (currentPage >= maxPage) {
 			self.is_lastPageLoaded = true;
 		}
-	});
+	};
+
+	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].callInfScr, fetchAddContnt);
 
 	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changed, () => {
 		self.articleList = __WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].content;
@@ -3663,6 +3688,7 @@ riot.tag2('niltea-index', '<section id="article_list" class="post" ref="articleL
 	self.on('unmount', () => {
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changed);
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].contentLoaded, contentLoadHandler);
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].callInfScr, fetchAddContnt);
 		window.removeEventListener('scroll', scrollHandler);
 		window.removeEventListener('resize', getElmSize);
 	});

@@ -35,7 +35,7 @@ import Constant from "../Constant/Constant";
 	// index / pagenation
 	route('/index/*', (page) => {
 		riot.mount(self.refs.content, 'niltea-index');
-		Action.loadContent({type: 'posts', query: {limit, offset: limit * (page - 1), current: 'index', page}});
+		Action.loadContent({type: 'posts', query: {limit, offset: limit * (page - 1)}, current: 'index', page});
 	});
 
 	// post

@@ -19,3 +19,5 @@
 	vertical-align: bottom;
 }
 .txtHide { @include txtHide; }
+$easeIn:  cubic-bezier(0.6, 0.04, 0.98, 0.335);
+$easeOut: cubic-bezier(0.075, 0.82, 0.165, 1);
