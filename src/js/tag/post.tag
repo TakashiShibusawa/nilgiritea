@@ -97,28 +97,11 @@ import Store from '../Store/Store';
 			});
 			return photoset;
 		}
-		let loadedCount = 0;
-		let photoCount = 0;
-		const onImgLoadEach = img => {
-			console.log('loadedCount', loadedCount)
-			loadedCount += 1;
-			const width =  img.width;
-			const height = img.height;
-			console.log(width, height)
-			if (loadedCount >= photoCount) setPhotosetSize();
-		}
+
 		const afterUpdate = () => {
 			if (!self.isPhotoSet) return;
 
-			photoCount = self.refs.photoItem.length;
-			// photosetの画像全て読み込み完了後にレイアウトをセットする
-			self.refs.photoItem.forEach(photo => {
-				const url = photo.style.backgroundImage.match(/https?:\/+[\d\w\.\/]*/)[0];
-				const img = new Image;
-				img.src = url;
-				// document.body.appendChild(img);
-				img.onload = () => { onImgLoadEach(img); };
-			})
+			setPhotosetSize();
 		}
 
 		self.on('updated', Action.setLoader );
