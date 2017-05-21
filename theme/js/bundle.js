@@ -3317,7 +3317,7 @@ riot.tag2('niltea-base', '<section class="header" ref="header"></section> <secti
 
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/index/*', page => {
 		riot.mount(self.refs.content, 'niltea-index');
-		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].loadContent({ type: 'posts', query: { limit, offset: limit * (page - 1), current: 'index', page } });
+		__WEBPACK_IMPORTED_MODULE_3__Action_Action__["a" /* default */].loadContent({ type: 'posts', query: { limit, offset: limit * (page - 1) }, current: 'index', page });
 	});
 
 	__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_riot_route__["a" /* default */])('/post/*', id => {
@@ -3640,7 +3640,7 @@ riot.tag2('niltea-index', '<section id="article_list" class="post" ref="articleL
 		});
 	};
 
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].callInfScr, () => {
+	const fetchAddContnt = () => {
 
 		if (self.is_infScrActive) return;
 
@@ -3661,7 +3661,9 @@ riot.tag2('niltea-index', '<section id="article_list" class="post" ref="articleL
 		if (currentPage >= maxPage) {
 			self.is_lastPageLoaded = true;
 		}
-	});
+	};
+
+	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].callInfScr, fetchAddContnt);
 
 	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changed, () => {
 		self.articleList = __WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].content;
@@ -3686,6 +3688,7 @@ riot.tag2('niltea-index', '<section id="article_list" class="post" ref="articleL
 	self.on('unmount', () => {
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changed);
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].contentLoaded, contentLoadHandler);
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].callInfScr, fetchAddContnt);
 		window.removeEventListener('scroll', scrollHandler);
 		window.removeEventListener('resize', getElmSize);
 	});
