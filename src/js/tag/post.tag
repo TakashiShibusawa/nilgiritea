@@ -78,6 +78,17 @@ import Store from '../Store/Store';
 			// データに要素がバインドされた形跡がなければバインドしてくる
 			if (!isLayoutBinded) bindPhotoset();
 
+			// photosetの行ごとにforEach
+			self.photoset.forEach(row => {
+				// 行内の画像ごとにforEach
+				row.forEach(photo => {
+					console.log(photo)
+					// Objectに取得した要素を挿入する
+					const width  = photo.original_size.width;
+					const height = photo.original_size.height;
+					console.log(width, height);
+				});
+			});
 				// let mostLowHeight = null;
 				// row.style.height = mostLowHeight + 'px';
 
