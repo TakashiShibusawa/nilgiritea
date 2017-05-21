@@ -78,24 +78,26 @@ import Store from '../Store/Store';
 			// データに要素がバインドされた形跡がなければバインドしてくる
 			if (!isLayoutBinded) bindPhotoset();
 
+			const rowContainer = self.refs.rowContainer;
 			// photosetの行ごとにforEach
-			self.photoset.forEach(row => {
-				// 行内の画像ごとにforEach
+			self.photoset.forEach((row, rowIndex) => {
+				// 画像1枚当たりの幅を計算
+				const fitWidth = ~~(rowWidth / row.length);
+				let lowest = null;
+				// 行内の画像ごとにforEach：倍率を計算して高さをセットする
 				row.forEach(photo => {
-					console.log(photo)
-					// Objectに取得した要素を挿入する
 					const width  = photo.original_size.width;
 					const height = photo.original_size.height;
-					console.log(width, height);
+					// 画像表示倍率の計算
+					const imgMag = fitWidth / width;
+					// 画像高さを計算
+					const fitHeight = ~~(height * imgMag);
+
+					// 画像高さの更新：低い方にあわせる
+					if (lowest === null || lowest > fitHeight) lowest = fitHeight;
 				});
+				rowContainer[rowIndex].style.height = lowest + 'px';
 			});
-				// let mostLowHeight = null;
-				// row.style.height = mostLowHeight + 'px';
-
-				// 3.rowごとに画像の取りうる幅を計算
-				// 4.アスペクト比を計算して高さをセットする
-			// row is Element
-
 		};
 
 		// レイアウトに応じて行ごと画像をセットする
