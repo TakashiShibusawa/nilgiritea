@@ -50,11 +50,21 @@ import Store from '../Store/Store';
 		self.isPhotoSet = false;
 		self.photoset = null;
 		self.layout = [];
-		self.isLayoutBinded = false;
+		let isLayoutBinded = false;
 
 		// photosetの配列にエレメントをキャッシュする
 		const bindPhotoset = () => {
-			// TODO
+			// containerを取得し、行ごとにforEach
+			self.refs.rowContainer.forEach((row, rowIndex) => {
+				// 行内にある画像要素を取得し、forEach
+				const photos = [].slice.call(row.getElementsByTagName('figure'));
+				photos.forEach((photo, photoIndex) => {
+					// 取得した要素に対応する配列内のObjectを引き当てる
+					const photo_in_arr = self.photoset[rowIndex][photoIndex];
+					// Objectに取得した要素を挿入する
+					photo_in_arr.element = photo;
+				});
+			});
 			// finally
 			isLayoutBinded = true;
 		};
@@ -65,30 +75,15 @@ import Store from '../Store/Store';
 			// 画面幅を取得
 			const rowWidth = self.refs.rowContainer[0].getBoundingClientRect().width;
 
-				// 3.rowごとに画像の取りうる幅を計算
-				// 4.アスペクト比を計算して高さをセットする
-			// row is Element
-
-			// 1.containerを取得し、photosetにエレメントを結びつける
-			self.refs.rowContainer.forEach((row, rowIndex) => {
-				// console.log(row);
-				// console.log(self.photoset[rowIndex]);
-
-				// 行内にある画像要素を取得
-				const photos = [].slice.call(row.getElementsByTagName('figure'));
-				photos.forEach((photo, photoIndex) => {
-					const photo_in_arr = self.photoset[rowIndex][photoIndex];
-					photo_in_arr.element = photo;
-
-					const width  = photo_in_arr.original_size.width;
-					const height = photo_in_arr.original_size.height;
-					console.log(width, height);
-				// 	// if (mostLowHeight === null || mostLowHeight > height) mostLowHeight = height;
-				});
+			// データに要素がバインドされた形跡がなければバインドしてくる
+			if (!isLayoutBinded) bindPhotoset();
 
 				// let mostLowHeight = null;
 				// row.style.height = mostLowHeight + 'px';
-			});
+
+				// 3.rowごとに画像の取りうる幅を計算
+				// 4.アスペクト比を計算して高さをセットする
+			// row is Element
 
 		};
 
