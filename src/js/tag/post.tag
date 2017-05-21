@@ -10,13 +10,13 @@ import Store from '../Store/Store';
 			<!-- single -->
 			<div if={!isPhotoSet} class="photo_rowContainer layout_itemCount-1" ref='rowContainer'>
 				<a class="photo_item photo_item-single" if={!isPhotoSet} each={photos} href='{original_size.url}' onclick={openModal}>
-					<figure class="photo_item_image" style="background-image: url({alt_sizes[0].url})"></figure>
+					<figure class="photo_item_image" style="background-image: url({alt_sizes[0].url})" ref='photoItem'></figure>
 				</a>
 			</div>
 			<!-- set -->
 			<div if={isPhotoSet} each={row in photoset} class="photo_rowContainer layout_itemCount-{row.length}" ref='rowContainer'>
 				<a class="photo_item photo_item-set" each={row} href='{original_size.url}' onclick={openModal}>
-					<figure class="photo_item_image" style="background-image: url({alt_sizes[0].url})"></figure>
+					<figure class="photo_item_image" style="background-image: url({alt_sizes[0].url})" ref='photoItem'></figure>
 				</a>
 			</div>
 		</section>
@@ -78,18 +78,28 @@ import Store from '../Store/Store';
 			});
 			return photoset;
 		}
+		let loadedCount = 0;
+		let photoCount = 0;
+		const onImgLoadEach = img => {
+			console.log('loadedCount', loadedCount)
+			loadedCount += 1;
+			const width =  img.width;
+			const height = img.height;
+			console.log(width, height)
+			if (loadedCount >= photoCount) layoutPhotoset();
+		}
 		const afterUpdate = () => {
 			if (!self.isPhotoSet) return;
 
+			photoCount = self.refs.photoItem.length;
 			// photosetの画像全て読み込み完了後にレイアウトをセットする
-			// const photoCount = self.refs.photoItem.length;
-			// let loadedCount = 0;
-			// self.refs.photoItem.forEach(photo => {
-			// 	photo.addEventListener('load', () => {
-			// 		loadedCount += 1;
-			// 		if (loadedCount >= photoCount) layoutPhotoset();
-			// 	})
-			// })
+			self.refs.photoItem.forEach(photo => {
+				const url = photo.style.backgroundImage.match(/https?:\/+[\d\w\.\/]*/)[0];
+				const img = new Image;
+				img.src = url;
+				// document.body.appendChild(img);
+				img.onload = () => { onImgLoadEach(img); };
+			})
 		}
 
 		self.on('updated', Action.setLoader );
