@@ -84,33 +84,4 @@ import Constant from "../../Constant/Constant";
 	});
 	RiotControl.on(Store.ActionTypes.changedCurrent, modPagenation );
 	</script>
-	<style type="text/scss">
-	/* navigation */
-	.navigation {
-		width: 100%;
-		margin: 0 auto;
-		padding: 20px 0 0;
-		overflow: hidden;
-		text-align: center;
-		display: flex;
-		justify-content: center;
-		a,
-		.current {
-			display: block;
-			padding: 3px 9px;
-			margin: 0 0.2em;
-			border-radius: 2px;
-			background-color: #eee;
-			text-decoration: none;
-			font-size: 1.4em;
-			color: #444;
-			font-weight: 500;
-		}
-		a:hover { background-color: #aaa; }
-		.current {
-			background-color: #aaa;
-			color: #ddd;
-		}
-	}
-	</style>
 </niltea-footer>

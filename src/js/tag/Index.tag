@@ -6,7 +6,7 @@ import Constant from "../Constant/Constant";
 
 import util from '../niltea_util.js';
 <niltea-index>
-	<section id="article_list" class='post' ref='articleList'>
+	<section id="article_list" class='post index' ref='articleList'>
 		<niltea-list-item articleList={articleList}></niltea-list-item>
 	</section>
 	<script>
@@ -132,73 +132,6 @@ import util from '../niltea_util.js';
 			return `${_date.getFullYear()} / ${_date.getMonth() + 1} / ${_date.getDate()}`;
 		}
 	</script>
-	<style type="text/scss">
-		.post_item {
-			will-change: filter;
-			width: 100%;
-			height: 350px;
-			margin: 15px auto 0;
-			background: #888 center center no-repeat;
-			background-size: cover;
-			&:first-child { margin-top: 0; }
-		}
-		.post_item_link {
-			background-color: rgba(#fff, 0.4);
-			transition: background-color 0.2s;
-			&:hover {
-				transition: background-color 0.4s;
-				background-color: rgba(#fff, 0.1);
-			}
-			display: block;
-			width: 100%;
-			height: 100%;
-			box-sizing: border-box;
-			padding: 25px;
-			text-decoration: none;
-			color: #000;
-		}
-		.post_item_info {
-			width: 100%;
-			height: 100%;
-			box-sizing: border-box;
-			border: 4px solid #000;
-			border-radius: 2px;
-			display: flex;
-			align-items: flex-start;
-			flex-direction: column;
-			justify-content: space-between;
-			padding: 10px;
-		}
-		.post_item_title {
-			margin-left: -30px;
-			padding: 3px 8px 0;
-			font-size: 2.2em;
-			line-height: 1.5;
-			background-color: #fff;
-			display: inline-block;
-		}
-		.post_item_meta {
-			align-self: flex-end;
-			text-align: right;
-		}
-		.post_item_date,
-		.post_item_notes {
-			display: inline-block;
-		}
-		.post_item_date {
-			margin-top: 5px;
-			padding: 2px 8px;
-			font-size: 1.6em;
-			background-color: #fff;
-		}
-		.post_item_notes {
-			margin-top: 5px;
-			padding: 2px 8px;
-			font-size: 1.0em;
-			background-color: #fff;
-		}
-
-	</style>
 </niltea-list-item>
 
 <niltea-index-list-lead>
