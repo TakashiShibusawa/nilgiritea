@@ -3444,7 +3444,7 @@ var riot = __webpack_require__(0);
 
 
 
-riot.tag2('niltea-header', '<header class="mainHeader"> <h1> <a href="/" class="home"> <span class="mainTitle">{title}</span> <span class="siteDescription"><raw content="{description}"></raw></span> </a> </h1> <nav class="hamburger lsf" onclick="{hamburger}">menu</nav> <nav class="gnav clearfix" id="gnav" ref="gnav"> <ul> <li class="gnav_item about" title="about"><a href="/about">about</a></li> <li class="gnav_item pixiv" title="Pixiv"><a href="https://pixiv.me/kicky" target="_blank">pixiv</a></li> <li class="gnav_item twitter lsf" title="Twitter"><a href="https://twitter.com/niltea" target="_blank">twitter</a></li> <li class="gnav_item github lsf" title="GitHub"><a href="https://github.com/niltea" target="_blank">github</a></li> </ul> </nav> </header>', 'niltea-header .clearfix,[data-is="niltea-header"] .clearfix{ zoom: 1; } niltea-header .clearfix:after,[data-is="niltea-header"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-header .txtHide,[data-is="niltea-header"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-header .mainHeader,[data-is="niltea-header"] .mainHeader{ position: fixed; left: 0; top: 20px; padding-left: 20px; z-index: 500; width: 100%; display: flex; justify-content: flex-start; } niltea-header a,[data-is="niltea-header"] a{ text-decoration: none; color: #000; } niltea-header h1 a,[data-is="niltea-header"] h1 a{ display: inline-block; } niltea-header h1 .mainTitle,[data-is="niltea-header"] h1 .mainTitle{ display: block; font-size: 3.8em; line-height: 1em; letter-spacing: 0.05em; } niltea-header h1 .siteDescription,[data-is="niltea-header"] h1 .siteDescription{ display: block; margin-top: 0.6em; font-weight: 400; font-size: 1.0em; line-height: 1em; letter-spacing: 0.15em; } niltea-header .gnav,[data-is="niltea-header"] .gnav{ padding-left: 40px; padding-top: 15px; } niltea-header .gnav ul,[data-is="niltea-header"] .gnav ul{ display: flex; justify-content: flex-start; } niltea-header .gnav_item,[data-is="niltea-header"] .gnav_item{ display: inline-block; line-height: 1em; font-size: 1.8em; } niltea-header .gnav_item + .gnav_item,[data-is="niltea-header"] .gnav_item + .gnav_item{ margin-left: 1.2em; } niltea-header .gnav_item:first-child,[data-is="niltea-header"] .gnav_item:first-child{ margin: 0; } niltea-header .gnav_item.active,[data-is="niltea-header"] .gnav_item.active,niltea-header .gnav_item:hover,[data-is="niltea-header"] .gnav_item:hover{ } niltea-header .gnav_item a,[data-is="niltea-header"] .gnav_item a{ font-size: 1em; } niltea-header .gnav_item.lsf a,[data-is="niltea-header"] .gnav_item.lsf a{ font-size: 1.2em; } niltea-header .hamburger,[data-is="niltea-header"] .hamburger{ display: none; } @media screen and (min-width: 37.5em) { niltea-header .pixiv a,[data-is="niltea-header"] .pixiv a{ width: 18px; height: 18px; display: block; background: url(/images/pixiv.svg) 0 0 no-repeat; background-size: 18px; text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } } @media screen and (max-width: 37.5em) { niltea-header .mainHeader,[data-is="niltea-header"] .mainHeader{ display: block; padding: 0; } niltea-header h1,[data-is="niltea-header"] h1,niltea-header .gnav,[data-is="niltea-header"] .gnav{ float: none; } niltea-header h1,[data-is="niltea-header"] h1{ display: flex; justify-content: center; text-align: center; } niltea-header .hamburger,[data-is="niltea-header"] .hamburger{ display: block; position: absolute; right: 2vw; top: 8px; width: 1em; font-size: 2.8em; line-height: 1em; cursor: pointer; } niltea-header .gnav,[data-is="niltea-header"] .gnav{ position: fixed; right: 0; top: 65px; padding: 0; width: 20%; transform: translateX(20vw); transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1); } niltea-header .gnav.narrow_shown,[data-is="niltea-header"] .gnav.narrow_shown{ transition: 0.2s cubic-bezier(0.6, 0.04, 0.98, 0.335); transform: none; } niltea-header .gnav ul,[data-is="niltea-header"] .gnav ul{ flex-direction: column; padding-bottom: 20px; } niltea-header .gnav .gnav_item,[data-is="niltea-header"] .gnav .gnav_item{ margin: 10px 0 0; text-align: right; } niltea-header .gnav .gnav_item:first-child,[data-is="niltea-header"] .gnav .gnav_item:first-child{ margin-top: 0; } niltea-header .gnav .gnav_item a,[data-is="niltea-header"] .gnav .gnav_item a{ display: inline-block; padding: 5px 20px 5px 10px; } }', '', function (opts) {
+riot.tag2('niltea-header', '<header class="mainHeader"> <h1> <a href="/" class="home"> <span class="mainTitle">{title}</span> <span class="siteDescription"><raw content="{description}"></raw></span> </a> </h1> <nav class="hamburger lsf" ref="hamburger" onclick="{hamburger}">menu</nav> <nav class="gnav clearfix" id="gnav" ref="gnav"> <ul> <li class="gnav_item about" title="about"><a href="/about">about</a></li> <li class="gnav_item pixiv" title="Pixiv"><a href="https://pixiv.me/kicky" target="_blank">pixiv</a></li> <li class="gnav_item twitter lsf" title="Twitter"><a href="https://twitter.com/niltea" target="_blank">twitter</a></li> <li class="gnav_item github lsf" title="GitHub"><a href="https://github.com/niltea" target="_blank">github</a></li> </ul> </nav> </header>', 'niltea-header .clearfix,[data-is="niltea-header"] .clearfix{ zoom: 1; } niltea-header .clearfix:after,[data-is="niltea-header"] .clearfix:after{ content: ""; clear: both; display: block; } niltea-header .txtHide,[data-is="niltea-header"] .txtHide{ text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } niltea-header .mainHeader,[data-is="niltea-header"] .mainHeader{ position: fixed; left: 0; top: 20px; padding-left: 20px; z-index: 500; width: 100%; display: flex; justify-content: flex-start; } niltea-header a,[data-is="niltea-header"] a{ text-decoration: none; color: #000; } niltea-header h1 a,[data-is="niltea-header"] h1 a{ display: inline-block; } niltea-header h1 .mainTitle,[data-is="niltea-header"] h1 .mainTitle{ display: block; font-size: 3.8em; line-height: 1em; letter-spacing: 0.05em; } niltea-header h1 .siteDescription,[data-is="niltea-header"] h1 .siteDescription{ display: block; margin-top: 0.6em; font-weight: 400; font-size: 1.0em; line-height: 1em; letter-spacing: 0.15em; } niltea-header .gnav,[data-is="niltea-header"] .gnav{ padding-left: 40px; padding-top: 15px; } niltea-header .gnav ul,[data-is="niltea-header"] .gnav ul{ display: flex; justify-content: flex-start; } niltea-header .gnav_item,[data-is="niltea-header"] .gnav_item{ display: inline-block; line-height: 1em; font-size: 1.8em; } niltea-header .gnav_item + .gnav_item,[data-is="niltea-header"] .gnav_item + .gnav_item{ margin-left: 1.2em; } niltea-header .gnav_item:first-child,[data-is="niltea-header"] .gnav_item:first-child{ margin: 0; } niltea-header .gnav_item.active,[data-is="niltea-header"] .gnav_item.active,niltea-header .gnav_item:hover,[data-is="niltea-header"] .gnav_item:hover{ } niltea-header .gnav_item a,[data-is="niltea-header"] .gnav_item a{ font-size: 1em; } niltea-header .gnav_item.lsf a,[data-is="niltea-header"] .gnav_item.lsf a{ font-size: 1.2em; } niltea-header .hamburger,[data-is="niltea-header"] .hamburger{ display: none; } @media screen and (min-width: 37.5em) { niltea-header .pixiv a,[data-is="niltea-header"] .pixiv a{ width: 18px; height: 18px; display: block; background: url(/images/pixiv.svg) 0 0 no-repeat; background-size: 18px; text-indent: -9999px; white-space: nowrap; overflow: hidden; vertical-align: bottom; } } @media screen and (max-width: 37.5em) { niltea-header .mainHeader,[data-is="niltea-header"] .mainHeader{ display: block; padding: 0; } niltea-header h1,[data-is="niltea-header"] h1,niltea-header .gnav,[data-is="niltea-header"] .gnav{ float: none; } niltea-header h1,[data-is="niltea-header"] h1{ display: flex; justify-content: center; text-align: center; } niltea-header .hamburger,[data-is="niltea-header"] .hamburger{ display: block; position: absolute; right: 2vw; top: 8px; width: 1em; font-size: 2.8em; line-height: 1em; cursor: pointer; } niltea-header .gnav,[data-is="niltea-header"] .gnav{ position: fixed; right: 0; top: 65px; padding: 0; width: 20%; transform: translateX(20vw); transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1); } niltea-header .gnav.narrow_shown,[data-is="niltea-header"] .gnav.narrow_shown{ transition: 0.2s cubic-bezier(0.6, 0.04, 0.98, 0.335); transform: none; } niltea-header .gnav ul,[data-is="niltea-header"] .gnav ul{ flex-direction: column; padding-bottom: 20px; } niltea-header .gnav .gnav_item,[data-is="niltea-header"] .gnav .gnav_item{ margin: 10px 0 0; text-align: right; } niltea-header .gnav .gnav_item:first-child,[data-is="niltea-header"] .gnav .gnav_item:first-child{ margin-top: 0; } niltea-header .gnav .gnav_item a,[data-is="niltea-header"] .gnav .gnav_item a{ display: inline-block; padding: 5px 20px 5px 10px; } }', '', function (opts) {
 	const self = this;
 	self.title = '';
 	self.description = '';
@@ -3456,18 +3456,37 @@ riot.tag2('niltea-header', '<header class="mainHeader"> <h1> <a href="/" class="
 		self.update();
 	});
 
-	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changedCurrent, () => {
-		self.refs.gnav.classList.remove('narrow_shown');
+	let isGnavShown = false;
+	const gnavDisp = opt => {
+		const shown = 'narrow_shown';
+		if (opt.constructor !== Boolean) {
+
+			opt = isGnavShown === true ? false : true;
+		}
+		if (opt === true) {
+			self.refs.gnav.classList.add(shown);
+			self.refs.hamburger.textContent = 'close';
+			isGnavShown = true;
+		} else {
+			self.refs.gnav.classList.remove(shown);
+			self.refs.hamburger.textContent = 'menu';
+			isGnavShown = false;
+		}
+
 		self.update();
-	});
-	self.hamburger = () => {
-		self.refs.gnav.classList.toggle('narrow_shown');
 	};
+
+	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_1__Store_Store__["a" /* default */].ActionTypes.changedCurrent, () => gnavDisp(false));
+	self.hamburger = () => gnavDisp('toggle');
 
 	let prevTop = 0;
 	const scrollHandler = scrollTop => {
+		if (!isGnavShown) {
+			prevTop = scrollTop;
+			return;
+		}
 		const scrollDiff = Math.abs(scrollTop - prevTop);
-		if (scrollDiff >= 6) self.refs.gnav.classList.remove('narrow_shown');
+		if (scrollDiff >= 6) gnavDisp(false);
 		prevTop = scrollTop;
 	};
 	self.on('mount', () => {

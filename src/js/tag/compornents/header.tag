@@ -9,7 +9,7 @@ import Constant from "../../Constant/Constant";
 				<span class="siteDescription"><raw content="{description}" /></span>
 			</a>
 		</h1>
-		<nav class="hamburger lsf" onclick={hamburger}>menu</nav>
+		<nav class="hamburger lsf" ref='hamburger' onclick={hamburger}>menu</nav>
 		<nav class="gnav clearfix" id="gnav" ref='gnav'>
 			<ul>
 				<li class="gnav_item about" title="about"><a href="/about">about</a></li>
@@ -45,9 +45,11 @@ import Constant from "../../Constant/Constant";
 			}
 			if (opt === true) {
 				self.refs.gnav.classList.add(shown);
+				self.refs.hamburger.textContent = 'close';
 				isGnavShown = true;
 			} else {
 				self.refs.gnav.classList.remove(shown);
+				self.refs.hamburger.textContent = 'menu';
 				isGnavShown = false;
 			}
 			// last
