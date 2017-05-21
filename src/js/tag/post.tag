@@ -62,22 +62,32 @@ import Store from '../Store/Store';
 		const setPhotosetSize = () => {
 			if (!self.isPhotoSet) return;
 			console.log('setPhotosetSize is called.');
-			
-				let mostLowHeight = null;
-				const photos = [].slice.call(row.getElementsByTagName('figure'));
-				photos.forEach(photo => {
-					const height = photo.height;
-					// if (mostLowHeight === null || mostLowHeight > height) mostLowHeight = height;
-				})
-				row.style.height = mostLowHeight + 'px';
-			self.refs.rowContainer.forEach((row, rowIndex) => {
-				console.log(row);
-				console.log(self.photoset[rowIndex]);
-				// 1.containerを取得し、photosetにエレメントを結びつける
-				// 2.画面幅を取得
+			// 画面幅を取得
+			const rowWidth = self.refs.rowContainer[0].getBoundingClientRect().width;
+
 				// 3.rowごとに画像の取りうる幅を計算
 				// 4.アスペクト比を計算して高さをセットする
+			// row is Element
 
+			// 1.containerを取得し、photosetにエレメントを結びつける
+			self.refs.rowContainer.forEach((row, rowIndex) => {
+				// console.log(row);
+				// console.log(self.photoset[rowIndex]);
+
+				// 行内にある画像要素を取得
+				const photos = [].slice.call(row.getElementsByTagName('figure'));
+				photos.forEach((photo, photoIndex) => {
+					const photo_in_arr = self.photoset[rowIndex][photoIndex];
+					photo_in_arr.element = photo;
+
+					const width  = photo_in_arr.original_size.width;
+					const height = photo_in_arr.original_size.height;
+					console.log(width, height);
+				// 	// if (mostLowHeight === null || mostLowHeight > height) mostLowHeight = height;
+				});
+
+				// let mostLowHeight = null;
+				// row.style.height = mostLowHeight + 'px';
 			});
 
 		};
