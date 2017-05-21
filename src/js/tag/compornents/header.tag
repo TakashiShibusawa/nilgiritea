@@ -31,18 +31,40 @@ import Constant from "../../Constant/Constant";
 			self.update();
 		});
 
-		RiotControl.on(Store.ActionTypes.changedCurrent, () => {
-			self.refs.gnav.classList.remove('narrow_shown');
+		// gnavの表示・非表示を切り替える関数
+		// opt:String | Boolean [true | false | 'toggle']
+		// 	true:  強制的に表示する
+		// 	false: 強制的に隠す
+		// 	'toggle': (default) 表示のトグル
+		let isGnavShown = false;
+		const gnavDisp = opt => {
+			const shown = 'narrow_shown';
+			if (opt.constructor !== Boolean) {
+				// true/false以外が渡されたときは現在の表示状況に応じてオプションを設定
+				opt = (isGnavShown === true)? false : true;
+			}
+			if (opt === true) {
+				self.refs.gnav.classList.add(shown);
+				isGnavShown = true;
+			} else {
+				self.refs.gnav.classList.remove(shown);
+				isGnavShown = false;
+			}
+			// last
 			self.update();
-		});
-		self.hamburger = () => {
-			self.refs.gnav.classList.toggle('narrow_shown');
-		}
-
+		};
+		// カレントが切り替わったときはgnavを強制非表示とする
+		RiotControl.on(Store.ActionTypes.changedCurrent, () => gnavDisp(false)　);
+		self.hamburger = () => gnavDisp('toggle')
+		// スクロールしたのであればgnav非表示
 		let prevTop = 0;
 		const scrollHandler = scrollTop => {
+			if (!isGnavShown) {
+				prevTop = scrollTop;
+				return;
+			}
 			const scrollDiff = Math.abs(scrollTop - prevTop);
-			if (scrollDiff >= 6) self.refs.gnav.classList.remove('narrow_shown');
+			if (scrollDiff >= 6) gnavDisp(false);
 			prevTop = scrollTop;
 		};
 		self.on('mount', () => {
