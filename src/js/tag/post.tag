@@ -50,6 +50,14 @@ import Store from '../Store/Store';
 		self.isPhotoSet = false;
 		self.photoset = null;
 		self.layout = [];
+		self.isLayoutBinded = false;
+
+		// photosetの配列にエレメントをキャッシュする
+		const bindPhotoset = () => {
+			// TODO
+			// finally
+			isLayoutBinded = true;
+		};
 
 		const setPhotosetSize = () => {
 			if (!self.isPhotoSet) return;
