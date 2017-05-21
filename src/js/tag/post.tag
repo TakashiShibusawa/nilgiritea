@@ -61,10 +61,8 @@ import Store from '../Store/Store';
 
 		const setPhotosetSize = () => {
 			if (!self.isPhotoSet) return;
-			console.log('setPhotosetSize is under construction but called.');
-			return;
+			console.log('setPhotosetSize is called.');
 			
-			self.refs.rowContainer.forEach(row => {
 				let mostLowHeight = null;
 				const photos = [].slice.call(row.getElementsByTagName('figure'));
 				photos.forEach(photo => {
@@ -72,6 +70,14 @@ import Store from '../Store/Store';
 					// if (mostLowHeight === null || mostLowHeight > height) mostLowHeight = height;
 				})
 				row.style.height = mostLowHeight + 'px';
+			self.refs.rowContainer.forEach((row, rowIndex) => {
+				console.log(row);
+				console.log(self.photoset[rowIndex]);
+				// 1.containerを取得し、photosetにエレメントを結びつける
+				// 2.画面幅を取得
+				// 3.rowごとに画像の取りうる幅を計算
+				// 4.アスペクト比を計算して高さをセットする
+
 			});
 
 		};
