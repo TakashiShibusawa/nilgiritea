@@ -69,12 +69,16 @@ import Store from '../Store/Store';
 		};
 
 		// レイアウトに応じて行ごと画像をセットする
-		const setPhotoLayout = () => {
+		const getPhotoLayout = () => {
 			if (!self.isPhotoSet) return;
+
+			// レイアウトの解釈を行う
+			self.layout = self.photoset_layout.split('');
 			const photoset = [];
-			const layout = self.photoset_layout.split('');
 			let photoIndex = 0;
-			layout.forEach((itemPerRow, row) => {
+
+			// 配列に画像を挿入する
+			self.layout.forEach((itemPerRow, row) => {
 				const photosInRow = [];
 				for (let i = parseInt(itemPerRow, 10); i > 0; i -=1) {
 					const photo = self.photos[photoIndex];
@@ -127,7 +131,7 @@ import Store from '../Store/Store';
 
 			// photosが複数であればphososetであると判断
 			self.isPhotoSet = (self.photos.length > 1);
-			if (self.isPhotoSet) self.photoset = setPhotoLayout();
+			self.photoset = (self.isPhotoSet)  ? getPhotoLayout() : null;
 
 			self.update();
 			afterUpdate();
