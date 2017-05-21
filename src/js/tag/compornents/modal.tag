@@ -19,7 +19,7 @@ import util from '../../niltea_util.js';
 		const wrapper = document.getElementById('wrapper');
 		self.figure = null;
 
-		const showModal = href => {
+		const showModal = target => {
 			self.refs.modal.classList.add('shown');
 			// 本体のロック
 			self.scrollY = util.getScrollTop();
@@ -27,19 +27,22 @@ import util from '../../niltea_util.js';
 			wrapper.style.top = self.scrollY * -1 + 'px';
 		};
 		const openModal = event => {
+			log('openModal is called.')
 			event.preventDefault();
-			// const el = (event.target.nodeName === 'IMG') ? event.target.parentNode : event.target;
-			// log(el)
-			const href = event.target.style.backgroundImage.match(/https?:\/+[\d\w\.\/]*/)[0];
-			log('openModal', href)
-			const fig = self.refs.figure;
-			self.figure = href;
+
+			// ターゲット画像を抽出
+			const target = event.target.style.backgroundImage.match(/https?:\/+[\d\w\.\/]*/)[0];
+			log('openModal: target acquired', target)
+
+			// figureにURLをセットしてupdateすることでimgを表示させる
+			self.figure = target;
 			self.update();
-			showModal(href);
+			// モーダル表示処理を呼ぶ
+			showModal(target);
 		}
 
 		const hideModal = () => {
-			console.log('hide')
+			log('hideModal is called.')
 			self.refs.modal.classList.remove('shown');
 			// 本体のロック解除
 			wrapper.style.position = '';
@@ -47,7 +50,7 @@ import util from '../../niltea_util.js';
 			util.setScrollTop(self.scrollY);
 		}
 		self.hideModal = hideModal;
-		RiotControl.on(Constant.openModal, openModal );
+		RiotControl.on(Constant.openModal, openModal);
 
 		// posts以外に遷移したらunmountする
 		const unMountSelf = () => {
@@ -57,6 +60,7 @@ import util from '../../niltea_util.js';
 		RiotControl.on(Store.ActionTypes.changedCurrent, unMountSelf );
 		self.on('unmount', () => {
 			RiotControl.off(Store.ActionTypes.changedCurrent, unMountSelf);
+			RiotControl.off(Constant.openModal, openModal);
 		});
 	</script>
 	<style type="text/scss">

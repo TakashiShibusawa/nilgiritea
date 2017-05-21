@@ -3529,7 +3529,7 @@ riot.tag2('niltea-modal', '<div class="modal" ref="modal"> <div class="modal_bg"
 	const wrapper = document.getElementById('wrapper');
 	self.figure = null;
 
-	const showModal = href => {
+	const showModal = target => {
 		self.refs.modal.classList.add('shown');
 
 		self.scrollY = __WEBPACK_IMPORTED_MODULE_4__niltea_util_js__["a" /* default */].getScrollTop();
@@ -3537,18 +3537,20 @@ riot.tag2('niltea-modal', '<div class="modal" ref="modal"> <div class="modal_bg"
 		wrapper.style.top = self.scrollY * -1 + 'px';
 	};
 	const openModal = event => {
+		log('openModal is called.');
 		event.preventDefault();
 
-		const href = event.target.style.backgroundImage.match(/https?:\/+[\d\w\.\/]*/)[0];
-		log('openModal', href);
-		const fig = self.refs.figure;
-		self.figure = href;
+		const target = event.target.style.backgroundImage.match(/https?:\/+[\d\w\.\/]*/)[0];
+		log('openModal: target acquired', target);
+
+		self.figure = target;
 		self.update();
-		showModal(href);
+
+		showModal(target);
 	};
 
 	const hideModal = () => {
-		console.log('hide');
+		log('hideModal is called.');
 		self.refs.modal.classList.remove('shown');
 
 		wrapper.style.position = '';
@@ -3565,6 +3567,7 @@ riot.tag2('niltea-modal', '<div class="modal" ref="modal"> <div class="modal_bg"
 	__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.on(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changedCurrent, unMountSelf);
 	self.on('unmount', () => {
 		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_2__Store_Store__["a" /* default */].ActionTypes.changedCurrent, unMountSelf);
+		__WEBPACK_IMPORTED_MODULE_0_riotcontrol___default.a.off(__WEBPACK_IMPORTED_MODULE_3__Constant_Constant__["a" /* default */].openModal, openModal);
 	});
 });
 
