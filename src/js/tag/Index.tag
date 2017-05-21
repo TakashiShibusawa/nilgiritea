@@ -41,20 +41,16 @@ import util from '../niltea_util.js';
 
 		// infscrの設定
 		self.is_infScrActive = false;
-		self.is_lastPageLoaded = false;
-		const scrollHandler = e => {
-			requestAnimationFrame(() => {
-				if (self.is_infScrActive || self.is_lastPageLoaded) return;
-				const scrollTop = ~~(util.getScrollTop());
-				// ウィンドウ下部の座標
-				const winBtmPos = scrollTop + self.cords.winHeight;
+		const scrollHandler = scrollTop => {
+			if (self.is_infScrActive) return;
+			// ウィンドウ下部の座標
+			const winBtmPos = scrollTop + self.cords.winHeight;
 
-				// トリガ位置より下にスクロールした
-				if (winBtmPos >= self.cords.triggerPos) {
-					// call infScr
-					Action.callInfScr();
-				}
-			});
+			// トリガ位置より下にスクロールした
+			if (winBtmPos >= self.cords.triggerPos) {
+				// call infScr
+				Action.callInfScr();
+			}
 		};
 
 		// 追加コンテンツを読み込む動作
@@ -81,7 +77,7 @@ import util from '../niltea_util.js';
 			}
 			// 最終ページを読み込んだときの処理
 			if (currentPage >= maxPage) {
-				self.is_lastPageLoaded = true;
+				RiotControl.off(Constant.onScroll, scrollHandler);
 				// TODO:下のページネーションを消す処理の追加
 			}
 		};

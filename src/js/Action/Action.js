@@ -96,7 +96,10 @@ const appAction = new class AppAction {
 		RiotControl.trigger(Constant.callInfScr, null);
 	}
 	onScroll() {
-		RiotControl.trigger(Constant.onScroll, null);
+		requestAnimationFrame(() => {
+			const scrollTop = ~~(util.getScrollTop());
+			RiotControl.trigger(Constant.onScroll, scrollTop);
+		});
 	}
 }
 
