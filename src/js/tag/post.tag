@@ -46,15 +46,18 @@ import Store from '../Store/Store';
 		// open Modal
 		self.openModal = Action.openModal;
 
-		const layoutPhotoset = () => {
-			const layout = self.photoset_layout.split('');
+		self.layout = [];
+		const setPhotosetSize = () => {
+			if (!self.isPhotoSet) return;
+			console.log('setPhotosetSize is under construction but called.');
+			return;
 			
 			self.refs.rowContainer.forEach(row => {
 				let mostLowHeight = null;
-				const photos = [].slice.call(row.getElementsByTagName('img'));
+				const photos = [].slice.call(row.getElementsByTagName('figure'));
 				photos.forEach(photo => {
 					const height = photo.height;
-					if (mostLowHeight === null || mostLowHeight > height) mostLowHeight = height;
+					// if (mostLowHeight === null || mostLowHeight > height) mostLowHeight = height;
 				})
 				row.style.height = mostLowHeight + 'px';
 			});
@@ -86,7 +89,7 @@ import Store from '../Store/Store';
 			const width =  img.width;
 			const height = img.height;
 			console.log(width, height)
-			if (loadedCount >= photoCount) layoutPhotoset();
+			if (loadedCount >= photoCount) setPhotosetSize();
 		}
 		const afterUpdate = () => {
 			if (!self.isPhotoSet) return;
@@ -105,12 +108,12 @@ import Store from '../Store/Store';
 		self.on('updated', Action.setLoader );
 		self.on('before-mount', Action.showLoader );
 		self.on('mount', () => {
-			window.addEventListener('resize', layoutPhotoset);
+			window.addEventListener('resize', setPhotosetSize);
 		});
 
 		self.on('unmount', () => {
 			RiotControl.off(Store.ActionTypes.changed);
-			window.removeEventListener('resize', layoutPhotoset);
+			window.removeEventListener('resize', setPhotosetSize);
 		});
 		// Subscribes Store.onChanged
 		RiotControl.on(Store.ActionTypes.changed, () => {
