@@ -54,8 +54,10 @@ import Store from '../Store/Store';
 
 		// photosetの配列にエレメントをキャッシュする
 		const bindPhotoset = () => {
-			// containerを取得し、行ごとにforEach
-			self.refs.rowContainer.forEach((row, rowIndex) => {
+			// containerを取得し、photoSetでなければコンテナを配列に突っ込んでおく
+			const rowContainer = (self.isPhotoSet) ? self.refs.rowContainer : [self.refs.rowContainer];
+			// 行ごとにforEach
+			rowContainer.forEach((row, rowIndex) => {
 				// 行内にある画像要素を取得し、forEach
 				const photos = [].slice.call(row.getElementsByTagName('figure'));
 				photos.forEach((photo, photoIndex) => {
@@ -69,16 +71,17 @@ import Store from '../Store/Store';
 			isLayoutBinded = true;
 		};
 
-		const setPhotosetSize = () => {
-			if (!self.isPhotoSet) return;
-			console.log('setPhotosetSize is called.');
+		const setPhotoSize = () => {
+			if (!self.photos) return;
+
+			// photoSetでなければコンテナを配列に突っ込んでおく
+			const rowContainer = (self.isPhotoSet) ? self.refs.rowContainer : [self.refs.rowContainer];
 			// 画面幅を取得
-			const rowWidth = self.refs.rowContainer[0].getBoundingClientRect().width;
+			const rowWidth = rowContainer[0].getBoundingClientRect().width;
 
 			// データに要素がバインドされた形跡がなければバインドしてくる
 			if (!isLayoutBinded) bindPhotoset();
 
-			const rowContainer = self.refs.rowContainer;
 			// photosetの行ごとにforEach
 			self.photoset.forEach((row, rowIndex) => {
 				// 画像1枚当たりの幅を計算
@@ -102,13 +105,11 @@ import Store from '../Store/Store';
 
 		// レイアウトに応じて行ごと画像をセットする
 		const getPhotoLayout = () => {
-			if (!self.isPhotoSet) return;
-
 			// レイアウトの解釈を行う
+			if (!self.photoset_layout) self.photoset_layout = '1';
 			self.layout = self.photoset_layout.split('');
 			const photoset = [];
 			let photoIndex = 0;
-
 			// 配列に画像を挿入する
 			self.layout.forEach((itemPerRow, row) => {
 				const photosInRow = [];
@@ -123,20 +124,18 @@ import Store from '../Store/Store';
 		}
 
 		const afterUpdate = () => {
-			if (!self.isPhotoSet) return;
-
-			setPhotosetSize();
+			setPhotoSize();
 		}
 
 		self.on('updated', Action.setLoader );
 		self.on('before-mount', Action.showLoader );
 		self.on('mount', () => {
-			window.addEventListener('resize', setPhotosetSize);
+			window.addEventListener('resize', setPhotoSize);
 		});
 
 		self.on('unmount', () => {
 			RiotControl.off(Store.ActionTypes.changed);
-			window.removeEventListener('resize', setPhotosetSize);
+			window.removeEventListener('resize', setPhotoSize);
 		});
 		// Subscribes Store.onChanged
 		RiotControl.on(Store.ActionTypes.changed, () => {
@@ -146,7 +145,7 @@ import Store from '../Store/Store';
 
 			// photosが複数であればphososetであると判断
 			self.isPhotoSet = (self.photos.length > 1);
-			self.photoset = (self.isPhotoSet)  ? getPhotoLayout() : null;
+			self.photoset = (self.photos) ? getPhotoLayout() : null;
 
 			self.update();
 			afterUpdate();
