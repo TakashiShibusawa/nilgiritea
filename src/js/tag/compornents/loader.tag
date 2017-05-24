@@ -29,6 +29,7 @@ import loader from "../../class_loader";
 	const contentLoaded = () => {
 		setTimeout(() => {self.refs.loader.classList.add('disabled');}, 0);
 		// loader.contentLoaded();
+		console.log('loader tag contentLoaded')
 		Action.contentLoaded();
 	};
 	const showLoader = () => {
