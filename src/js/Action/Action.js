@@ -3,6 +3,8 @@ import Constant from "../Constant/Constant";
 import fetchJsonp from 'jsonp-promise';
 import util from '../niltea_util.js';
 
+import 'babel-polyfill';
+
 const fetchParams = {mode: 'cors'};
 
 const tumblrAPI = new class TumblrAPI {
